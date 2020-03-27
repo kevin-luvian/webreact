@@ -1,0 +1,119 @@
+.card {
+  border: none !important;
+}
+
+.card-border-ry-none {
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  background-color: white;
+  border-radius: 0.25rem;
+}
+
+.no-link-sidebar {
+  text-decoration: none;
+  color: #8d97ad !important;
+  cursor: pointer;
+}
+
+.no-link-sidebar:hover {
+  text-decoration: none;
+  color: white !important;
+}
+
+.bg-lightblue {
+  background-color: #f3f8fb;
+}
+
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+  border-left: 0.25rem solid #36b9cc !important;
+}
+
+.text-gray-300 {
+  color: #dddfeb !important;
+}
+
+.text-gray-800 {
+  color: #5a5c69 !important;
+}
+
+.color-mygray {
+  color: #878787 !important;
+}
+
+.bg-mydarkgray {
+  background-color: #303030 !important;
+}
+
+.bg-myblue {
+  background-color: #007bff !important;
+}
+
+.bg-crimson {
+  background-color: crimson !important;
+}
+
+.color-crimson {
+  color: crimson !important;
+}
+
+.card-myheader {
+  border-left: 0.25rem solid #ffffff;
+}
+
+.card-myheader:hover {
+  text-decoration: none;
+  border-left: 0.25rem solid #007bff;
+}
+
+.card-myheader:hover i {
+  color: #007bff !important;
+}
+
+.color-mylightgray {
+  color: rgb(192, 192, 192) !important;
+}
+
+.float-custom {
+  float: right !important;
+}
+
+.on-hover-blue:hover {
+  color: #3f51b5 !important;
+}
+
+.i-modal-close {
+  cursor: pointer;
+  font-size: 25px;
+  color: rgb(235, 235, 235);
+}
+
+.i-modal-close:hover {
+  color: rgb(204, 204, 204);
+}
+
+@media (max-width: 991px) {
+  .mt-phone-4 {
+    margin-top: 1.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mt-phone2-4 {
+    margin-top: 1.5rem !important;
+  }
+  .mt-phone2-2 {
+    margin-top: 0.5rem !important;
+  }
+  .float-custom {
+    float: left !important;
+  }
+}

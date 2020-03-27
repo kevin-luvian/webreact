@@ -1,0 +1,168 @@
+.btn-action-edit {
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  background-color: orange;
+  color: white;
+  border: 1px solid transparent;
+  min-height: 35px;
+  min-width: 32px;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-action-edit:hover {
+  background-color: transparent;
+  border: 2px solid orange;
+  color: orange;
+}
+
+.btn-action-edit:active {
+  background-color: white;
+  border: 2px solid orange;
+  color: orange;
+}
+
+.btn-action-delete {
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  background-color: crimson;
+  color: white;
+  border: 1px solid transparent;
+  min-height: 35px;
+  min-width: 32px;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-action-delete:hover {
+  background-color: transparent;
+  border: 2px solid crimson;
+  color: crimson;
+}
+
+.btn-action-delete:active {
+  background-color: white;
+  border: 2px solid crimson;
+  color: crimson;
+}
+
+.btn-modal-type {
+  cursor: context-menu !important;
+  text-align: center;
+  background-color: transparent;
+  color: #007bff;
+  border: 3px solid #007bff;
+  min-height: 40px;
+  min-width: 120px;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-modal-type-disabled {
+  text-align: center;
+  background-color: transparent;
+  color: #007bff59;
+  border: 3px solid #007bff59;
+  min-height: 40px;
+  min-width: 120px;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-modal-type-disabled:hover {
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: 3px solid transparent;
+}
+
+.btn-modal-type-disabled:active {
+  background-color: #006bdd;
+  color: white;
+}
+
+@media (max-width: 420px) {
+  .btn-modal-type {
+    min-width: 90px;
+  }
+
+  .btn-modal-type-disabled {
+    min-width: 90px;
+  }
+}
+
+.btn-modal-submit {
+  font-weight: bold;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  border: 3px solid transparent;
+  min-height: 40px;
+  min-width: 120px;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-modal-submit:hover {
+  cursor: pointer;
+  background-color: #006cdf;
+}
+
+.btn-modal-submit:active {
+  background-color: #004997;
+}
+
+.btn-modal-crimson {
+  font-weight: bold;
+  text-align: center;
+  background-color: crimson;
+  color: white;
+  border: 3px solid transparent;
+  min-height: 40px;
+  min-width: 120px;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-modal-crimson:hover {
+  cursor: pointer;
+  background-color: rgb(204, 19, 56);
+}
+
+.btn-modal-crimson:active {
+  background-color: rgb(163, 15, 45);
+}
+
+.btn-mywhite {
+  border: 2px solid transparent;
+  padding: 5px 10px;
+  border-radius: 0.25rem;
+  background-color: white;
+  color: #666;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-mywhite:hover,
+.btn-mywhite-focus:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-mywhite:active,
+.btn-mywhite-focus:active {
+  background-color: #006fe6;
+  color: white;
+}
+
+.btn-mywhite-focus {
+  border: 2px solid #007bff;
+  padding: 5px 10px;
+  border-radius: 0.25rem;
+  background-color: white;
+  color: #007bff;
+  transition: 0.3s ease-in-out;
+}

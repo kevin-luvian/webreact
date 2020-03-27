@@ -1,0 +1,18 @@
+#detail-head {
+    transition: 0.3s ease-in-out;
+    border-left: 0 solid transparent !important;
+}
+
+#detail-head:hover {
+    border-left: 0.25rem solid #4e73df !important;
+    cursor: pointer;
+}
+
+#detail-dropdown-icon {
+    color: #dddfeb;
+    transition: 0.3s ease-in-out;
+}
+
+#detail-head:hover #detail-dropdown-icon {
+    color: #4e73df;
+}

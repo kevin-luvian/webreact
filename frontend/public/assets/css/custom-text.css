@@ -1,0 +1,7 @@
+.text-rounded {
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    padding-bottom: 4px;
+    min-width: 80px;
+}
