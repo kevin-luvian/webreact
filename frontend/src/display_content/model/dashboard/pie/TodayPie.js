@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 class TodayPie extends Component {
   constructor(props) {
@@ -16,12 +17,12 @@ class TodayPie extends Component {
     for (let i = 0; i < data.length; i++) {
       let value_clone = data[i].value;
       if (!data[i].type) value_clone *= -1;
-      if (data[i].category.title in res) {
-        res[data[i].category.title].total += value_clone;
+      if (data[i].categoryModel.name in res) {
+        res[data[i].categoryModel.name].total += value_clone;
       } else {
-        res[data[i].category.title] = {
+        res[data[i].categoryModel.name] = {
           total: value_clone,
-          color: data[i].category.color
+          color: data[i].categoryModel.color
         };
       }
     }
@@ -105,6 +106,7 @@ class TodayPie extends Component {
       },
       series: [
         {
+          animation: false,
           name: "Share",
           data: details.percentageData
         }
@@ -115,12 +117,21 @@ class TodayPie extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="card shadow">
-          <div className="card-body">
-            <h4 className="header-title">Today Expenses</h4>
-            <div id="highpiechart"></div>
+        {this.props.isLoading ? (
+          <div className="card shadow" style={{ minHeight: "478px" }}>
+            <div className="center mx-auto">
+              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+              <div className="d-none" id="highpiechart" />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="card shadow">
+            <div className="card-body">
+              <h4 className="header-title">Today Expenses</h4>
+              <div id="highpiechart" />
+            </div>
+          </div>
+        )}
       </React.Fragment>
     );
   }

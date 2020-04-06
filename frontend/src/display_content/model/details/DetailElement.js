@@ -39,7 +39,7 @@ class DetailElement extends Component {
                 className="header-title mb-0"
                 style={{ color: this.props.color }}
               >
-                {this.props.title}
+                {this.props.name}
               </p>
               <p className="color-mygray m-0">
                 count

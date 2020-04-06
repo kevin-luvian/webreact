@@ -1,28 +1,33 @@
 import React, { Component } from "react";
 import { Modal, Backdrop, Fade, TextField } from "@material-ui/core";
 
-class ModalBox extends Component {
+class ModalUtil extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       id: this.props.id,
-      name: this.props.name,
-      filledName: "",
-      isError: false
+      filledName: this.props.name,
+      filledColor: this.props.color
     };
+    this.baseState = this.state;
   }
 
-  handleShow = (id, name) => {
+  resetState() {
+    this.setState(this.baseState);
+  }
+
+  handleShow = (id, name, color) => {
     this.setState({
-      name: name,
       id: id,
-      filledName: "",
+      filledName: name,
+      filledColor: color,
       open: true
     });
   };
 
   handleOpen = () => {
+    this.resetState();
     this.setState({
       open: true
     });
@@ -35,28 +40,19 @@ class ModalBox extends Component {
   };
 
   handleNameChange = e => {
-    this.setState({
-      filledName: e.target.value,
-      isError: false
-    });
+    this.setState({ filledName: e.target.value });
+  };
+
+  handleColorChange = e => {
+    this.setState({ filledColor: e.target.value });
   };
 
   handleSubmit = () => {
-    if (this.validate()) {
-      this.props.handleSubmit(this.state.id);
-    } else {
-      this.setState({
-        isError: true
-      });
-      console.log("cannot submit");
-    }
-  };
-
-  validate = () => {
-    if (this.state.filledName && this.state.filledName === this.state.name) {
-      return true;
-    }
-    return false;
+    this.props.handleSubmit({
+      id: this.state.id,
+      name: this.state.filledName,
+      color: this.state.filledColor
+    });
   };
 
   render() {
@@ -84,27 +80,30 @@ class ModalBox extends Component {
                   className="col-4 fa fa-close text-right my-auto i-modal-close"
                   onClick={this.handleClose}
                 />
-                <div className="col-12 mt-4">
-                  <p className="mb-0">
-                    <small
-                      className={
-                        this.state.isError ? "color-crimson" : "text-muted"
-                      }
-                    >
-                      enter "{this.state.name}" to continue
-                    </small>
-                  </p>
-                  <TextField
-                    className="w-100 m-0"
-                    error={this.state.isError}
-                    helperText=""
-                    value={this.state.filledName}
-                    onChange={this.handleNameChange}
-                  />
-                </div>
               </div>
+              <form
+                className="col-10 mx-auto mt-2 mb-4"
+                noValidate
+                autoComplete="off"
+              >
+                <TextField
+                  className="w-100 mt-4"
+                  error={false}
+                  label="Name"
+                  value={this.state.filledName}
+                  onChange={this.handleNameChange}
+                />
+                <TextField
+                  className="w-100 mt-4"
+                  error={false}
+                  label="Color"
+                  value={this.state.filledColor}
+                  onChange={this.handleColorChange}
+                />
+              </form>
+
               <button
-                className="btn-modal-crimson float-right mt-4"
+                className="btn-modal-submit float-right mt-4"
                 onClick={this.handleSubmit}
               >
                 Submit
@@ -117,4 +116,4 @@ class ModalBox extends Component {
   }
 }
 
-export default ModalBox;
+export default ModalUtil;

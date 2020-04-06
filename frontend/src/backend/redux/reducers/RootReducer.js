@@ -1,4 +1,10 @@
-export default (state, action) => {
+const initialState = {
+  token: "",
+  default: { account: "none", category: "none" },
+  username: ""
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case "tokenAdd":
       return {
@@ -10,10 +16,15 @@ export default (state, action) => {
         ...state,
         token: ""
       };
-    case "historyAdd":
+    case "setDefault":
       return {
         ...state,
-        history: action.payload
+        default: action.payload
+      };
+    case "setUsername":
+      return {
+        ...state,
+        username: action.payload
       };
     default:
       return state;

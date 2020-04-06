@@ -8,12 +8,20 @@ import rootReducer from "./reducers/RootReducer";
 const persistConfig = {
   key: "token",
   storage: storage,
-  whitelist: ["token", "history"] // which reducer want to store
+  whitelist: ["token", "default", "username"] // which reducer want to store
+};
+
+const myMiddleware = ({ getState }) => next => async action => {
+  if (action.type === "CLEAR_TOKEN") {
+    console.log("STATE ", getState().token);
+  }
+  next(action);
 };
 
 const pReducer = persistReducer(persistConfig, rootReducer);
-const middleware = applyMiddleware(thunk, logger);
+const middleware = applyMiddleware(thunk, logger, myMiddleware);
+
 const store = createStore(pReducer, middleware);
 const persistor = persistStore(store);
 
-export { persistor, store };
+export { store, persistor };

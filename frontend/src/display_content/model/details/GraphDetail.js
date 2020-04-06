@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import GraphDetailElement from "./GraphDetailElement";
 
 class GraphDetail extends Component {
@@ -8,12 +9,7 @@ class GraphDetail extends Component {
   }
 
   componentDidMount() {
-    let parsedData = this.parseData();
-    this.setState({
-      details_data: parsedData.data,
-      total: parsedData.total,
-      count: parsedData.count
-    });
+    this.parseData();
   }
 
   convertToArray = data => {
@@ -42,18 +38,23 @@ class GraphDetail extends Component {
       if (!data[i].type) value_clone *= -1;
       total += value_clone;
       count += 1;
-      if (data[i].category.title in res) {
-        res[data[i].category.title].total += value_clone;
-        res[data[i].category.title].count += 1;
+      if (data[i].categoryModel.name in res) {
+        res[data[i].categoryModel.name].total += value_clone;
+        res[data[i].categoryModel.name].count += 1;
       } else {
-        res[data[i].category.title] = {
+        res[data[i].categoryModel.name] = {
           total: value_clone,
-          color: data[i].category.color,
+          color: data[i].categoryModel.color,
           count: 1
         };
       }
     }
-    return { total: total, count: count, data: this.convertToArray(res) };
+
+    this.setState({
+      details_data: this.convertToArray(res),
+      total: total,
+      count: count
+    });
   };
 
   renderTotal = () => {
@@ -87,35 +88,49 @@ class GraphDetail extends Component {
   render() {
     return (
       <React.Fragment>
-        <div
-          className="card shadow bg-myblue mt-phone-4"
-          style={{ border: "none" }}
-        >
-          <div className="card-body">
-            <h4 className="header-title text-white">Details</h4>
-            <div className="row">
-              <div className="col">
-                <p className="text-white m-0">
-                  Total
-                  <span
-                    style={{ display: "inline-block", width: "10px" }}
-                  ></span>
-                  <span className="font-weight-bold">{this.renderTotal()}</span>
-                </p>
-              </div>
-              <div className="col">
-                <p className="text-white m-0 float-right">
-                  Count
-                  <span
-                    style={{ display: "inline-block", width: "10px" }}
-                  ></span>
-                  <span className="font-weight-bold">{this.state.count}</span>
-                </p>
-              </div>
+        {this.props.isLoading ? (
+          <div className="card shadow bg-myblue mt-phone-4" style={{ minHeight: "102px" }}>
+            <div className="center mx-auto">
+              <ScaleLoader color={"white"} height={50} width={5} margin={5} />
             </div>
           </div>
-        </div>
-        <div className="row px-3">{this.createDetailCards()}</div>
+        ) : (
+          <React.Fragment>
+            <div
+              className="card shadow bg-myblue mt-phone-4"
+              style={{ border: "none" }}
+            >
+              <div className="card-body">
+                <h4 className="header-title text-white">Details</h4>
+                <div className="row">
+                  <div className="col">
+                    <p className="text-white m-0">
+                      Total
+                      <span
+                        style={{ display: "inline-block", width: "10px" }}
+                      ></span>
+                      <span className="">
+                        {this.renderTotal()}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="col">
+                    <p className="text-white m-0 float-right">
+                      Count
+                      <span
+                        style={{ display: "inline-block", width: "10px" }}
+                      ></span>
+                      <span className="">
+                        {this.state.count}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row px-3">{this.createDetailCards()}</div>
+          </React.Fragment>
+        )}
       </React.Fragment>
     );
   }

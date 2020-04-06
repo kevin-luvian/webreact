@@ -1,111 +1,71 @@
 import React, { Component } from "react";
 import AccountCard from "./AccountCard";
-
-const cards = [
-  {
-    id: "card-menu-1",
-    title: "cash",
-    icon: "fa fa-dollar",
-    color: "#1cc88a",
-    total: 30000
-  },
-  {
-    id: "card-menu-2",
-    title: "bank",
-    icon: "fa fa-credit-card",
-    color: "#007bff",
-    total: 500000
-  }
-];
+import Carousel from "react-bootstrap/Carousel";
+import axios from "../../../backend/axios/Axios";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 class AccountCardCarousel extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isLoading: true,
+      activeIndex: 0,
+      data: []
+    };
   }
 
-  createSlideIndicators = () => {
-    let result = [];
-    cards.map((props, index) =>
-      result.push(
-        <li
-          key={index}
-          data-target="#carouselExampleIndicators"
-          data-slide-to={index}
-          className={index === 0 ? "active" : ""}
-          style={{ backgroundColor: "gray" }}
-        />
-      )
-    );
-    return result;
-  };
+  componentDidMount() {
+    this.fetchAccountCalculated();
+  }
 
+  fetchAccountCalculated = async () => {
+    await axios
+      .get("/api/account/all/calculated")
+      .then(response => {
+        this.setState({ isLoading: false, data: response.data.payload });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  /*
   createCards = () => {
     let result = [];
     cards.map((props, index) =>
       result.push(
-        <div
-          key={index}
-          className={
-            index === 0 ? "carousel-item p-4 active" : "carousel-item p-4"
-          }
-        >
+        <Carousel.Item>
           <AccountCard id={"card-account-" + index} {...props} />
-        </div>
+        </Carousel.Item>
       )
     );
     return result;
   };
+*/
+  handleSelect = (selectedIndex, e) => {
+    console.log(e);
+  };
 
   render() {
+    const iconStyle = {
+      color: "grey",
+      fontSize: "3rem"
+    };
     return (
       <React.Fragment>
-        <div
-          id="carouselExampleIndicators"
-          className="carousel slide"
-          data-ride="carousel"
-          data-interval="false"
+        <Carousel
+          className="col-12 col-md-9 col-lg-7 col-xl-6 mx-auto"
+          indicators={false}
+          prevIcon={<i className="fa fa-chevron-left" style={iconStyle} />}
+          nextIcon={<i className="fa fa-chevron-right" style={iconStyle} />}
         >
-          <ol
-            className="carousel-indicators"
-            style={{ transform: "translateY(100%)" }}
-          >
-            {this.createSlideIndicators()}
-          </ol>
-          <div className="carousel-inner">{this.createCards()}</div>
-          <a
-            className="carousel-control-prev my-auto ml-4"
-            href="#carouselExampleIndicators"
-            role="button"
-            data-slide="prev"
-            style={{
-              height: "80px",
-              width: "30px",
-              transform: "translateX(200px)"
-            }}
-          >
-            <i
-              className="fa fa-caret-left text-gray-800"
-              style={{ fontSize: "80px" }}
-            />
-          </a>
-          <a
-            className="carousel-control-next my-auto mr-4"
-            href="#carouselExampleIndicators"
-            role="button"
-            data-slide="next"
-            style={{
-              height: "80px",
-              width: "30px",
-              transform: "translateX(-200px)"
-            }}
-          >
-            <i
-              className="fa fa-caret-right text-gray-800"
-              style={{ fontSize: "80px" }}
-            />
-          </a>
-        </div>
+          {this.state.data.map((props, index) => {
+            return (
+              <Carousel.Item className="py-4">
+                <AccountCard id={"card-account-" + index} {...props} />
+              </Carousel.Item>
+            );
+          })}
+        </Carousel>
       </React.Fragment>
     );
   }

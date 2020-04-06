@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import HomePage from "../../display_content/page/HomePage";
 import ThisWeekDashboardPage from "../../display_content/page/ThisWeekDashboardPage";
 import ThisMonthDashboardPage from "../../display_content/page/ThisMonthDashboardPage";
+import SummaryPage from "../../display_content/page/SummaryPage";
 import Login from "../../display_content/model/authenticate/Login";
 import Logout from "../../display_content/model/authenticate/Logout";
-import axios from "../axios/Axios";
-import SetHistoryAction from "../redux/actions/SetHistoryAction";
 import ClearTokenAction from "../redux/actions/ClearTokenAction";
 import AccountPage from "../../display_content/page/AccountPage";
+import SettingsPage from "../../display_content/page/SettingsPage";
 
 class MenuRouter extends Component {
   constructor(props) {
@@ -17,40 +17,21 @@ class MenuRouter extends Component {
     this.state = {};
   }
 
-  isEmpty = str => {
-    return !str || 0 === str.length;
-  };
-
-  checkToken = async () => {
-    const token = this.props.token;
-    if (!this.isEmpty(token)) {
-      axios
-        .get("/checkauth", {
-          headers: {
-            Authorization: "Bearer " + token,
-            "Access-Control-Allow-Credentials": "true"
-          }
-        })
-        .then(response => {
-          console.log("authenticated");
-        })
-        .catch(error => {
-          console.log("token is invalid");
-          this.props.ClearTokenAction();
-        });
-    }
+  authenticate = () => {
+    return this.props.token && this.props.token.length !== 0;
   };
 
   render() {
     const ProtectedRoute = ({ component: Component, ...rest }) => {
-      //this.checkToken()
-      console.log(window.location.pathname);
+      // this.clearToken();
+      // this.checkToken();
+      // console.log(window.location.pathname);
+      // console.log(this.props.token);
       return (
         <Route
           {...rest}
           render={props =>
-            //!this.isEmpty(this.props.token)?
-            true ? (
+            this.authenticate() ? (
               <Component {...props} />
             ) : (
               <Redirect
@@ -70,15 +51,16 @@ class MenuRouter extends Component {
         <ProtectedRoute path="/" exact component={HomePage} />
         <ProtectedRoute
           path="/week-dashboard"
-          exact
           component={ThisWeekDashboardPage}
         />
         <ProtectedRoute
           path="/month-dashboard"
-          exact
           component={ThisMonthDashboardPage}
         />
-        <ProtectedRoute path="/account" exact component={AccountPage} />
+        <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
+        <ProtectedRoute path="/account" component={AccountPage} />
+        <ProtectedRoute path="/settings" component={SettingsPage} />
+        {/**<ProtectedRoute path="/favicon" component={FavIconPage} />*/}
         <ProtectedRoute path="/logout" component={Logout} />
       </Router>
     );
@@ -90,7 +72,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  SetHistoryAction: () => dispatch(SetHistoryAction()),
   ClearTokenAction: () => dispatch(ClearTokenAction())
 });
 

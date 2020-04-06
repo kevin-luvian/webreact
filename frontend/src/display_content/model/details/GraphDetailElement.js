@@ -38,12 +38,12 @@ class GraphDetailElement extends Component {
               >
                 {this.props.title}
               </h4>
-              <p className="color-mylightgray font-weight-bold m-0">
+              <p className="color-mylightgray m-0">
                 count
                 <span style={{ display: "inline-block", width: "10px" }}></span>
                 {this.props.count}
               </p>
-              <p className="color-mylightgray font-weight-bold m-0">
+              <p className="color-mylightgray m-0">
                 total
                 <span style={{ display: "inline-block", width: "16px" }}></span>
                 {this.renderTotal()}

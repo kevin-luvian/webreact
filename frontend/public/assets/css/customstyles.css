@@ -2,12 +2,41 @@
   border: none !important;
 }
 
+.shadow-tight {
+  box-shadow: 0 .2rem .5rem rgba(0,0,0,.2)!important
+}
+
 .card-border-ry-none {
   border-top: none !important;
   border-right: none !important;
   border-bottom: none !important;
   background-color: white;
   border-radius: 0.25rem;
+}
+
+div.inline {
+  float: left;
+}
+
+.clearBoth {
+  clear: both;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .no-link-sidebar {
@@ -79,7 +108,7 @@
 }
 
 .color-mylightgray {
-  color: rgb(192, 192, 192) !important;
+  color: rgb(163, 163, 163) !important;
 }
 
 .float-custom {

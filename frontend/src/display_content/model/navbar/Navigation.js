@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class Navigation extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Navigation extends Component {
                         {value.href === "" ? (
                           <span>{value.title}</span>
                         ) : (
-                          <a href={value.href}>{value.title}</a>
+                          <Link to={value.href}>{value.title}</Link>
                         )}
                       </li>
                     );

@@ -1,6 +1,6 @@
-export const parseDayFromDate = (date_param) =>{
+export const parseDayFromDate = (date) =>{
   var res = "";
-  switch (date_param.getDay()) {
+  switch (date.getDay()) {
     case 1:
       res = "Monday";
       break;

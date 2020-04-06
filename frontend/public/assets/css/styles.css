@@ -709,7 +709,7 @@ ul.breadcrumbs {
     -webkit-transform: none!important;
             transform: none!important;
     top: 100%!important;
-    right: 25px!important;
+    right: 15px!important;
     left: auto!important;
     display: none;
 }

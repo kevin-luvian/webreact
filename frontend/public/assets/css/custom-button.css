@@ -85,16 +85,6 @@
   color: white;
 }
 
-@media (max-width: 420px) {
-  .btn-modal-type {
-    min-width: 90px;
-  }
-
-  .btn-modal-type-disabled {
-    min-width: 90px;
-  }
-}
-
 .btn-modal-submit {
   font-weight: bold;
   text-align: center;
@@ -165,4 +155,25 @@
   background-color: white;
   color: #007bff;
   transition: 0.3s ease-in-out;
+}
+
+.btn-date-sm-submit {
+  min-width: 100%;
+  margin: .25rem 0;
+}
+
+@media (max-width: 578px) {
+  .btn-date-sm-submit {
+    margin-top: 1rem !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .btn-modal-type {
+    min-width: 90px;
+  }
+
+  .btn-modal-type-disabled {
+    min-width: 90px;
+  }
 }

@@ -1,41 +1,31 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import ClearTokenAction from "../../../backend/redux/actions/ClearTokenAction";
-import axios from '../../../backend/axios/Axios'
+import { Redirect } from "react-router-dom";
 
 class Logout extends Component {
-    
-    componentDidMount() {
-        const response = this.handleLogout()
-        console.log(response)
-        this.props.ClearTokenAction()
-    }
+  route = () => {
+    this.props.ClearTokenAction();
+    return (
+      <Redirect
+        to={{
+          pathname: "/login"
+        }}
+      />
+    );
+  };
 
-    handleLogout = async() => {
-        const url = "/logout"
-        const token = 'Bearer ' + this.props.token
-        return await axios.post(url, null, {
-            //crossorigin: true,
-            headers: {
-                "Authorization": token,
-                "Access-Control-Allow-Credentials": "true"
-            }
-        })
-    }
-    
-    render () {
-        return (
-            <React.Fragment/>
-        )
-    }
+  render() {
+    return this.route();
+  }
 }
 
 const mapStateToProps = state => ({
-    ...state
+  ...state
 });
 
 const mapDispatchToProps = dispatch => ({
-    ClearTokenAction: () => dispatch(ClearTokenAction())
+  ClearTokenAction: () => dispatch(ClearTokenAction())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Logout);

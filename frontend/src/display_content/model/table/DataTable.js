@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import CustomToolbar from "./CustomToolbar";
-import ModalBox from "../modal/ModalBox";
+import ModalTransaction from "../modal/ModalTransaction";
 import ModalDelete from "../modal/ModalDelete";
+import axios from "../../../backend/axios/Axios";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { connect } from "react-redux";
 import {
   Checkbox,
   Select,
@@ -14,75 +17,101 @@ import {
   FormControlLabel
 } from "@material-ui/core";
 
-const options = {
-  filterType: "checkbox",
-  selectableRows: "none",
-  print: false,
-  viewColumns: false,
-  responsive: "scrollMaxHeight",
-  customSort: (data, colIndex, order) => {
-    if (colIndex === 1) {
-      if (order === "desc") {
-        data.sort(function(x, y) {
-          return x.data[1].title.localeCompare(y.data[1].title);
-        });
-      } else {
-        data.sort(function(x, y) {
-          return y.data[1].title.localeCompare(x.data[1].title);
-        });
-      }
-    } else {
-      if (order === "desc") {
-        data.sort(function(x, y) {
-          return x.data[colIndex].localeCompare(y.data[colIndex]);
-        });
-      } else {
-        data.sort(function(x, y) {
-          return y.data[colIndex].localeCompare(x.data[colIndex]);
-        });
-      }
-    }
-    return data;
-  },
-  fixedHeaderOptions: {
-    xAxis: false,
-    yAxis: true
-  },
-  customToolbar: () => {
-    return <CustomToolbar />;
-  }
-};
-
 class DataTable extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  handleAdd = async data => {
+    await axios
+      .post("/api/transaction", data)
+      .then(response => {
+        this.refs.modalAdd.handleClose();
+        this.props.reload();
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  };
+
+  handleEdit = async data => {
+    await axios
+      .put("/api/transaction", data)
+      .then(response => {
+        this.refs.modalEdit.handleClose();
+        this.props.reload();
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  };
+
+  handleDelete = async data => {
+    await axios
+      .delete("/api/transaction", { data: data })
+      .then(response => {
+        this.refs.modalDelete.handleClose();
+        this.props.reload();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  getAccounts = () => {
+    var data = this.props.data;
+    let res = [];
+    for (let i = 0; i < data.length; i++) {
+      if (!res.includes(data[i].accountModel.name))
+        res.push(data[i].accountModel.name);
+    }
+    return res;
+  };
+
   getCategories = () => {
     var data = this.props.data;
     let res = [];
     for (let i = 0; i < data.length; i++) {
-      if (!res.includes(data[i].category.title))
-        res.push(data[i].category.title);
+      if (!res.includes(data[i].categoryModel.name))
+        res.push(data[i].categoryModel.name);
     }
     return res;
   };
 
   handleEditClick = rowData => {
+    console.log(rowData);
     this.refs.modalEdit.handleShow(
       rowData[0],
-      rowData[1].title,
-      rowData[2],
-      rowData[3],
-      rowData[4],
-      rowData[5].title
+      rowData[1],
+      rowData[2].id,
+      rowData[3].id,
+      this.parseToDate(rowData[4]),
+      rowData[5],
+      rowData[6]
     );
   };
 
   handleDeleteClick = rowData => {
-    console.log(rowData);
-    this.refs.modalDelete.handleShow(rowData[0], rowData[6]);
+    this.refs.modalDelete.handleShow(rowData[0], rowData[1]);
+  };
+
+  handleToolbarClick = () => {
+    this.refs.modalAdd.handleShow(
+      "",
+      "",
+      this.props.default.account,
+      this.props.default.category,
+      this.props.currentDate,
+      true,
+      0,
+      this.props.default.account
+    );
+  };
+
+  parseToDate = dateStr => {
+    let dateArr = dateStr.split("-");
+    return new Date(dateArr[0], parseInt(dateArr[1]) - 1, dateArr[2]);
   };
 
   getMuiTheme = () =>
@@ -98,12 +127,31 @@ class DataTable extends Component {
             zIndex: "0 !important",
             fontWeight: "bold"
           }
+        },
+        MUIDataTable: {
+          responsiveScrollMaxHeight: {
+            maxHeight: "69vh !important"
+          }
+        },
+        MuiTypography: {
+          h6: {
+            fontFamily: "Lato, sans-serif",
+            fontSize: "18px !important",
+            fontWeight: "600"
+          }
         }
       }
     });
 
   render() {
     const columns = [
+      {
+        name: "id",
+        options: {
+          display: false,
+          filter: false
+        }
+      },
       {
         name: "name",
         label: "Name",
@@ -114,7 +162,74 @@ class DataTable extends Component {
         }
       },
       {
-        name: "category",
+        name: "accountModel",
+        label: "Account",
+        options: {
+          sort: true,
+          searchable: false,
+          setCellHeaderProps: value => ({
+            style: { textAlign: "center", minWidth: "100px" }
+          }),
+          customBodyRender: (value, tableMeta, updateValue) => {
+            return (
+              <p className="text-muted m-0">
+                <i
+                  className={"fa fa-" + value.favIcon}
+                  style={{ color: "gray" }}
+                />
+                {" " + value.name}
+              </p>
+            );
+          },
+          filter: true,
+          filterType: "custom",
+          filterOptions: {
+            logic: (item, filters) => {
+              if (filters.length) return !filters.includes(item.name);
+              return false;
+            },
+            display: (filterList, onChange, index, column) => {
+              let accountsOption = this.getAccounts();
+              return (
+                <React.Fragment>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Account</FormLabel>
+                    <FormGroup>
+                      {accountsOption.map((account, idx) => {
+                        return (
+                          <FormControlLabel
+                            key={idx}
+                            className="ml-0"
+                            control={
+                              <Checkbox
+                                value={account}
+                                checked={filterList[index].includes(account)}
+                                onClick={event => {
+                                  if (event.target.checked)
+                                    filterList[index].push(event.target.value);
+                                  else
+                                    filterList[index].splice(
+                                      filterList[index].indexOf(account),
+                                      1
+                                    );
+                                  onChange(filterList[index], index, column);
+                                }}
+                              />
+                            }
+                            label={account}
+                          />
+                        );
+                      })}
+                    </FormGroup>
+                  </FormControl>
+                </React.Fragment>
+              );
+            }
+          }
+        }
+      },
+      {
+        name: "categoryModel",
         label: "Category",
         options: {
           sort: true,
@@ -130,7 +245,7 @@ class DataTable extends Component {
                   paddingLeft: "15px"
                 }}
               >
-                {value.title}
+                {value.name}
               </p>
             );
           },
@@ -138,7 +253,7 @@ class DataTable extends Component {
           filterType: "custom",
           filterOptions: {
             logic: (item, filters) => {
-              if (filters.length) return !filters.includes(item.title);
+              if (filters.length) return !filters.includes(item.name);
               return false;
             },
             display: (filterList, onChange, index, column) => {
@@ -185,22 +300,15 @@ class DataTable extends Component {
         name: "date",
         label: "Date",
         options: {
+          sort: true,
           filter: false,
-          sort: false,
           searchable: false,
           setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
-            var mm = value.getMonth() + 1;
-            var dd = value.getDate();
-            var yyyy = value.getFullYear();
-
-            var res = [
-              (mm > 9 ? "" : "0") + mm,
-              (dd > 9 ? "" : "0") + dd,
-              yyyy
-            ].join("/");
-
-            return <p className="text-center mb-0">{res}</p>;
+            let date = value.split("-");
+            return (
+              <p className="mb-0">{[date[1], date[2], date[0]].join("/")}</p>
+            );
           }
         }
       },
@@ -228,6 +336,7 @@ class DataTable extends Component {
             logic: (type, filters) => {
               if (filters.includes("Expenses")) return !type;
               else if (filters.includes("Incomes")) return type;
+              return false;
             },
             display: (filterList, onChange, index, column) => {
               const optionValues = ["Expenses", "Incomes"];
@@ -280,7 +389,7 @@ class DataTable extends Component {
         }
       },
       {
-        name: "account",
+        name: "accountModel",
         options: {
           display: false,
           filter: false
@@ -297,7 +406,6 @@ class DataTable extends Component {
           empty: true,
           setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
-            // console.log(tableMeta.rowData);
             return (
               <div className="text-center" style={{ minWidth: "100px" }}>
                 <button
@@ -331,22 +439,124 @@ class DataTable extends Component {
         }
       }
     ];
+    const options = {
+      filterType: "checkbox",
+      selectableRows: "none",
+      print: false,
+      viewColumns: false,
+      //responsive: "scrollMaxHeight",scrollFullHeight
+      responsive: "scrollMaxHeight",
+      customSort: (data, colIndex, order) => {
+        if (colIndex === 2) {
+          console.log(data);
+          if (order === "desc") {
+            data.sort(function(x, y) {
+              return x.data[2].name.localeCompare(y.data[2].name);
+            });
+          } else {
+            data.sort(function(x, y) {
+              return y.data[2].name.localeCompare(x.data[2].name);
+            });
+          }
+        } else if (colIndex === 3) {
+          if (order === "desc") {
+            data.sort(function(x, y) {
+              return x.data[3].name.localeCompare(y.data[3].name);
+            });
+          } else {
+            data.sort(function(x, y) {
+              return y.data[3].name.localeCompare(x.data[3].name);
+            });
+          }
+        } else if (colIndex === 4) {
+          if (order === "desc") {
+            data.sort((x, y) => {
+              let date1 = this.parseToDate(x.data[4]);
+              let date2 = this.parseToDate(y.data[4]);
+              if (date1 > date2) return 1;
+              else if (date1 < date2) return -1;
+              else return 0;
+            });
+          } else {
+            data.sort((x, y) => {
+              let date1 = this.parseToDate(x.data[4]);
+              let date2 = this.parseToDate(y.data[4]);
+              if (date1 > date2) return -1;
+              else if (date1 < date2) return 1;
+              else return 0;
+            });
+          }
+        } else {
+          if (order === "desc") {
+            data.sort(function(x, y) {
+              return x.data[colIndex].localeCompare(y.data[colIndex]);
+            });
+          } else {
+            data.sort(function(x, y) {
+              return y.data[colIndex].localeCompare(x.data[colIndex]);
+            });
+          }
+        }
+        return data;
+      },
+      fixedHeaderOptions: {
+        xAxis: false,
+        yAxis: true
+      },
+      customToolbar: () => {
+        return (
+          <CustomToolbar
+            title="New Transaction"
+            onClick={this.handleToolbarClick}
+          />
+        );
+      }
+    };
     return (
       <React.Fragment>
-        <ModalBox ref="modalEdit" modalTitle="Edit Transaction" />
-        <ModalDelete ref="modalDelete" modalTitle="Delete Transaction" />
-        <MuiThemeProvider theme={this.getMuiTheme()}>
-          <MUIDataTable
-            title={"Transaction Data"}
-            data={this.props.data}
-            columns={columns}
-            options={options}
-            className="px-3 shadow"
-          />
-        </MuiThemeProvider>
+        <ModalTransaction
+          ref="modalAdd"
+          modalTitle="Create Transaction"
+          accounts={this.props.accounts}
+          categories={this.props.categories}
+          handleSubmit={this.handleAdd}
+        />
+        <ModalTransaction
+          ref="modalEdit"
+          modalTitle="Edit Transaction"
+          accounts={this.props.accounts}
+          categories={this.props.categories}
+          handleSubmit={this.handleEdit}
+        />
+        <ModalDelete
+          ref="modalDelete"
+          modalTitle="Delete Transaction"
+          handleSubmit={this.handleDelete}
+        />
+        {this.props.isLoading ? (
+          <div className="card shadow" style={{ minHeight: "238px" }}>
+            <div className="center mx-auto">
+              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+            </div>
+          </div>
+        ) : (
+          <MuiThemeProvider theme={this.getMuiTheme()}>
+            <MUIDataTable
+              title={"Transaction Data"}
+              data={this.props.data}
+              columns={columns}
+              options={options}
+              className="px-3 shadow"
+            />
+          </MuiThemeProvider>
+        )}
       </React.Fragment>
     );
   }
 }
 
-export default DataTable;
+const mapStateToProps = state => ({
+  ...state
+});
+
+export default connect(mapStateToProps)(DataTable);

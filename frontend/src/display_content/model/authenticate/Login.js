@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import axios from "../../../backend/axios/Axios";
 import Input from "./Input";
 import { connect } from "react-redux";
-import SetHistoryAction from "../../../backend/redux/actions/SetHistoryAction";
 import SetTokenAction from "../../../backend/redux/actions/SetTokenAction";
+import SetUsernameAction from "../../../backend/redux/actions/SetUsernameAction";
 import ClearTokenAction from "../../../backend/redux/actions/ClearTokenAction";
 import { Redirect } from "react-router-dom";
 
@@ -23,14 +23,17 @@ class Login extends Component {
       username: this.state.username,
       password: this.state.password
     };
-    const headers = {
-      "Content-Type": "application/json"
-    };
-    const response = await axios.post("/login", data, headers);
-    if (response.data["status"] === 200) {
-      this.props.SetTokenAction(response.data["result"]);
-      this.setState({ redirect: true });
-    }
+
+    await axios.post("/auth/signin", data).then(
+      response => {
+        this.props.SetTokenAction(response.data.payload.token);
+        this.props.SetUsernameAction(response.data.payload.username);
+        this.setState({ redirect: true });
+      },
+      error => {
+        console.log(error);
+      }
+    );
   };
 
   handleChangeUsername = event => {
@@ -77,19 +80,12 @@ class Login extends Component {
       return <Redirect to="/" />;
     }
 
-    const props = {
-      name: "loginForm",
-      method: "POST",
-      action: "/login"
-    };
-
     return (
       <React.Fragment>
         <div className="login-area">
           <div className="container">
             <div className="login-box">
               <form
-                {...props}
                 onSubmit={this.handleSubmit}
                 ref={fm => {
                   this.form = fm;
@@ -121,8 +117,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  SetHistoryAction: payload => dispatch(SetHistoryAction(payload)),
   SetTokenAction: payload => dispatch(SetTokenAction(payload)),
+  SetUsernameAction: payload => dispatch(SetUsernameAction(payload)),
   ClearTokenAction: () => dispatch(ClearTokenAction())
 });
 
