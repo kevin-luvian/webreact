@@ -1,6 +1,6 @@
 package com.project.react.security;
 
-import com.project.react.repository.UserRepository;
+import com.project.react.repository.UserDb;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
-    private UserRepository users;
-    public CustomUserDetailsService(UserRepository users) {
+    private UserDb users;
+    public CustomUserDetailsService(UserDb users) {
         this.users = users;
     }
     @Override

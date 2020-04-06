@@ -1,6 +1,6 @@
 package com.project.react.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
@@ -17,33 +20,30 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class TransactionModel{
+@Table(name = "transactions")
+public class TransactionModel {
 
-	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy="uuid")
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
     @NotNull
-    @Column(name = "judul", nullable = false)
-    private String judul;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @NotNull
-    @Column(name = "multiplier", nullable = false)
-    private int multiplier;
+    @Column(name = "value", nullable = false)
+    private Long value;
 
     @NotNull
-    @Column(name = "nominal", nullable = false)
-    private int nominal;
+    @Column(name = "type", nullable = false)
+    private Boolean type;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "tanggal", nullable = false, columnDefinition = "DATE")
-    private Date tanggal;
-
-    @NotNull
-    @Column(name = "balance_awal", nullable = false)
-    private boolean balanceAwal;
+    @Column(name = "date", nullable = false, columnDefinition = "DATE")
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "id_category", referencedColumnName = "id", nullable = false)
@@ -58,6 +58,7 @@ public class TransactionModel{
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private UserModel userModel;
 
     public String getId() {
@@ -68,44 +69,36 @@ public class TransactionModel{
         this.id = id;
     }
 
-    public String getJudul() {
-        return judul;
+    public String getName() {
+        return name;
     }
 
-    public void setJudul(String judul) {
-        this.judul = judul;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getMultiplier() {
-        return multiplier;
+    public Long getValue() {
+        return value;
     }
 
-    public void setMultiplier(int multiplier) {
-        this.multiplier = multiplier;
+    public void setValue(Long value) {
+        this.value = value;
     }
 
-    public int getNominal() {
-        return nominal;
+    public Boolean getType() {
+        return type;
     }
 
-    public void setNominal(int nominal) {
-        this.nominal = nominal;
+    public void setType(Boolean type) {
+        this.type = type;
     }
 
-    public Date getTanggal() {
-        return tanggal;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setTanggal(Date tanggal) {
-        this.tanggal = tanggal;
-    }
-
-    public boolean isBalanceAwal() {
-        return balanceAwal;
-    }
-
-    public void setBalanceAwal(boolean balanceAwal) {
-        this.balanceAwal = balanceAwal;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public CategoryModel getCategoryModel() {
@@ -131,4 +124,5 @@ public class TransactionModel{
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
     }
+
 }

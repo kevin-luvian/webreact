@@ -1,38 +1,26 @@
 package com.project.react.service.implement;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Lob;
-
-import com.project.react.model.User;
 import com.project.react.model.UserModel;
 import com.project.react.repository.UserDb;
-import com.project.react.repository.UserRepository;
+import com.project.react.restModel.UserRequest;
 import com.project.react.service.interfaces.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserDb userDb;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Override
-    @Lob
-    public String encrypt(String rawPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(rawPassword);
-        return hashedPassword;
-    }
 
     @Override
     public List<UserModel> getAll() {
@@ -40,25 +28,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel getById(String id) {
-        Optional<UserModel> user = userDb.findById(id);
-        if (user.isPresent())
-            return user.get();
-        return null;
+    public Optional<UserModel> getById(String id) {
+        return userDb.findById(id);
     }
 
     @Override
-    public UserModel getByUsername(String username) {
+    public Optional<UserModel> getByUsername(String username) {
         return userDb.findByUsername(username);
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        return null;
+    public UserModel create(UserRequest request) {
+        UserModel user = new UserModel();
+        user.setUsername(request.getUsername().get());
+        user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
+        user.setRoles(Arrays.asList("ROLE_USER"));
+        return userDb.save(user);
+    }
+
+    @Override
+    public UserModel update(UserRequest request) {
+        UserModel user = getById(request.getId().get()).get();
+        if (!passwordEncoder.matches(request.getOldPassword().get(), user.getPassword()))
+            throw new AccessDeniedException("unauthorized");
+        if (!request.getPassword().get().isBlank())
+            user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
+        user.setUsername(request.getUsername().get());
+        return userDb.save(user);
     }
 
     @Override
@@ -67,38 +63,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel create(UserModel user) {
-        String rawPassword = user.getPassword();
-        String hash = encrypt(rawPassword);
-        user.setPassword(hash);
-        return save(user);
-    }
-
-    @Override
-    public void delete(UserModel user) {
+    public UserModel delete(String id) {
+        UserModel user = getById(id).get();
         userDb.delete(user);
-    }
-
-    @Override
-    public UserModel getLoggedUser() {
-        try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-            String username = null;
-
-            if (principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
-            } else {
-                username = principal.toString();
-            }
-            return this.getByUsername(username);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
+        return user;
     }
 }

@@ -1,55 +1,50 @@
 package com.project.react.restModel;
 
+import java.util.Date;
+
 public class BaseResponse<T> {
+    private Date timestamp;
     private int status;
     private String message;
-    private T result;
+    private T payload;
 
-    public BaseResponse(){
-        this(0,null,null);
-    }
-
-    public BaseResponse(int status, String message, T result){
+    public BaseResponse(int status, String message, T payload) {
+        this.timestamp = new Date();
         this.status = status;
         this.message = message;
-        this.result = result;
+        this.payload = payload;
     }
 
-    /**
-     * @return the status
-     */
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public int getStatus() {
         return status;
     }
-    /**
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-    /**
-     * @return the result
-     */
-    public T getResult() {
-        return result;
-    }
 
-    /**
-     * @param status the status to set
-     */
     public void setStatus(int status) {
         this.status = status;
     }
-    /**
-     * @param message the message to set
-     */
+
+    public String getMessage() {
+        return message;
+    }
+
     public void setMessage(String message) {
         this.message = message;
     }
-    /**
-     * @param result the result to set
-     */
-    public void setResult(T result) {
-        this.result = result;
+
+    public T getPayload() {
+        return payload;
     }
+
+    public void setPayload(T payload) {
+        this.payload = payload;
+    }
+
 }

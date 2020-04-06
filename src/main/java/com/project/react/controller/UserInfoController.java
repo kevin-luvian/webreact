@@ -16,7 +16,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController()
 public class UserInfoController {
     @GetMapping("/api/me")
-    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
         Map<Object, Object> model = new HashMap<>();
         model.put("username", userDetails.getUsername());
         model.put("roles", userDetails.getAuthorities().stream().map(a -> ((GrantedAuthority) a).getAuthority())

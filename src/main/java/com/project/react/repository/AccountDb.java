@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.project.react.model.AccountModel;
 
 @Repository
-public interface AccountDb extends JpaRepository<AccountModel, Long>{
+public interface AccountDb extends JpaRepository<AccountModel, String>{
 }

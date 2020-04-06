@@ -2,29 +2,28 @@ package com.project.react.controller;
 
 import com.project.react.service.interfaces.UserService;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
 import com.project.react.model.UserModel;
+import com.project.react.restModel.BaseResponse;
+import com.project.react.restModel.UserRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -35,59 +34,57 @@ public class UserController {
     private UserService userService;
 
     @GetMapping(value = "/all")
-    private ResponseEntity<?> retrieveModel() {
+    private ResponseEntity<?> retrieveAll(@AuthenticationPrincipal UserDetails userDetails) {
         List<UserModel> users = userService.getAll();
-        if (users == null) {
-            users = new ArrayList<>();
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return ResponseEntity.ok().body(new BaseResponse<List<UserModel>>(200, "user list", users));
     }
 
-    @GetMapping(value = "/{id}")
-    private ResponseEntity<UserModel> retrieveModelById(@PathVariable String id) {
-        UserModel user = userService.getById(id);
-        return new ResponseEntity<UserModel>(user, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    ResponseEntity<UserModel> updateModel(@PathVariable String id, @Valid @RequestBody UserModel user) {
-        user.setId(id);
-        UserModel result = userService.save(user);
-        return ResponseEntity.ok().body(result);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteModel(@PathVariable String id) {
-        UserModel user = userService.getById(id);
-        userService.delete(user);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping(value = "")
-    public ResponseEntity<?> postModel(@Valid @RequestBody UserModel user) throws URISyntaxException {
-        UserModel result = userService.create(user);
-        return ResponseEntity.created(new URI("/api/user/" + result.getId())).body(result);
-    }
-
-    @GetMapping(value = "/template")
+    @RequestMapping(value = "/template")
     private ResponseEntity<?> getTemplate() {
-        return new ResponseEntity<>(new UserModel("",""), HttpStatus.OK);
+        return ResponseEntity.ok().body(new BaseResponse<UserModel>(200, "empty user template", new UserModel()));
     }
 
-    @GetMapping(value = "")
-    private ResponseEntity<?> getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String username = null;
-
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
+    @PostMapping
+    public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody UserRequest request) {
+        try {
+            if (request.getUsername().get().isBlank() || request.getPassword().get().isBlank()) {
+                throw new NullPointerException();
+            }
+            UserModel user = userService.create(request);
+            return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully created", user));
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", ""));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
         }
+    }
 
-        UserModel currentUser = userService.getByUsername(username);
+    @PutMapping
+    ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody UserRequest request) {
+        try {
+            if (request.getUsername().get().isBlank() || request.getOldPassword().get().isBlank())
+                throw new NullPointerException();
+            UserModel user = userService.update(request);
+            return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully updated", user));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", ""));
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", ""));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
+        }
+    }
 
-        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+    @DeleteMapping
+    public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody String id) {
+        try {
+            UserModel user = userService.delete(id);
+            return ResponseEntity.ok().body(new BaseResponse<UserModel>(200, "user successfully deleted", user));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
+        }
     }
 }

@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 import java.util.List;
 
@@ -18,67 +17,70 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table
+@Table(name = "accounts")
 public class AccountModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String id;
 
     @NotNull
-    @Column(name = "judul", nullable = false)
-    private int judul;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @NotNull
-    @Column(name = "multiplier", nullable = false)
-    private int multiplier;
+    @Column(name = "color", nullable = false)
+    private String color;
 
     @NotNull
-    @Column(name = "nominal", nullable = false)
-    private int nominal;
+    @Column(name = "favIcon", nullable = false)
+    private String favIcon;
 
-    @OneToMany(mappedBy = "accountModel", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "accountModel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<TransactionModel> transactionList;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private UserModel userModel;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getJudul() {
-        return judul;
+    public String getName() {
+        return name;
     }
 
-    public void setJudul(int judul) {
-        this.judul = judul;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getMultiplier() {
-        return multiplier;
+    public String getColor() {
+        return color;
     }
 
-    public void setMultiplier(int multiplier) {
-        this.multiplier = multiplier;
+    public void setColor(String color) {
+        this.color = color;
     }
 
-    public int getNominal() {
-        return nominal;
+    public String getFavIcon() {
+        return favIcon;
     }
 
-    public void setNominal(int nominal) {
-        this.nominal = nominal;
+    public void setFavIcon(String favIcon) {
+        this.favIcon = favIcon;
     }
 
     public List<TransactionModel> getTransactionList() {
@@ -96,4 +98,5 @@ public class AccountModel {
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
     }
+
 }
