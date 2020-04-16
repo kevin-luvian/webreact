@@ -24,46 +24,38 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PACKAGE)
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 final class UserAuthenticationServiceImpl implements UserAuthenticationService {
-    final Map<String,String> tokens = new HashMap<String,String>();
+    final Map<String, String> tokens = new HashMap<String, String>();
 
     @Autowired
     private UserService userService;
 
-    private String generateUUID(){
+    private String generateUUID() {
         String uuid = UUID.randomUUID().toString();
         return uuid;
     }
 
     @Override
-    public BaseResponse<String> login(final String username, final String password){
-        BaseResponse<String> response = new BaseResponse<String>();
-        try{
-            UserModel user = userService.getByUsername(username);
-            if(matchPassword(user, password)){
+    public BaseResponse<String> login(final String username, final String password) {
+        try {
+            UserModel user = userService.getByUsername(username).get();
+            if (matchPassword(user, password)) {
                 String token = generateUUID();
                 tokens.put(token, username);
                 int i = 0;
-                for(String key: tokens.keySet()){
-                    System.out.println("(login) "+i+++". "+tokens.get(key)+" : "+key);
+                for (String key : tokens.keySet()) {
+                    System.out.println("(login) " + i++ + ". " + tokens.get(key) + " : " + key);
                 }
-                response.setStatus(200);
-                response.setMessage("success");
-                response.setResult(token);
+                return new BaseResponse<String>(200, "success", token);
+            } else {
+                return new BaseResponse<String>(401, "password incorrect", "");
             }
-            else{
-                response.setStatus(401);
-                response.setMessage("password incorrect");
-            }
-            
-        } catch (NullPointerException e){
-            response.setStatus(401);
-            response.setMessage("user is invalid");
+        } catch (NullPointerException e) {
+            return new BaseResponse<String>(401, "user is invalid", "");
         }
-        return response;
     }
 
     @Override
-    public boolean matchPassword(UserModel user, String rawPassword){
+    public boolean matchPassword(UserModel user, String rawPassword) {
         String encodedPassword = user.getPassword();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(rawPassword, encodedPassword);
@@ -71,10 +63,10 @@ final class UserAuthenticationServiceImpl implements UserAuthenticationService {
 
     @Override
     public Optional<UserModel> findByToken(final String token) {
-        try{
+        try {
             String username = tokens.get(token);
-            return Optional.of(userService.getByUsername(username));
-        } catch (NullPointerException e){
+            return userService.getByUsername(username);
+        } catch (NullPointerException e) {
             return Optional.empty();
         }
     }
@@ -82,17 +74,17 @@ final class UserAuthenticationServiceImpl implements UserAuthenticationService {
     @Override
     public BaseResponse<Boolean> logout(String token) {
         BaseResponse<Boolean> response;
-        
+
         int i = 0;
-        for(String key: tokens.keySet()){
-            System.out.println("(logout) "+i+++". "+tokens.get(key)+" : "+key);
+        for (String key : tokens.keySet()) {
+            System.out.println("(logout) " + i++ + ". " + tokens.get(key) + " : " + key);
         }
 
-        if(tokens.containsKey(token)){
-            response = new BaseResponse<Boolean>(200,"Logout successfull",true);
+        if (tokens.containsKey(token)) {
+            response = new BaseResponse<Boolean>(200, "Logout successfull", true);
             tokens.remove(token);
         } else {
-            response = new BaseResponse<Boolean>(401,"Token Incorrect",false);
+            response = new BaseResponse<Boolean>(401, "Token Incorrect", false);
         }
         return response;
     }

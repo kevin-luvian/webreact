@@ -34,7 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionModel> getBetween(UserModel user, LocalDate startDate, LocalDate endDate) {
-        return transactionDb.findAllByUserModelAndDateLessThanAndDateGreaterThanEqual(user, endDate, startDate);
+        return transactionDb.findAllByUserModelAndDateLessThanAndDateGreaterThanEqualOrderByDateAsc(user, endDate, startDate);
     }
 
     @Override
