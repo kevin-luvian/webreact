@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../model/navbar/Navbar";
 import CardArea from "../model/account/CardArea";
-import TodayPie from "../model/dashboard/pie/TodayPie";
+import TodayPie from "../model/chart/pie/TodayPie";
 import GraphDetail from "../model/details/GraphDetail";
 import DataTable from "../model/table/DataTable";
 import axios from "../../backend/axios/Axios";

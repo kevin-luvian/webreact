@@ -4,7 +4,7 @@ import CardArea from "../model/account/CardArea";
 import ChooseDate from "../model/form/ChooseDate";
 import HorizontalScrollMenu from "../model/form/HorizontalScrollMenu";
 import DetailArea from "../model/details/DetailArea";
-import LineChart from "../model/dashboard/line/LineChart";
+import LineChart from "../model/chart/line/LineChart";
 import DataTable from "../model/table/DataTable";
 import axios from "../../backend/axios/Axios";
 import { parseDate } from "../../backend/function/Function";

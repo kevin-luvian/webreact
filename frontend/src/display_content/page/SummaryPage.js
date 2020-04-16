@@ -4,7 +4,7 @@ import DetailArea from "../model/details/DetailArea";
 import CardArea from "../model/account/CardArea";
 import DataTable from "../model/table/DataTable";
 import axios from "../../backend/axios/Axios";
-import WideLineChart from "../model/dashboard/line/WideLineChart";
+import WideLineChart from "../model/chart/line/WideLineChart";
 import HorizontalScrollMenu from "../model/form/HorizontalScrollMenu";
 import {
   convertToDate,
