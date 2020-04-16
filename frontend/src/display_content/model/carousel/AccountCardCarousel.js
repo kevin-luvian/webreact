@@ -10,7 +10,7 @@ class AccountCardCarousel extends Component {
     this.state = {
       isLoading: true,
       activeIndex: 0,
-      data: []
+      data: [],
     };
   }
 
@@ -21,10 +21,10 @@ class AccountCardCarousel extends Component {
   fetchAccountCalculated = async () => {
     await axios
       .get("/api/account/all/calculated")
-      .then(response => {
+      .then((response) => {
         this.setState({ isLoading: false, data: response.data.payload });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -48,7 +48,7 @@ class AccountCardCarousel extends Component {
   render() {
     const iconStyle = {
       color: "grey",
-      fontSize: "3rem"
+      fontSize: "3rem",
     };
     return (
       <React.Fragment>
@@ -60,7 +60,7 @@ class AccountCardCarousel extends Component {
         >
           {this.state.data.map((props, index) => {
             return (
-              <Carousel.Item className="py-4">
+              <Carousel.Item key={index} className="py-4">
                 <AccountCard id={"card-account-" + index} {...props} />
               </Carousel.Item>
             );

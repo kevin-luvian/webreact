@@ -48,7 +48,7 @@ class ModalUtil extends Component {
   };
 
   handleSubmit = () => {
-    this.props.handleSubmit({
+    this.props.onSubmit({
       id: this.state.id,
       name: this.state.filledName,
       color: this.state.filledColor
