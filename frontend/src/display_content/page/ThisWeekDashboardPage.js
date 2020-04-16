@@ -7,8 +7,7 @@ import DetailArea from "../model/details/DetailArea";
 import LineChart from "../model/dashboard/line/LineChart";
 import DataTable from "../model/table/DataTable";
 import axios from "../../backend/axios/Axios";
-import { parseDate, convertToDate } from "../../backend/function/Function";
-import { connect } from "react-redux";
+import { parseDate } from "../../backend/function/Function";
 
 const navigation = {
   title: "Weekly Dashboard",

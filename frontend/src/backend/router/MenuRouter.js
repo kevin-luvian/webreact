@@ -30,13 +30,13 @@ class MenuRouter extends Component {
       return (
         <Route
           {...rest}
-          render={props =>
+          render={(props) =>
             this.authenticate() ? (
               <Component {...props} />
             ) : (
               <Redirect
                 to={{
-                  pathname: "/login"
+                  pathname: "/login",
                 }}
               />
             )
@@ -67,12 +67,12 @@ class MenuRouter extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
+const mapStateToProps = (state) => ({
+  ...state,
 });
 
-const mapDispatchToProps = dispatch => ({
-  ClearTokenAction: () => dispatch(ClearTokenAction())
+const mapDispatchToProps = (dispatch) => ({
+  ClearTokenAction: () => dispatch(ClearTokenAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuRouter);

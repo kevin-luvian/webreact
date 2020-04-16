@@ -10,13 +10,12 @@ import {
   Switch,
   Checkbox,
   FormControl,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 import {
-  compareNum,
   parseDate,
   dateSort,
-  convertToDate
+  convertToDate,
 } from "../../../../backend/function/Function";
 
 const modes = ["normal", "cumulative"];
@@ -32,7 +31,7 @@ class WideLineChart extends Component {
       incomeChecked: true,
       expenseChecked: true,
       data: [],
-      chart: {}
+      chart: {},
     };
   }
 
@@ -42,7 +41,7 @@ class WideLineChart extends Component {
     }
   }
 
-  handleModeChange = e => {
+  handleModeChange = (e) => {
     this.setState({ mode: e.target.value }, this.reload);
   };
 
@@ -64,7 +63,9 @@ class WideLineChart extends Component {
   reload = () => {
     //this.state.chart.dispose();
     //this.loadChart();
-    this.state.chart.data = this.processData();
+    let chart = this.state.chart;
+    chart.data = this.processData();
+    this.setState({ chart: chart });
   };
 
   loadAndSort = () => {
@@ -159,7 +160,7 @@ class WideLineChart extends Component {
           }
           container.push({
             date: date,
-            value: value
+            value: value,
           });
           currentDate = date;
           containerIdx += 1;
@@ -209,7 +210,7 @@ class WideLineChart extends Component {
                 <div className="col">
                   <small
                     style={{
-                      color: "rgba(0, 0, 0, 0.54)"
+                      color: "rgba(0, 0, 0, 0.54)",
                     }}
                   >
                     incomes
@@ -222,7 +223,7 @@ class WideLineChart extends Component {
                   />
                   <small
                     style={{
-                      color: "rgba(0, 0, 0, 0.54)"
+                      color: "rgba(0, 0, 0, 0.54)",
                     }}
                   >
                     expenses
@@ -237,7 +238,7 @@ class WideLineChart extends Component {
                 <div className="col text-right">
                   <small
                     style={{
-                      color: "rgba(0, 0, 0, 0.54)"
+                      color: "rgba(0, 0, 0, 0.54)",
                     }}
                   >
                     incomes as positive

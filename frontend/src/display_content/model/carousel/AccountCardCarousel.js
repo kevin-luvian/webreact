@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AccountCard from "./AccountCard";
 import Carousel from "react-bootstrap/Carousel";
 import axios from "../../../backend/axios/Axios";
-import ScaleLoader from "react-spinners/ScaleLoader";
+//import ScaleLoader from "react-spinners/ScaleLoader";
 
 class AccountCardCarousel extends Component {
   constructor(props) {

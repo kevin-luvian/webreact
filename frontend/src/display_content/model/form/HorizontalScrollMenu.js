@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import {
-  compareNum,
   parseDate,
   dateSort,
-  convertToDate,
-  parseMonthToInt,
   parseDayFromDate,
   parseMonthFromDate
 } from "../../../backend/function/Function";
@@ -35,7 +32,7 @@ class HorizontalScrollMenu extends Component {
     data.sort(dateSort());
     for (let i = 0; i < data.length; i++) {
       let year = data[i].date.split("-")[0];
-      if (year != currentYear) {
+      if (year !== currentYear) {
         res.push({ name: year, value: year });
         currentYear = year;
       }

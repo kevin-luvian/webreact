@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../model/navbar/Navbar";
 import CardArea from "../model/account/CardArea";
-import HorizontalScrollMenu from "../model/form/HorizontalScrollMenu";
-import DetailArea from "../model/details/DetailArea";
-import LineChart from "../model/dashboard/line/LineChart";
-import DataTable from "../model/table/DataTable";
-import WeekTransactions from "./temp/WeekTransactions.js";
 import ChooseDate from "../model/form/ChooseDate";
 import axios from "../../backend/axios/Axios";
 import { parseDate } from "../../backend/function/Function";

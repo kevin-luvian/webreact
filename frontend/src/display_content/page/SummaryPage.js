@@ -221,7 +221,6 @@ class SummaryPage extends Component {
         <div className="col-12 px-0 mt-4">
           <WideLineChart
             key={this.state.keyFetch}
-            isLoading={true}
             isLoading={this.state.isLoading}
             data={this.state.transactions}
           />
