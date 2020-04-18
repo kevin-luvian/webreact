@@ -61,12 +61,10 @@ class WideLineChart extends Component {
   };
 
   reload = () => {
-    /*
     let chart = this.state.chart;
     chart.data = this.processData();
     this.setState({ chart: chart });
-    */
-    this.state.chart.data = this.processData();
+    //this.state.chart.data = this.processData();
   };
 
   loadAndSort = () => {

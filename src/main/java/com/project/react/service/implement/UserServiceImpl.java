@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = getById(request.getId().get()).get();
         if (!passwordEncoder.matches(request.getOldPassword().get(), user.getPassword()))
             throw new AccessDeniedException("unauthorized");
-        if (!request.getPassword().get().isBlank())
+        if (!request.getPassword().get().trim().isEmpty())
             user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
         user.setUsername(request.getUsername().get());
         return userDb.save(user);

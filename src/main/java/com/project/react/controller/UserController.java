@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().isBlank() || request.getPassword().get().isBlank()) {
+            if (request.getUsername().get().trim().isEmpty() || request.getPassword().get().trim().isEmpty()) {
                 throw new NullPointerException();
             }
             UserModel user = userService.create(request);
@@ -64,7 +64,7 @@ public class UserController {
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().isBlank() || request.getOldPassword().get().isBlank())
+            if (request.getUsername().get().trim().isEmpty() || request.getOldPassword().get().trim().isEmpty())
                 throw new NullPointerException();
             UserModel user = userService.update(request);
             return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully updated", user));

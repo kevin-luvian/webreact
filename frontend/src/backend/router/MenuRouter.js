@@ -10,6 +10,8 @@ import Logout from "../../display_content/model/authenticate/Logout";
 import ClearTokenAction from "../redux/actions/ClearTokenAction";
 import AccountPage from "../../display_content/page/AccountPage";
 import SettingsPage from "../../display_content/page/SettingsPage";
+import FavIconPage from "../../display_content/page/FavIconPage";
+import Error404Page from "../../display_content/page/Error404Page";
 
 class MenuRouter extends Component {
   constructor(props) {
@@ -60,8 +62,9 @@ class MenuRouter extends Component {
         <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
         <ProtectedRoute path="/account" component={AccountPage} />
         <ProtectedRoute path="/settings" component={SettingsPage} />
-        {/**<ProtectedRoute path="/favicon" component={FavIconPage} />*/}
+        <Route path="/favicon" component={FavIconPage} />
         <ProtectedRoute path="/logout" component={Logout} />
+        <Route path='*' exact={true} component={Error404Page} />
       </Router>
     );
   }
