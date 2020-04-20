@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
 import { connect } from "react-redux";
 import HomePage from "../../display_content/page/HomePage";
 import ThisWeekDashboardPage from "../../display_content/page/ThisWeekDashboardPage";
@@ -11,7 +16,7 @@ import ClearTokenAction from "../redux/actions/ClearTokenAction";
 import AccountPage from "../../display_content/page/AccountPage";
 import SettingsPage from "../../display_content/page/SettingsPage";
 import FavIconPage from "../../display_content/page/FavIconPage";
-import Error404Page from "../../display_content/page/Error404Page";
+import Error404Page from "../../display_content/page/error/Error404Page";
 
 class MenuRouter extends Component {
   constructor(props) {
@@ -49,22 +54,24 @@ class MenuRouter extends Component {
 
     return (
       <Router>
-        <Route path="/login" component={Login} />
-        <ProtectedRoute path="/" exact component={HomePage} />
-        <ProtectedRoute
-          path="/week-dashboard"
-          component={ThisWeekDashboardPage}
-        />
-        <ProtectedRoute
-          path="/month-dashboard"
-          component={ThisMonthDashboardPage}
-        />
-        <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
-        <ProtectedRoute path="/account" component={AccountPage} />
-        <ProtectedRoute path="/settings" component={SettingsPage} />
-        <Route path="/favicon" component={FavIconPage} />
-        <ProtectedRoute path="/logout" component={Logout} />
-        <Route path='*' exact={true} component={Error404Page} />
+        <Switch>
+          <Route path="/login" component={Login} />
+          <ProtectedRoute path="/" exact component={HomePage} />
+          <ProtectedRoute
+            path="/week-dashboard"
+            component={ThisWeekDashboardPage}
+          />
+          <ProtectedRoute
+            path="/month-dashboard"
+            component={ThisMonthDashboardPage}
+          />
+          <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
+          <ProtectedRoute path="/account" component={AccountPage} />
+          <ProtectedRoute path="/settings" component={SettingsPage} />
+          <Route path="/favicon" component={FavIconPage} />
+          <ProtectedRoute path="/logout" component={Logout} />
+          <Route path="*" exact={true} component={Error404Page} />
+        </Switch>
       </Router>
     );
   }

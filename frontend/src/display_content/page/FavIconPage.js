@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../model/navbar/Navbar";
 import favicondata from "../../backend/data/Favicon";
-import $ from "jquery";
 
 const navigation = {
   title: "FavIcon",
@@ -27,16 +26,9 @@ class FavIconPage extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    $(".DisabledLink").click(function (event) {
-      event.preventDefault();
-    });
-  }
-
   renderData = () => {
     var res = [];
     for (let i = 0; i < favicondata.length; i++) {
-      console.log(favicondata[i]);
       res.push(
         <div key={i} className="col-12 mt-5">
           <div className="card">
@@ -46,9 +38,9 @@ class FavIconPage extends Component {
                 {favicondata[i].icons.map((icon, index) => {
                   return (
                     <div key={index} className="fw-icons col-lg-3 col-sm-6">
-                      <a className="DisabledLink" href="">
-                        <i className={icon.value} /> {icon.text}
-                      </a>
+                      <p>
+                        <i className={icon.value} />{icon.text}
+                      </p>
                     </div>
                   );
                 })}

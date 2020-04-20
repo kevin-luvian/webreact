@@ -1928,20 +1928,18 @@ label {
 
 /*-------------------- 18. Icons ------------------- */
 
-.fw-icons {}
-
-.fw-icons a {
+.fw-icons p {
     color: #444;
     margin: 9px 0;
     display: inline-block;
     font-family: 'lato', sans-serif;
 }
 
-.fw-icons a:hover {
-    color: #007BFF;
+.fw-icons p:hover {
+    color: #7801ff;
 }
 
-.fw-icons a i {
+.fw-icons p i {
     width: 30px;
     font-size: 14px;
 }
@@ -2551,12 +2549,11 @@ table.dataTable thead td {
 /*-------------------- 25. 404 Page ------------------- */
 
 .error-area {
-    min-height: 100vh;
+    min-height: 90vh;
     background: #F3F8FB;
 }
 
 .error-content {
-    background: #fff;
     width: 100%;
     max-width: 600px;
     margin: auto;
@@ -2583,12 +2580,25 @@ table.dataTable thead td {
 }
 
 .error-content a {
+    text-decoration: none !important;
     display: inline-block;
     margin-top: 40px;
     background: #656aea;
     color: #fff;
     padding: 16px 26px;
     border-radius: 3px;
+    transition: 0.3s linear;
+}
+
+.error-content a:hover {
+    color: #fff;
+    box-shadow: 0 .2rem .5rem rgba(0,0,0,.2)!important
+}
+
+.error-content a:active {
+    color: #fff;
+    background: #5659c7;
+    box-shadow: 0 .2rem .5rem rgba(0,0,0,.2)!important
 }
 
 /*-------------------- END 404 Page ------------------- */
