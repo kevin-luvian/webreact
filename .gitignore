@@ -1,15 +1,29 @@
-### Backend ###
-
 ### Frontend ###
-frontend/node_modules/**
-frontend/build/**
-frontend/package-lock.json
+# dependencies
+frontend/node_modules
+frontend/.pnp
+frontend/.pnp.js
 
+# testing
+frontend/coverage
+
+# production
+frontend/build
+
+# misc
+frontend/.DS_Store
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+### Backend ###
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
 
 ### STS ###
 .apt_generated
