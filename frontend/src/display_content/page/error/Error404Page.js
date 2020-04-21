@@ -8,7 +8,7 @@ const navigation = {
   history: [
     {
       title: "Error",
-      href: "/",
+      href: "/error",
     },
     {
       title: "404",

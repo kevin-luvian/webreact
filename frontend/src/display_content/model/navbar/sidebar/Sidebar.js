@@ -25,11 +25,6 @@ class Sidebar extends Component {
         title: "Account",
         href: "/account",
         icon: "fa fa-money"
-      },
-      {
-        title: "Logout",
-        href: "#",
-        icon: "fa fa-power-off"
       }
     ];
 
