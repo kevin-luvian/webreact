@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import javax.validation.Valid;
 
 import com.project.react.model.AccountModel;
+import com.project.react.model.TransactionModel;
 import com.project.react.restModel.AccountRequest;
 import com.project.react.restModel.AccountResponse;
 import com.project.react.restModel.BaseResponse;
@@ -110,6 +111,23 @@ public class AccountController {
             AccountModel account = accountService.getById(id).get();
             if (account.getUserModel().equals(userService.getByUsername(userDetails.getUsername()).get())) {
                 return ResponseEntity.ok().body(new BaseResponse<AccountModel>(200, "account item", account));
+            }
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", null));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
+        }
+    }
+
+    @PostMapping(value = "/transactions")
+    private ResponseEntity<?> getAccountTransactions(@AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody String id) {
+        try {
+            id = id.replace("=", "");
+            AccountModel account = accountService.getById(id).get();
+            if (account.getUserModel().equals(userService.getByUsername(userDetails.getUsername()).get())) {
+                List<TransactionModel> transactions = account.getTransactionList();
+                return ResponseEntity.ok().body(new BaseResponse<List<TransactionModel>>(200,
+                        account.getName() + " transaction list", transactions));
             }
             return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", null));
         } catch (NoSuchElementException e) {
