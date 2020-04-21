@@ -14,7 +14,7 @@ import {
   FormLabel,
   FormGroup,
   FormControl,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 
 class DataTable extends Component {
@@ -23,38 +23,38 @@ class DataTable extends Component {
     this.state = {};
   }
 
-  handleAdd = async data => {
+  handleAdd = async (data) => {
     await axios
       .post("/api/transaction", data)
-      .then(response => {
+      .then((response) => {
         this.refs.modalAdd.handleClose();
         this.props.reload();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response);
       });
   };
 
-  handleEdit = async data => {
+  handleEdit = async (data) => {
     await axios
       .put("/api/transaction", data)
-      .then(response => {
+      .then((response) => {
         this.refs.modalEdit.handleClose();
         this.props.reload();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response);
       });
   };
 
-  handleDelete = async data => {
+  handleDelete = async (data) => {
     await axios
       .delete("/api/transaction", { data: data })
-      .then(response => {
+      .then((response) => {
         this.refs.modalDelete.handleClose();
         this.props.reload();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -79,7 +79,7 @@ class DataTable extends Component {
     return res;
   };
 
-  handleEditClick = rowData => {
+  handleEditClick = (rowData) => {
     console.log(rowData);
     this.refs.modalEdit.handleShow(
       rowData[0],
@@ -92,7 +92,7 @@ class DataTable extends Component {
     );
   };
 
-  handleDeleteClick = rowData => {
+  handleDeleteClick = (rowData) => {
     this.refs.modalDelete.handleShow(rowData[0], rowData[1]);
   };
 
@@ -100,16 +100,15 @@ class DataTable extends Component {
     this.refs.modalAdd.handleShow(
       "",
       "",
-      this.props.default.account,
+      this.props.defaultAccount || this.props.default.account,
       this.props.default.category,
       this.props.currentDate,
       true,
-      0,
-      this.props.default.account
+      0
     );
   };
 
-  parseToDate = dateStr => {
+  parseToDate = (dateStr) => {
     let dateArr = dateStr.split("-");
     return new Date(dateArr[0], parseInt(dateArr[1]) - 1, dateArr[2]);
   };
@@ -119,28 +118,28 @@ class DataTable extends Component {
       overrides: {
         MuiGridListTile: {
           root: {
-            width: "100% !important"
-          }
+            width: "100% !important",
+          },
         },
         MUIDataTableHeadCell: {
           root: {
             zIndex: "0 !important",
-            fontWeight: "bold"
-          }
+            fontWeight: "bold",
+          },
         },
         MUIDataTable: {
           responsiveScrollMaxHeight: {
-            maxHeight: "69vh !important"
-          }
+            maxHeight: "69vh !important",
+          },
         },
         MuiTypography: {
           h6: {
             fontFamily: "Lato, sans-serif",
             fontSize: "18px !important",
-            fontWeight: "600"
-          }
-        }
-      }
+            fontWeight: "600",
+          },
+        },
+      },
     });
 
   render() {
@@ -149,8 +148,8 @@ class DataTable extends Component {
         name: "id",
         options: {
           display: false,
-          filter: false
-        }
+          filter: false,
+        },
       },
       {
         name: "name",
@@ -158,8 +157,8 @@ class DataTable extends Component {
         options: {
           filter: false,
           sort: true,
-          setCellHeaderProps: value => ({ style: { textAlign: "center" } })
-        }
+          setCellHeaderProps: (value) => ({ style: { textAlign: "center" } }),
+        },
       },
       {
         name: "accountModel",
@@ -167,12 +166,12 @@ class DataTable extends Component {
         options: {
           sort: true,
           searchable: false,
-          setCellHeaderProps: value => ({
-            style: { textAlign: "center", minWidth: "100px" }
+          setCellHeaderProps: (value) => ({
+            style: { textAlign: "center", minWidth: "100px" },
           }),
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
-              <p className="text-muted m-0">
+              <p className="text-muted text-nowrap m-0">
                 <i
                   className={"fa fa-" + value.favIcon}
                   style={{ color: "gray" }}
@@ -204,7 +203,7 @@ class DataTable extends Component {
                               <Checkbox
                                 value={account}
                                 checked={filterList[index].includes(account)}
-                                onClick={event => {
+                                onClick={(event) => {
                                   if (event.target.checked)
                                     filterList[index].push(event.target.value);
                                   else
@@ -224,9 +223,9 @@ class DataTable extends Component {
                   </FormControl>
                 </React.Fragment>
               );
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         name: "categoryModel",
@@ -234,7 +233,7 @@ class DataTable extends Component {
         options: {
           sort: true,
           searchable: false,
-          setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
+          setCellHeaderProps: (value) => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <p
@@ -242,7 +241,7 @@ class DataTable extends Component {
                   margin: "0",
                   borderRadius: "15px",
                   borderLeft: "2px solid " + value.color,
-                  paddingLeft: "15px"
+                  paddingLeft: "15px",
                 }}
               >
                 {value.name}
@@ -272,7 +271,7 @@ class DataTable extends Component {
                               <Checkbox
                                 value={category}
                                 checked={filterList[index].includes(category)}
-                                onClick={event => {
+                                onClick={(event) => {
                                   if (event.target.checked)
                                     filterList[index].push(event.target.value);
                                   else
@@ -292,9 +291,9 @@ class DataTable extends Component {
                   </FormControl>
                 </React.Fragment>
               );
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         name: "date",
@@ -303,14 +302,14 @@ class DataTable extends Component {
           sort: true,
           filter: false,
           searchable: false,
-          setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
+          setCellHeaderProps: (value) => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
             let date = value.split("-");
             return (
               <p className="mb-0">{[date[1], date[2], date[0]].join("/")}</p>
             );
-          }
-        }
+          },
+        },
       },
       {
         name: "type",
@@ -318,7 +317,7 @@ class DataTable extends Component {
         options: {
           sort: false,
           searchable: false,
-          setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
+          setCellHeaderProps: (value) => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <React.Fragment>
@@ -347,7 +346,7 @@ class DataTable extends Component {
                     <FormGroup>
                       <Select
                         value={filterList[index]}
-                        onChange={event => {
+                        onChange={(event) => {
                           filterList[index][0] = event.target.value;
                           onChange(filterList[index], index, column);
                         }}
@@ -364,9 +363,9 @@ class DataTable extends Component {
                   </FormControl>
                 </React.Fragment>
               );
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         name: "value",
@@ -375,7 +374,7 @@ class DataTable extends Component {
           filter: false,
           sort: false,
           searchable: false,
-          setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
+          setCellHeaderProps: (value) => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <React.Fragment>
@@ -385,15 +384,15 @@ class DataTable extends Component {
                 </p>
               </React.Fragment>
             );
-          }
-        }
+          },
+        },
       },
       {
         name: "accountModel",
         options: {
           display: false,
-          filter: false
-        }
+          filter: false,
+        },
       },
       {
         name: "key",
@@ -404,7 +403,7 @@ class DataTable extends Component {
           searchable: false,
           download: false,
           empty: true,
-          setCellHeaderProps: value => ({ style: { textAlign: "center" } }),
+          setCellHeaderProps: (value) => ({ style: { textAlign: "center" } }),
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <div className="text-center" style={{ minWidth: "100px" }}>
@@ -418,7 +417,7 @@ class DataTable extends Component {
                     className="fa fa-edit"
                     style={{
                       fontSize: "1.1rem",
-                      transform: "translate(7%, 8%)"
+                      transform: "translate(7%, 8%)",
                     }}
                   />
                 </button>
@@ -435,9 +434,9 @@ class DataTable extends Component {
                 </button>
               </div>
             );
-          }
-        }
-      }
+          },
+        },
+      },
     ];
     const options = {
       filterType: "checkbox",
@@ -450,21 +449,21 @@ class DataTable extends Component {
         if (colIndex === 2) {
           console.log(data);
           if (order === "desc") {
-            data.sort(function(x, y) {
+            data.sort(function (x, y) {
               return x.data[2].name.localeCompare(y.data[2].name);
             });
           } else {
-            data.sort(function(x, y) {
+            data.sort(function (x, y) {
               return y.data[2].name.localeCompare(x.data[2].name);
             });
           }
         } else if (colIndex === 3) {
           if (order === "desc") {
-            data.sort(function(x, y) {
+            data.sort(function (x, y) {
               return x.data[3].name.localeCompare(y.data[3].name);
             });
           } else {
-            data.sort(function(x, y) {
+            data.sort(function (x, y) {
               return y.data[3].name.localeCompare(x.data[3].name);
             });
           }
@@ -488,11 +487,11 @@ class DataTable extends Component {
           }
         } else {
           if (order === "desc") {
-            data.sort(function(x, y) {
+            data.sort(function (x, y) {
               return x.data[colIndex].localeCompare(y.data[colIndex]);
             });
           } else {
-            data.sort(function(x, y) {
+            data.sort(function (x, y) {
               return y.data[colIndex].localeCompare(x.data[colIndex]);
             });
           }
@@ -501,7 +500,7 @@ class DataTable extends Component {
       },
       fixedHeaderOptions: {
         xAxis: false,
-        yAxis: true
+        yAxis: true,
       },
       customToolbar: () => {
         return (
@@ -510,7 +509,7 @@ class DataTable extends Component {
             onClick={this.handleToolbarClick}
           />
         );
-      }
+      },
     };
     return (
       <React.Fragment>
@@ -555,8 +554,8 @@ class DataTable extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
+const mapStateToProps = (state) => ({
+  ...state,
 });
 
 export default connect(mapStateToProps)(DataTable);

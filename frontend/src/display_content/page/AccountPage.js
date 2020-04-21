@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../model/navbar/Navbar";
 import DataTable from "../model/table/DataTable";
+import DetailArea from "../model/details/DetailArea";
 import AccountCardCarousel from "../model/carousel/AccountCardCarousel";
 import axios from "../../backend/axios/Axios";
 
@@ -9,13 +10,13 @@ const navigation = {
   history: [
     {
       title: "Home",
-      href: "/"
+      href: "/",
     },
     {
       title: "Account",
-      href: ""
-    }
-  ]
+      href: "",
+    },
+  ],
 };
 
 class AccountPage extends Component {
@@ -27,16 +28,16 @@ class AccountPage extends Component {
       keyCRUD: 0,
       isError: false,
       isLoading: true,
+      currentId: "",
       transactions: [],
       accounts: [],
-      categories: []
+      categories: [],
     };
   }
 
   componentDidMount() {
     this.fetchAccounts();
     this.fetchCategories();
-    this.fetchTransactions();
   }
 
   incrementKey = () => {
@@ -51,26 +52,33 @@ class AccountPage extends Component {
     this.setState({ keyCRUD: this.state.keyCRUD + 1 });
   };
 
+  handleAccountChange = (id) => {
+    this.setState({ currentId: id });
+    this.fetchTransactions(id);
+    this.incrementKey();
+  };
+
   reload = () => {
-    this.fetchTransactions();
+    this.fetchTransactions(this.state.currentId);
     this.incrementKeyCRUD();
   };
 
-  fetchTransactions = async () => {
-    await axios
-      .get("/api/transaction/all")
-      .then(response => {
+  fetchTransactions = (id) => {
+    console.log(id);
+    axios
+      .post("/api/account/transactions", id)
+      .then((response) => {
         this.setState({
           isLoading: false,
-          transactions: response.data.payload
+          transactions: response.data.payload,
         });
         this.incrementKey();
         this.incrementKeyFetch();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -78,17 +86,20 @@ class AccountPage extends Component {
   fetchAccounts = async () => {
     await axios
       .get("/api/account/all")
-      .then(response => {
+      .then((response) => {
+        let firstAccountId = response.data.payload[0].id;
+        console.log(firstAccountId);
         this.setState({
-          accounts: response.data.payload
+          currentId: firstAccountId,
+          accounts: response.data.payload,
         });
+        this.fetchTransactions(firstAccountId);
         this.incrementKey();
-        console.log(this.state.accounts);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -96,16 +107,16 @@ class AccountPage extends Component {
   fetchCategories = async () => {
     await axios
       .get("/api/category/all")
-      .then(response => {
+      .then((response) => {
         this.setState({
-          categories: response.data.payload
+          categories: response.data.payload,
         });
         this.incrementKey();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -115,8 +126,17 @@ class AccountPage extends Component {
       <Navbar navigationLink={navigation}>
         <div className="mt-4">
           <AccountCardCarousel
-            key={this.state.keyCRUD} 
+            key={this.state.keyCRUD}
             data={this.state.accounts}
+            handleClick={this.handleAccountChange}
+          />
+        </div>
+        <div className="row mt-4">
+          <DetailArea
+            key={this.state.key}
+            data={this.state.transactions}
+            isLoading={this.state.isLoading}
+            categories={this.state.categories}
           />
         </div>
         <div className="col-12 px-0 mt-4">
@@ -124,6 +144,7 @@ class AccountPage extends Component {
             key={this.state.key}
             data={this.state.transactions}
             isLoading={this.state.isLoading}
+            defaultAccount={this.state.currentId}
             accounts={this.state.accounts}
             categories={this.state.categories}
             currentDate={new Date()}

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AccountCard from "./AccountCard";
 import Carousel from "react-bootstrap/Carousel";
 import axios from "../../../backend/axios/Axios";
-//import ScaleLoader from "react-spinners/ScaleLoader";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 class AccountCardCarousel extends Component {
   constructor(props) {
@@ -28,22 +28,6 @@ class AccountCardCarousel extends Component {
         console.log(error);
       });
   };
-  /*
-  createCards = () => {
-    let result = [];
-    cards.map((props, index) =>
-      result.push(
-        <Carousel.Item>
-          <AccountCard id={"card-account-" + index} {...props} />
-        </Carousel.Item>
-      )
-    );
-    return result;
-  };
-*/
-  handleSelect = (selectedIndex, e) => {
-    console.log(e);
-  };
 
   render() {
     const iconStyle = {
@@ -52,20 +36,33 @@ class AccountCardCarousel extends Component {
     };
     return (
       <React.Fragment>
-        <Carousel
-          className="col-12 col-md-9 col-lg-7 col-xl-6 mx-auto"
-          indicators={false}
-          prevIcon={<i className="fa fa-chevron-left" style={iconStyle} />}
-          nextIcon={<i className="fa fa-chevron-right" style={iconStyle} />}
-        >
-          {this.state.data.map((props, index) => {
-            return (
-              <Carousel.Item key={index} className="py-4">
-                <AccountCard id={"card-account-" + index} {...props} />
-              </Carousel.Item>
-            );
-          })}
-        </Carousel>
+        {this.state.isLoading ? (
+          <div className="card shadow mt-4" style={{ minHeight: "108px" }}>
+            <div className="center mx-auto">
+              <ScaleLoader color={"#8914fe"} height={40} width={5} margin={5} />
+            </div>
+          </div>
+        ) : (
+          <Carousel
+            className="col-12 col-md-9 col-lg-7 col-xl-6 mx-auto"
+            indicators={false}
+            interval={null}
+            prevIcon={<i className="fa fa-chevron-left" style={iconStyle} />}
+            nextIcon={<i className="fa fa-chevron-right" style={iconStyle} />}
+          >
+            {this.state.data.map((props, index) => {
+              return (
+                <Carousel.Item key={index} className="py-4">
+                  <AccountCard
+                    id={"card-account-" + index}
+                    handleClick={this.props.handleClick}
+                    {...props}
+                  />
+                </Carousel.Item>
+              );
+            })}
+          </Carousel>
+        )}
       </React.Fragment>
     );
   }

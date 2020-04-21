@@ -5,16 +5,16 @@ class AccountCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isClicked: false
+      isClicked: false,
     };
   }
 
-  createKey = key => {
+  createKey = (key) => {
     return this.props.id + "-" + key;
   };
 
   handleButtonClick = () => {
-    console.log("button is clicked");
+    this.props.handleClick(this.props.id);
   };
 
   handleClick = () => {
@@ -53,9 +53,11 @@ class AccountCard extends Component {
               id={this.createKey("btn-click")}
               className="text-center d-none"
               style={{ paddingTop: "6px" }}
-              onClick={this.handleButtonClick}
             >
-              <i className="account-card-icon fa fa-file" />
+              <i
+                className="account-card-icon fa fa-file"
+                onClick={this.handleButtonClick}
+              />
             </div>
             <div id={this.createKey("card-body")} className="card-body">
               <div className="row no-gutters align-items-center">

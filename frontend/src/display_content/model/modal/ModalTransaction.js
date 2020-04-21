@@ -198,6 +198,21 @@ class ModalBox extends Component {
                     })}
                   </Select>
                 </FormControl>
+                <FormControl className="w-100 mt-4">
+                  <InputLabel>Category</InputLabel>
+                  <Select
+                    value={this.state.selectedCategory}
+                    onChange={this.handleCategoryChange}
+                  >
+                    {this.props.categories.map((value, index) => {
+                      return (
+                        <MenuItem key={index} value={value.id}>
+                          {value.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     disableToolbar
@@ -214,21 +229,6 @@ class ModalBox extends Component {
                     }}
                   />
                 </MuiPickersUtilsProvider>
-                <FormControl className="w-100 mt-4">
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    value={this.state.selectedCategory}
-                    onChange={this.handleCategoryChange}
-                  >
-                    {this.props.categories.map((value, index) => {
-                      return (
-                        <MenuItem key={index} value={value.id}>
-                          {value.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
                 <TextField
                   className="w-100 mt-4"
                   error={false}

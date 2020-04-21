@@ -24,10 +24,6 @@ class Input extends Component {
     }
   };
 
-  handleChange = event => {
-    return event.target.value;
-  };
-
   render() {
     const { id, ico, label, ...opts } = this.props;
     return (

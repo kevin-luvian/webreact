@@ -11,21 +11,21 @@ class SettingsPage extends Component {
     this.state = {
       key: 0,
       listAccount: [],
-      listCategory: []
+      listCategory: [],
     };
   }
 
-  handleAccountChange = data => {
+  handleAccountChange = (data) => {
     this.setState({
       key: this.state.key + 1,
-      listAccount: data
+      listAccount: data,
     });
   };
 
-  handleCategoryChange = data => {
+  handleCategoryChange = (data) => {
     this.setState({
       key: this.state.key + 1,
-      listCategory: data
+      listCategory: data,
     });
   };
 
@@ -35,30 +35,32 @@ class SettingsPage extends Component {
       history: [
         {
           title: "Home",
-          href: "/"
+          href: "/",
         },
         {
           title: "Settings",
-          href: ""
-        }
-      ]
+          href: "",
+        },
+      ],
     };
     return (
       <Navbar navigationLink={navigation}>
         <div className="container mt-4">
           <div className="col-12 px-0">
-            <p className="settings-title">Accounts</p>
             <div className="col-12 col-sm-11 mx-auto px-0 px-sm-3">
+              <p className="settings-title">Accounts</p>
               <AccountTable
                 data={this.state.listAccount}
                 handleChange={this.handleAccountChange}
               />
-              <p className="mt-2 text-muted">find more icon at <Link to="/favicon">/favicon</Link></p>
+              <p className="mt-2 text-muted">
+                find more icon at <Link to="/favicon">/favicon</Link>
+              </p>
             </div>
           </div>
           <div className="col-12 px-0 mt-5">
-            <p className="settings-title">Categories</p>
             <div className="col-12 col-sm-11 mx-auto px-0 px-sm-3">
+              <p className="settings-title">Categories</p>
               <CategoryTable
                 data={this.state.listCategory}
                 handleChange={this.handleCategoryChange}
@@ -66,8 +68,8 @@ class SettingsPage extends Component {
             </div>
           </div>
           <div className="col-12 px-0 mt-5">
-            <p className="settings-title">Default</p>
             <div className="col-12 col-sm-11 mx-auto px-0 px-sm-3">
+              <p className="settings-title">Default</p>
               <DefaultSettings
                 key={this.state.key}
                 listAccount={this.state.listAccount}

@@ -18,7 +18,6 @@ class Sidebar extends Component {
         subtitles: [
           { text: "today", href: "/" },
           { text: "weekly", href: "/week-dashboard" },
-          { text: "monthly", href: "/month-dashboard" },
           { text: "summary", href: "/summary-dashboard" }
         ]
       },

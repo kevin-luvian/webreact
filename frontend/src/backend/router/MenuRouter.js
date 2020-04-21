@@ -8,7 +8,6 @@ import {
 import { connect } from "react-redux";
 import HomePage from "../../display_content/page/HomePage";
 import ThisWeekDashboardPage from "../../display_content/page/ThisWeekDashboardPage";
-import ThisMonthDashboardPage from "../../display_content/page/ThisMonthDashboardPage";
 import SummaryPage from "../../display_content/page/SummaryPage";
 import Login from "../../display_content/model/authenticate/Login";
 import Logout from "../../display_content/model/authenticate/Logout";
@@ -30,10 +29,6 @@ class MenuRouter extends Component {
 
   render() {
     const ProtectedRoute = ({ component: Component, ...rest }) => {
-      // this.clearToken();
-      // this.checkToken();
-      // console.log(window.location.pathname);
-      // console.log(this.props.token);
       return (
         <Route
           {...rest}
@@ -61,16 +56,12 @@ class MenuRouter extends Component {
             path="/week-dashboard"
             component={ThisWeekDashboardPage}
           />
-          <ProtectedRoute
-            path="/month-dashboard"
-            component={ThisMonthDashboardPage}
-          />
           <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
           <ProtectedRoute path="/account" component={AccountPage} />
           <ProtectedRoute path="/settings" component={SettingsPage} />
-          <Route path="/favicon" component={FavIconPage} />
           <ProtectedRoute path="/logout" component={Logout} />
-          <Route path="*" exact={true} component={Error404Page} />
+          <Route path="/favicon" component={FavIconPage} />
+          <Route component={Error404Page} />
         </Switch>
       </Router>
     );
