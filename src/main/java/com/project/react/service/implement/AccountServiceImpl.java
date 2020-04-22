@@ -30,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
         for (AccountModel account : listAccount) {
             Long total = Long.valueOf(0);
             for (TransactionModel transaction : account.getTransactionList())
-                total += transaction.getValue();
+                total += transaction.getValue() * (transaction.getType() ? 1 : -1);
             result.add(new AccountResponse(account.getId(), account.getName(), account.getColor(), account.getFavIcon(),
                     total));
         }

@@ -9,7 +9,6 @@ class AccountCardCarousel extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      activeIndex: 0,
       data: [],
     };
   }

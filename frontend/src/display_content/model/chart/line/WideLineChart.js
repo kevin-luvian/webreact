@@ -93,7 +93,6 @@ class WideLineChart extends Component {
     res.push(data[data.length - 1]);
 
     this.setState({ data: res }, () => {
-      console.log(this.state.data);
       this.loadChart();
     });
   };

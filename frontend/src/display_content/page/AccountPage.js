@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import axios from "../../backend/axios/Axios";
 import Navbar from "../model/navbar/Navbar";
 import DataTable from "../model/table/DataTable";
 import DetailArea from "../model/details/DetailArea";
 import AccountCardCarousel from "../model/carousel/AccountCardCarousel";
-import axios from "../../backend/axios/Axios";
+import DetailAreaCashFlow from "../model/details/DetailAreaCashFlow";
 
 const navigation = {
   title: "Account",
@@ -53,9 +54,11 @@ class AccountPage extends Component {
   };
 
   handleAccountChange = (id) => {
-    this.setState({ currentId: id });
-    this.fetchTransactions(id);
-    this.incrementKey();
+    if (this.state.currentId !== id) {
+      this.setState({ currentId: id });
+      this.fetchTransactions(id);
+      this.incrementKey();
+    }
   };
 
   reload = () => {
@@ -64,7 +67,6 @@ class AccountPage extends Component {
   };
 
   fetchTransactions = (id) => {
-    console.log(id);
     axios
       .post("/api/account/transactions", id)
       .then((response) => {
@@ -132,11 +134,10 @@ class AccountPage extends Component {
           />
         </div>
         <div className="row mt-4">
-          <DetailArea
+          <DetailAreaCashFlow
             key={this.state.key}
             data={this.state.transactions}
             isLoading={this.state.isLoading}
-            categories={this.state.categories}
           />
         </div>
         <div className="col-12 px-0 mt-4">

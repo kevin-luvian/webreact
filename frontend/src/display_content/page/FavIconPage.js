@@ -49,7 +49,7 @@ class FavIconPage extends Component {
     let searchParam = this.state.searchParam;
     let counter = 0;
     if (searchParam !== "" && searchParam.length > 1) {
-      for (let i = 0; i < favicondata.length; i++) {
+      for (let i = 1; i < favicondata.length; i++) {
         for (let j = 0; j < favicondata[i].icons.length; j++) {
           if (favicondata[i].icons[j].text.includes(searchParam))
             res.push(this.renderIcon(favicondata[i].icons[j], counter++));
