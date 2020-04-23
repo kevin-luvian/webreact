@@ -55,11 +55,11 @@ public class UserController {
             UserModel user = userService.create(currentUser, request);
             return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully created", user));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", e.getStackTrace()));
         } catch (NullPointerException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", e.getStackTrace()));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", e.getStackTrace()));
         }
     }
 
@@ -74,11 +74,11 @@ public class UserController {
             UserModel user = userService.update(currentUser, request);
             return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully updated", user));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", e.getStackTrace()));
         } catch (NullPointerException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", e.getStackTrace()));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", e.getStackTrace()));
         }
     }
 
@@ -86,10 +86,13 @@ public class UserController {
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody String id) {
         try {
-            UserModel user = userService.delete(id);
+            UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
+            UserModel user = userService.delete(currentUser, id);
             return ResponseEntity.ok().body(new BaseResponse<UserModel>(200, "user successfully deleted", user));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", e.getStackTrace()));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", ""));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "no such element exception", e.getStackTrace()));
         }
     }
 }

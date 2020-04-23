@@ -64,7 +64,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel delete(String id) {
+    public UserModel delete(UserModel currentUser, String id) {
+        if (currentUser.getRoles().contains("ADMIN"))
+            throw new AccessDeniedException("unauthorized");
         UserModel user = getById(id).get();
         userDb.delete(user);
         return user;

@@ -12,6 +12,6 @@ public interface UserService {
     Optional<UserModel> getByUsername(String username);
     UserModel create(UserModel currentUser, UserRequest request);
     UserModel update(UserModel currentUser, UserRequest request);
+    UserModel delete(UserModel currentUser, String id);
     UserModel save(UserModel user);
-    UserModel delete(String id);
 }
