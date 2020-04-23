@@ -38,7 +38,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel create(UserRequest request) {
+    public UserModel create(UserModel currentUser, UserRequest request) {
+        if (currentUser.getRoles().contains("ADMIN"))
+            throw new AccessDeniedException("unauthorized");
         UserModel user = new UserModel();
         user.setUsername(request.getUsername().get());
         user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
@@ -47,13 +49,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel update(UserRequest request) {
+    public UserModel update(UserModel currentUser, UserRequest request) {
         UserModel user = getById(request.getId().get()).get();
         if (!passwordEncoder.matches(request.getOldPassword().get(), user.getPassword()))
             throw new AccessDeniedException("unauthorized");
-        if (!request.getPassword().get().trim().isEmpty())
-            user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
         user.setUsername(request.getUsername().get());
+        user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
         return userDb.save(user);
     }
 

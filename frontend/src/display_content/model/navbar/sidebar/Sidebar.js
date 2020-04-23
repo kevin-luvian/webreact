@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Element from "./Element";
-import { Link } from "react-router-dom";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -18,14 +17,14 @@ class Sidebar extends Component {
         subtitles: [
           { text: "today", href: "/" },
           { text: "weekly", href: "/week-dashboard" },
-          { text: "summary", href: "/summary-dashboard" }
-        ]
+          { text: "summary", href: "/summary-dashboard" },
+        ],
       },
       {
         title: "Account",
         href: "/account",
-        icon: "fa fa-money"
-      }
+        icon: "fa fa-money",
+      },
     ];
 
     let result = [];
@@ -41,9 +40,9 @@ class Sidebar extends Component {
         <div className="sidebar-menu">
           <div className="sidebar-header">
             <div className="logo">
-              <Link to="/">
-                <img src="assets/images/icon/logo.png" alt="logo" />
-              </Link>
+              <div>
+                <img src="assets/images/icon/logo512.png" alt="logo" />
+              </div>
             </div>
           </div>
           <div className="main-menu">

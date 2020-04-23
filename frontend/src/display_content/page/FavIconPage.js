@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { TextField, InputAdornment } from "@material-ui/core";
-import Navbar from "../model/navbar/Navbar";
+import AuthNavbarWrapper from "../model/wrapper/AuthNavbarWrapper";
 import favicondata from "../../backend/data/Favicon";
 
 const navigation = {
@@ -93,7 +93,7 @@ class FavIconPage extends Component {
 
   render() {
     return (
-      <Navbar navigationLink={navigation}>
+      <AuthNavbarWrapper navigationLink={navigation}>
         <div className="row">
           <div className="col-12 mt-5">
             <div className="card">
@@ -122,7 +122,7 @@ class FavIconPage extends Component {
           </div>
           {this.state.allData}
         </div>
-      </Navbar>
+        </AuthNavbarWrapper>
     );
   }
 }

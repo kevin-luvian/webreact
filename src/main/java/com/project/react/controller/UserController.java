@@ -51,8 +51,11 @@ public class UserController {
             if (request.getUsername().get().trim().isEmpty() || request.getPassword().get().trim().isEmpty()) {
                 throw new NullPointerException();
             }
-            UserModel user = userService.create(request);
+            UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
+            UserModel user = userService.create(currentUser, request);
             return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully created", user));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", ""));
         } catch (NullPointerException e) {
             return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", ""));
         } catch (NoSuchElementException e) {
@@ -64,9 +67,11 @@ public class UserController {
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().trim().isEmpty() || request.getOldPassword().get().trim().isEmpty())
+            if (request.getUsername().get().trim().isEmpty() || request.getOldPassword().get().trim().isEmpty()
+                    || request.getPassword().get().trim().isEmpty())
                 throw new NullPointerException();
-            UserModel user = userService.update(request);
+            UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
+            UserModel user = userService.update(currentUser, request);
             return ResponseEntity.ok().body(new BaseResponse<Object>(200, "user successfully updated", user));
         } catch (AccessDeniedException e) {
             return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", ""));

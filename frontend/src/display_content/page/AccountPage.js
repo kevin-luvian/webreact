@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "../../backend/axios/Axios";
 import Navbar from "../model/navbar/Navbar";
 import DataTable from "../model/table/DataTable";
-import DetailArea from "../model/details/DetailArea";
 import AccountCardCarousel from "../model/carousel/AccountCardCarousel";
 import DetailAreaCashFlow from "../model/details/DetailAreaCashFlow";
 

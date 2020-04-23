@@ -10,8 +10,8 @@ public interface UserService {
     List<UserModel> getAll();
     Optional<UserModel> getById(String id);
     Optional<UserModel> getByUsername(String username);
-    UserModel create(UserRequest request);
-    UserModel update(UserRequest request);
+    UserModel create(UserModel currentUser, UserRequest request);
+    UserModel update(UserModel currentUser, UserRequest request);
     UserModel save(UserModel user);
     UserModel delete(String id);
 }
