@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import com.project.react.repository.UserDb;
+import com.project.react.model.UserModel;
 import com.project.react.restModel.BaseResponse;
 import com.project.react.security.jwtAuth.AuthenticationRequest;
 import com.project.react.security.jwtAuth.JwtTokenProvider;
+import com.project.react.service.interfaces.UserService;
 
 import static org.springframework.http.ResponseEntity.ok;
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -39,31 +39,29 @@ public class AuthController {
     JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    UserDb users;
+    private UserService userService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
+            Optional<UserModel> user = userService.getByUsername(username);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            String token = jwtTokenProvider.createToken(username, this.users.findByUsername(username)
+            String token = jwtTokenProvider.createToken(username, user
                     .orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
-            Map<String, Object> model = new HashMap<>();
-            model.put("id", this.users.findByUsername(username).get().getId());
-            model.put("username", username);
-            model.put("token", token);
-            return ResponseEntity.ok().body(new BaseResponse<Map<String, Object>>(200, "sign in success", model));
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", user.get().getId());
+            response.put("roles", user.get().getRoles());
+            response.put("username", username);
+            response.put("token", token);
+            return ResponseEntity.ok().body(new BaseResponse<Map<String, Object>>(200, "sign in success", response));
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
     }
 
     @GetMapping("/check")
-    public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        Map<Object, Object> model = new HashMap<>();
-        model.put("username", userDetails.getUsername());
-        model.put("roles", userDetails.getAuthorities().stream().map(a -> ((GrantedAuthority) a).getAuthority())
-                .collect(toList()));
-        return ok(model);
+    public ResponseEntity<String> checkAuth(@AuthenticationPrincipal UserDetails userDetails) {
+        return ok("auth");
     }
 }
