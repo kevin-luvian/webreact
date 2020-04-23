@@ -1,31 +1,24 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { connect } from "react-redux";
-import ClearTokenAction from "../../../backend/redux/actions/ClearTokenAction";
-import { Redirect } from "react-router-dom";
+import ClearStoreAction from "../../../backend/redux/actions/ClearStoreAction";
 
 class Logout extends Component {
-  route = () => {
-    this.props.ClearTokenAction();
-    return (
-      <Redirect
-        to={{
-          pathname: "/login"
-        }}
-      />
-    );
-  };
+  componentDidMount() {
+    this.props.ClearStoreAction();
+    this.props.history.push("/login");
+  }
 
   render() {
-    return this.route();
+    return null;
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
+const mapStateToProps = (state) => ({
+  ...state,
 });
 
-const mapDispatchToProps = dispatch => ({
-  ClearTokenAction: () => dispatch(ClearTokenAction())
+const mapDispatchToProps = (dispatch) => ({
+  ClearStoreAction: () => dispatch(ClearStoreAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Logout);

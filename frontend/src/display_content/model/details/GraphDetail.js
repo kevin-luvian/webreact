@@ -12,7 +12,7 @@ class GraphDetail extends Component {
     this.parseData();
   }
 
-  convertToArray = data => {
+  convertToArray = (data) => {
     let res = [];
 
     for (const key in data) {
@@ -21,7 +21,7 @@ class GraphDetail extends Component {
           title: key,
           color: data[key].color,
           count: data[key].count,
-          total: data[key].total
+          total: data[key].total,
         });
       }
     }
@@ -45,7 +45,7 @@ class GraphDetail extends Component {
         res[data[i].categoryModel.name] = {
           total: value_clone,
           color: data[i].categoryModel.color,
-          count: 1
+          count: 1,
         };
       }
     }
@@ -53,28 +53,28 @@ class GraphDetail extends Component {
     this.setState({
       details_data: this.convertToArray(res),
       total: total,
-      count: count
+      count: count,
     });
   };
 
   renderTotal = () => {
-    var res = [];
     var total = this.state.total;
     if (total < 0) {
       total *= -1;
-      res.push(
-        <span key={0} style={{ color: "#08d467" }}>
-          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+      return (
+        <span>
+          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+          <i
+            className="fa fa-arrow-up icon-arrow-up"
+            style={{ fontSize: "10px", color: "white" }}
+          />
         </span>
       );
     } else {
-      res.push(
-        <span key={0}>
-          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </span>
+      return (
+        <span>Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
       );
     }
-    return res;
   };
 
   createDetailCards = () => {
@@ -89,7 +89,10 @@ class GraphDetail extends Component {
     return (
       <React.Fragment>
         {this.props.isLoading ? (
-          <div className="card shadow bg-myblue mt-phone-4" style={{ minHeight: "102px" }}>
+          <div
+            className="card shadow bg-myblue mt-phone-4"
+            style={{ minHeight: "102px" }}
+          >
             <div className="center mx-auto">
               <ScaleLoader color={"white"} height={50} width={5} margin={5} />
             </div>
@@ -109,9 +112,7 @@ class GraphDetail extends Component {
                       <span
                         style={{ display: "inline-block", width: "10px" }}
                       ></span>
-                      <span className="">
-                        {this.renderTotal()}
-                      </span>
+                      <span className="">{this.renderTotal()}</span>
                     </p>
                   </div>
                   <div className="col">
@@ -120,9 +121,7 @@ class GraphDetail extends Component {
                       <span
                         style={{ display: "inline-block", width: "10px" }}
                       ></span>
-                      <span className="">
-                        {this.state.count}
-                      </span>
+                      <span className="">{this.state.count}</span>
                     </p>
                   </div>
                 </div>

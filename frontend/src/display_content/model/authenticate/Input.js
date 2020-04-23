@@ -6,22 +6,26 @@ class Input extends Component {
     super(props);
     this.state = {
       isHover: false,
-      error: false
+      error: false,
     };
   }
 
   handleFocus = () => {
     this.setState({
-      isHover: true
+      isHover: true,
     });
   };
 
-  handleBlur = event => {
+  handleBlur = (event) => {
     if (!event.target.value) {
       this.setState({
-        isHover: false
+        isHover: false,
       });
     }
+  };
+
+  onChange = (e) => {
+    this.props.handleInputChange(e.target.value);
   };
 
   render() {
@@ -35,7 +39,7 @@ class Input extends Component {
           <input
             id={id}
             {...opts}
-            onChange={this.props.handleChange}
+            onChange={this.onChange}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
           />
@@ -54,7 +58,7 @@ Input.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
   value: PropTypes.string,
-  handleError: PropTypes.func
+  handleError: PropTypes.func,
 };
 
 export default Input;

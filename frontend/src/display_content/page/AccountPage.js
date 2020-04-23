@@ -89,7 +89,6 @@ class AccountPage extends Component {
       .get("/api/account/all")
       .then((response) => {
         let firstAccountId = response.data.payload[0].id;
-        console.log(firstAccountId);
         this.setState({
           currentId: firstAccountId,
           accounts: response.data.payload,

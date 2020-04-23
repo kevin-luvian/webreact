@@ -37,6 +37,17 @@ class AccountCard extends Component {
     $("#" + this.createKey("btn-click")).addClass("d-none");
   };
 
+  renderTotal = (total) => {
+    if (total < 0) {
+      return (
+        <React.Fragment>
+          Rp {total * -1} <i className="fa fa-arrow-up icon-arrow-up" />
+        </React.Fragment>
+      );
+    }
+    return "Rp " + total;
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -69,7 +80,7 @@ class AccountCard extends Component {
                     {this.props.name}
                   </div>
                   <div className="h5 mb-0 font-weight-bold text-gray-800">
-                    Rp {this.props.total}
+                    {this.renderTotal(this.props.total)}
                   </div>
                 </div>
                 <div className="col-auto mr-3">

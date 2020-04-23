@@ -50,7 +50,7 @@ class Navbar extends Component {
                     </div>
                   </div>
                   <div className="col p-0">
-                    <DropdownMenu username={this.props.username}/>
+                    <DropdownMenu username={this.props.user.username}/>
                   </div>
                 </div>
               </div>

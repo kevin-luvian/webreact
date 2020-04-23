@@ -18,6 +18,12 @@ div.inline {
   float: left;
 }
 
+.icon-arrow-up {
+  color: rgb(12, 221, 12);
+  font-size: 13px;
+  transform: translate(-2px, -6px);
+}
+
 .clearBoth {
   clear: both;
 }

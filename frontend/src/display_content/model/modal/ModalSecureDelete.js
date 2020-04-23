@@ -1,25 +1,26 @@
 import React, { Component } from "react";
 import { Modal, Backdrop, Fade, TextField } from "@material-ui/core";
+import axios from "../../../backend/axios/Axios";
 
-class ModalBox extends Component {
+class ModalSecureDelete extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      id: this.props.id,
-      name: this.props.name,
-      filledName: "",
+      id: "",
+      name: "",
+      filledPassword: "",
       isError: false,
     };
   }
 
   handleShow = (id, name) => {
     this.setState({
-      name: name,
       id: id,
-      filledName: "",
-      open: true,
+      name: name,
+      filledPassword: "",
     });
+    this.handleOpen();
   };
 
   handleOpen = () => {
@@ -34,15 +35,15 @@ class ModalBox extends Component {
     });
   };
 
-  handleNameChange = (e) => {
+  handlePasswordChange = (e) => {
     this.setState({
-      filledName: e.target.value,
+      filledPassword: e.target.value,
       isError: false,
     });
   };
 
-  handleSubmit = () => {
-    if (this.validate()) {
+  handleSubmit = async () => {
+    if (await this.validate()) {
       this.props.onSubmit(this.state.id);
       this.handleClose();
     } else {
@@ -54,10 +55,15 @@ class ModalBox extends Component {
   };
 
   validate = () => {
-    if (this.state.filledName && this.state.filledName === this.state.name) {
-      return true;
-    }
-    return false;
+    return axios
+      .post("/auth/validate-admin", { password: this.state.filledPassword })
+      .then(() => {
+        console.log("WTF");
+        return true;
+      })
+      .catch((error) => {
+        return false;
+      });
   };
 
   render() {
@@ -92,15 +98,17 @@ class ModalBox extends Component {
                         this.state.isError ? "color-crimson" : "text-muted"
                       }
                     >
-                      enter "{this.state.name}" to continue
+                      enter password to delete "{this.state.name}"
                     </small>
                   </p>
                   <TextField
                     className="w-100 m-0"
                     error={this.state.isError}
-                    helperText=""
-                    value={this.state.filledName}
-                    onChange={this.handleNameChange}
+                    helperText={
+                      this.state.isError ? "password is incorrect" : " "
+                    }
+                    value={this.state.filledPassword}
+                    onChange={this.handlePasswordChange}
                   />
                 </div>
               </div>
@@ -118,4 +126,4 @@ class ModalBox extends Component {
   }
 }
 
-export default ModalBox;
+export default ModalSecureDelete;

@@ -80,23 +80,25 @@ class DetailAreaCashFlow extends Component {
   };
 
   renderTotal = () => {
-    var res = [];
     var total = this.state.total;
     if (total < 0) {
       total *= -1;
-      res.push(
-        <span key={0} style={{ color: "#08d467" }}>
-          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+      return (
+        <span>
+          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+          <i
+            className="fa fa-arrow-up icon-arrow-up"
+            style={{ fontSize: "10px" }}
+          />
         </span>
       );
     } else {
-      res.push(
+      return (
         <span key={0}>
           Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </span>
       );
     }
-    return res;
   };
 
   render() {

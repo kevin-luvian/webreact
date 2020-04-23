@@ -6,14 +6,14 @@ public class UserRequest {
     private Optional<String> id;
     private Optional<String> username;
     private Optional<String> password;
-    private Optional<String> oldPassword;
+    private Optional<String> newPassword;
     private Optional<String> role;
 
-    public UserRequest(String id, String username, String password, String oldPassword, String role) {
+    public UserRequest(String id, String username, String password, String newPassword, String role) {
         this.id = Optional.of(id);
         this.username = Optional.of(username);
         this.password = Optional.of(password);
-        this.oldPassword = Optional.of(oldPassword);
+        this.newPassword = Optional.of(newPassword);
         this.role = Optional.of(role);
     }
 
@@ -41,12 +41,12 @@ public class UserRequest {
         this.password = password;
     }
 
-    public Optional<String> getOldPassword() {
-        return oldPassword;
+    public Optional<String> getNewPassword() {
+        return newPassword;
     }
 
-    public void setOldPassword(Optional<String> oldPassword) {
-        this.oldPassword = oldPassword;
+    public void setNewPassword(Optional<String> newPassword) {
+        this.newPassword = newPassword;
     }
 
     public Optional<String> getRole() {

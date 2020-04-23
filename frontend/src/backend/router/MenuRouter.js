@@ -12,10 +12,13 @@ import SummaryPage from "../../display_content/page/SummaryPage";
 import Login from "../../display_content/model/authenticate/Login";
 import Logout from "../../display_content/model/authenticate/Logout";
 import ClearTokenAction from "../redux/actions/ClearTokenAction";
+import ClearStoreAction from "../redux/actions/ClearStoreAction";
 import AccountPage from "../../display_content/page/AccountPage";
 import SettingsPage from "../../display_content/page/SettingsPage";
 import FavIconPage from "../../display_content/page/FavIconPage";
 import Error404Page from "../../display_content/page/error/Error404Page";
+import UserManagementPage from "../../display_content/page/UserManagementPage";
+import axios from "../axios/Axios";
 
 class MenuRouter extends Component {
   constructor(props) {
@@ -24,7 +27,17 @@ class MenuRouter extends Component {
   }
 
   authenticate = () => {
+    this.authCheck();
     return this.props.token && this.props.token.length !== 0;
+  };
+
+  authCheck = () => {
+    axios.get("/auth/check").then(
+      () => {},
+      () => {
+        this.props.ClearStoreAction();
+      }
+    );
   };
 
   render() {
@@ -50,7 +63,6 @@ class MenuRouter extends Component {
     return (
       <Router>
         <Switch>
-          <Route path="/login" component={Login} />
           <ProtectedRoute path="/" exact component={HomePage} />
           <ProtectedRoute
             path="/week-dashboard"
@@ -59,7 +71,12 @@ class MenuRouter extends Component {
           <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
           <ProtectedRoute path="/account" component={AccountPage} />
           <ProtectedRoute path="/settings" component={SettingsPage} />
-          <ProtectedRoute path="/logout" component={Logout} />
+          <ProtectedRoute
+            path="/user-management"
+            component={UserManagementPage}
+          />
+          <Route path="/login" component={Login} />
+          <Route path="/logout" component={Logout} />
           <Route path="/favicon" component={FavIconPage} />
           <Route component={Error404Page} />
         </Switch>
@@ -74,6 +91,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   ClearTokenAction: () => dispatch(ClearTokenAction()),
+  ClearStoreAction: () => dispatch(ClearStoreAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuRouter);

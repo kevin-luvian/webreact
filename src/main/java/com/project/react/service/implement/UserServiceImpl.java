@@ -39,7 +39,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel create(UserModel currentUser, UserRequest request) {
-        if (currentUser.getRoles().contains("ADMIN"))
+        System.out.println(currentUser.getRoles());
+        if (!currentUser.getRoles().contains("ROLE_ADMIN"))
             throw new AccessDeniedException("unauthorized");
         UserModel user = new UserModel();
         user.setUsername(request.getUsername().get());
@@ -50,11 +51,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel update(UserModel currentUser, UserRequest request) {
+        if (!currentUser.getRoles().contains("ROLE_ADMIN"))
+            throw new AccessDeniedException("unauthorized");
         UserModel user = getById(request.getId().get()).get();
-        if (!passwordEncoder.matches(request.getOldPassword().get(), user.getPassword()))
+        if (!passwordEncoder.matches(request.getPassword().get(), user.getPassword()))
             throw new AccessDeniedException("unauthorized");
         user.setUsername(request.getUsername().get());
-        user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
+        user.setPassword(this.passwordEncoder.encode(request.getNewPassword().get()));
         return userDb.save(user);
     }
 
@@ -65,10 +68,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel delete(UserModel currentUser, String id) {
-        if (currentUser.getRoles().contains("ADMIN"))
+        if (!currentUser.getRoles().contains("ROLE_ADMIN"))
             throw new AccessDeniedException("unauthorized");
         UserModel user = getById(id).get();
         userDb.delete(user);
         return user;
+    }
+
+    @Override
+    public Boolean checkPassword(UserModel user, String password) {
+        return passwordEncoder.matches(password, user.getPassword());
     }
 }

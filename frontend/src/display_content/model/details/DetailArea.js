@@ -9,7 +9,7 @@ class DetailArea extends Component {
     this.state = {
       count: 0,
       total: 0,
-      categories: []
+      categories: [],
     };
   }
 
@@ -38,7 +38,7 @@ class DetailArea extends Component {
     this.setState({
       count: transactions.length,
       total: total,
-      categories: categories
+      categories: categories,
     });
   };
 
@@ -52,9 +52,9 @@ class DetailArea extends Component {
     return res;
   };
 
-  handleChangeDay = day => {
+  handleChangeDay = (day) => {
     this.setState({
-      data: this.processData(day)
+      data: this.processData(day),
     });
   };
 
@@ -67,29 +67,31 @@ class DetailArea extends Component {
   handleClick = () => {
     $("#detail-dropdown-icon").toggleClass("fa-angle-double-down");
     $("#detail-dropdown-icon").toggleClass("fa-angle-double-up");
-    $("#target-detail-body").slideToggle(300, function() {
+    $("#target-detail-body").slideToggle(300, function () {
       $("#target-detail-body").toggleClass("collapse");
     });
   };
 
   renderTotal = () => {
-    var res = [];
     var total = this.state.total;
     if (total < 0) {
       total *= -1;
-      res.push(
-        <span key={0} style={{ color: "#08d467" }}>
-          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+      return (
+        <span>
+          Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+          <i
+            className="fa fa-arrow-up icon-arrow-up"
+            style={{ fontSize: "10px" }}
+          />
         </span>
       );
     } else {
-      res.push(
+      return (
         <span key={0}>
           Rp {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </span>
       );
     }
-    return res;
   };
 
   render() {
@@ -130,7 +132,7 @@ class DetailArea extends Component {
                       position: "absolute",
                       transform: "translateY(-50%)",
                       top: "50%",
-                      right: "20%"
+                      right: "20%",
                     }}
                   />
                 </div>

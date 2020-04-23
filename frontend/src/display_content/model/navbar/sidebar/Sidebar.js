@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { connect } from "react-redux";
 import Element from "./Element";
 
 class Sidebar extends Component {
@@ -9,7 +9,7 @@ class Sidebar extends Component {
   }
 
   createElements = () => {
-    var elements = [
+    let elements = [
       {
         title: "Dashboard",
         href: "#",
@@ -26,6 +26,14 @@ class Sidebar extends Component {
         icon: "fa fa-money",
       },
     ];
+
+    if (this.props.user.roles.includes("ROLE_ADMIN")) {
+      elements.push({
+        title: "Users",
+        href: "/user-management",
+        icon: "fa fa-users",
+      });
+    }
 
     let result = [];
     elements.map((props, index) =>
@@ -60,4 +68,8 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+const mapStateToProps = (state) => ({
+  ...state,
+});
+
+export default connect(mapStateToProps)(Sidebar);

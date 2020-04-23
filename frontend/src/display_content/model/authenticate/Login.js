@@ -4,47 +4,47 @@ import Input from "./Input";
 import { connect } from "react-redux";
 import SetTokenAction from "../../../backend/redux/actions/SetTokenAction";
 import SetUsernameAction from "../../../backend/redux/actions/SetUsernameAction";
+import SetRolesAction from "../../../backend/redux/actions/SetRolesAction";
 import ClearTokenAction from "../../../backend/redux/actions/ClearTokenAction";
-import { Redirect } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirect: false,
       username: "",
-      password: ""
+      password: "",
     };
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
     };
 
     await axios.post("/auth/signin", data).then(
-      response => {
+      (response) => {
         this.props.SetTokenAction(response.data.payload.token);
         this.props.SetUsernameAction(response.data.payload.username);
-        this.setState({ redirect: true });
+        this.props.SetRolesAction(response.data.payload.roles);
+        this.props.history.push("/");
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
   };
 
-  handleChangeUsername = event => {
+  handleChangeUsername = (username_param) => {
     this.setState({
-      username: event.target.value
+      username: username_param,
     });
   };
 
-  handleChangePassword = event => {
+  handleChangePassword = (password_param) => {
     this.setState({
-      password: event.target.value
+      password: password_param,
     });
   };
 
@@ -57,7 +57,7 @@ class Login extends Component {
         label: "Username",
         type: "text",
         value: this.state.username,
-        handleChange: this.handleChangeUsername.bind(this)
+        handleInputChange: this.handleChangeUsername,
       },
       {
         id: "input-2",
@@ -66,8 +66,8 @@ class Login extends Component {
         label: "Password",
         type: "password",
         value: this.state.password,
-        handleChange: this.handleChangePassword.bind(this)
-      }
+        handleInputChange: this.handleChangePassword,
+      },
     ];
 
     let result = [];
@@ -76,10 +76,6 @@ class Login extends Component {
   };
 
   render() {
-    if (this.state.redirect === true) {
-      return <Redirect to="/" />;
-    }
-
     return (
       <React.Fragment>
         <div className="login-area">
@@ -87,7 +83,7 @@ class Login extends Component {
             <div className="login-box">
               <form
                 onSubmit={this.handleSubmit}
-                ref={fm => {
+                ref={(fm) => {
                   this.form = fm;
                 }}
               >
@@ -112,14 +108,15 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
+const mapStateToProps = (state) => ({
+  ...state,
 });
 
-const mapDispatchToProps = dispatch => ({
-  SetTokenAction: payload => dispatch(SetTokenAction(payload)),
-  SetUsernameAction: payload => dispatch(SetUsernameAction(payload)),
-  ClearTokenAction: () => dispatch(ClearTokenAction())
+const mapDispatchToProps = (dispatch) => ({
+  SetTokenAction: (payload) => dispatch(SetTokenAction(payload)),
+  SetUsernameAction: (payload) => dispatch(SetUsernameAction(payload)),
+  SetRolesAction: (payload) => dispatch(SetRolesAction(payload)),
+  ClearTokenAction: () => dispatch(ClearTokenAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

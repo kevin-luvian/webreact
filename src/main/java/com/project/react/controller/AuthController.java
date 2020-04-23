@@ -15,18 +15,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.project.react.model.UserModel;
+import com.project.react.restModel.AuthResponse;
 import com.project.react.restModel.BaseResponse;
 import com.project.react.security.jwtAuth.AuthenticationRequest;
 import com.project.react.security.jwtAuth.JwtTokenProvider;
 import com.project.react.service.interfaces.UserService;
 
 import static org.springframework.http.ResponseEntity.ok;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -42,26 +48,35 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AuthenticationRequest data) {
+    public BaseResponse<?> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             Optional<UserModel> user = userService.getByUsername(username);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             String token = jwtTokenProvider.createToken(username, user
                     .orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
-            Map<String, Object> response = new HashMap<>();
-            response.put("id", user.get().getId());
-            response.put("roles", user.get().getRoles());
-            response.put("username", username);
-            response.put("token", token);
-            return ResponseEntity.ok().body(new BaseResponse<Map<String, Object>>(200, "sign in success", response));
+            AuthResponse response = new AuthResponse(user.get().getId(), username, user.get().getRoles(), token);
+            return new BaseResponse<AuthResponse>(200, "sign in success", response);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
     }
 
     @GetMapping("/check")
-    public ResponseEntity<String> checkAuth(@AuthenticationPrincipal UserDetails userDetails) {
-        return ok("auth");
+    public BaseResponse<String> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return new BaseResponse<String>(200, "token is valid", userDetails.getUsername());
+    }
+
+    @PostMapping("/validate-admin")
+    public ResponseEntity<?> validateAdmin(@AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody Map<String, String> request) {
+        try {
+            UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
+            if (userService.checkPassword(currentUser, request.get("password")))
+                return ResponseEntity.ok().body(new BaseResponse<Object>(200, "admin is valid", userDetails));
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "request is unauthorized", ""));
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(new BaseResponse<Object>(400, "null pointer exception", ""));
+        }
     }
 }

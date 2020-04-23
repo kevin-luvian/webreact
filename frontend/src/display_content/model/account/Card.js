@@ -6,6 +6,18 @@ class Card2 extends Component {
     this.state = {};
   }
 
+  renderTotal = (total) => {
+    if (total < 0) {
+      return (
+        <React.Fragment>
+          Rp {total * -1}{" "}
+          <i className="fa fa-arrow-up icon-arrow-up" />
+        </React.Fragment>
+      );
+    }
+    return "Rp " + total;
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -24,15 +36,14 @@ class Card2 extends Component {
                     {this.props.name}
                   </div>
                   <div className="h5 mb-0 font-weight-bold text-gray-800">
-                    Rp {this.props.total}
+                    {this.renderTotal(this.props.total)}
                   </div>
                 </div>
                 <div className="col-auto mr-3">
                   <i
-                    className={
-                      "text-gray-300 fa fa-" + this.props.favIcon
-                    }
-                    style={{fontSize:"3rem"}}/>
+                    className={"text-gray-300 fa fa-" + this.props.favIcon}
+                    style={{ fontSize: "3rem" }}
+                  />
                 </div>
               </div>
             </div>

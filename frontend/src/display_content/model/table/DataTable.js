@@ -24,7 +24,7 @@ class DataTable extends Component {
   }
 
   handleAdd = async (data) => {
-    await axios
+    axios
       .post("/api/transaction", data)
       .then((response) => {
         this.refs.modalAdd.handleClose();
@@ -36,7 +36,7 @@ class DataTable extends Component {
   };
 
   handleEdit = async (data) => {
-    await axios
+    axios
       .put("/api/transaction", data)
       .then((response) => {
         this.refs.modalEdit.handleClose();
@@ -48,7 +48,7 @@ class DataTable extends Component {
   };
 
   handleDelete = async (data) => {
-    await axios
+    axios
       .delete("/api/transaction", { data: data })
       .then((response) => {
         this.refs.modalDelete.handleClose();
@@ -80,7 +80,6 @@ class DataTable extends Component {
   };
 
   handleEditClick = (rowData) => {
-    console.log(rowData);
     this.refs.modalEdit.handleShow(
       rowData[0],
       rowData[1],
@@ -111,6 +110,13 @@ class DataTable extends Component {
   parseToDate = (dateStr) => {
     let dateArr = dateStr.split("-");
     return new Date(dateArr[0], parseInt(dateArr[1]) - 1, dateArr[2]);
+  };
+
+  parseDataDownload = (data) => {
+    for (let i = 0; i < data.length; i++) {
+      data[i].data[2] = data[i].data[2].name;
+      data[i].data[3] = data[i].data[3].name;
+    }
   };
 
   getMuiTheme = () =>
@@ -388,13 +394,6 @@ class DataTable extends Component {
         },
       },
       {
-        name: "accountModel",
-        options: {
-          display: false,
-          filter: false,
-        },
-      },
-      {
         name: "key",
         label: "Action",
         options: {
@@ -443,11 +442,14 @@ class DataTable extends Component {
       selectableRows: "none",
       print: false,
       viewColumns: false,
+      onDownload: (buildHead, buildBody, columns, data) => {
+        this.parseDataDownload(data);
+        return buildHead(columns) + buildBody(data);
+      },
       //responsive: "scrollMaxHeight",scrollFullHeight
       responsive: "scrollMaxHeight",
       customSort: (data, colIndex, order) => {
         if (colIndex === 2) {
-          console.log(data);
           if (order === "desc") {
             data.sort(function (x, y) {
               return x.data[2].name.localeCompare(y.data[2].name);
