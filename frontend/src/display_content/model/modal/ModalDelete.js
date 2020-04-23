@@ -43,7 +43,7 @@ class ModalBox extends Component {
 
   handleSubmit = () => {
     if (this.validate()) {
-      this.props.handleSubmit(this.state.id);
+      this.props.onSubmit(this.state.id);
     } else {
       this.setState({
         isError: true
