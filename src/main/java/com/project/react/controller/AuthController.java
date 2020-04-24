@@ -28,9 +28,6 @@ import com.project.react.security.jwtAuth.AuthenticationRequest;
 import com.project.react.security.jwtAuth.JwtTokenProvider;
 import com.project.react.service.interfaces.UserService;
 
-import static org.springframework.http.ResponseEntity.ok;
-import static java.util.stream.Collectors.toList;
-
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/auth")
