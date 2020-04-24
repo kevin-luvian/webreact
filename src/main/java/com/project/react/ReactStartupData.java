@@ -37,13 +37,5 @@ public class ReactStartupData implements ApplicationRunner {
             user.setRoles(Arrays.asList( "ROLE_USER"));
             userService.save(user);
         }
-
-        if(!userService.getByUsername("bob").isPresent()){
-            UserModel user = new UserModel();
-            user.setUsername("bob");
-            user.setPassword(this.passwordEncoder.encode("password"));
-            user.setRoles(Arrays.asList( "ROLE_USER"));
-            userService.save(user);
-        }
     }
 }

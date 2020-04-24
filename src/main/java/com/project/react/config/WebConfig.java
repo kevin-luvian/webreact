@@ -9,11 +9,11 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
-      registry.addViewController("/{spring:\\.*}")
+      registry.addViewController("/{spring:[^\s]+}")
             .setViewName("forward:/");
-      registry.addViewController("/**/{spring:\\.*}")
+      registry.addViewController("/**/{spring:[^\s]+}")
             .setViewName("forward:/");
-      registry.addViewController("/{spring:\\.*}/**{spring:?!(\\.js|\\.css)$}")
+      registry.addViewController("/{spring:[^\s]+}/**{spring:?!(\\.js|\\.css)$}")
             .setViewName("forward:/");
   }
 }
