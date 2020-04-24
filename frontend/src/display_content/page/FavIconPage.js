@@ -38,7 +38,7 @@ class FavIconPage extends Component {
   handleSearch = (e) => {
     this.setState(
       {
-        searchParam: e.target.value,
+        searchParam: (e.target.value).toLowerCase(),
       },
       this.renderSearch
     );
