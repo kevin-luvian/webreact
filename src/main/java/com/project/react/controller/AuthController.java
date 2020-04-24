@@ -15,11 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -48,7 +45,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/signin")
-    public BaseResponse<?> signin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity<?> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             Optional<UserModel> user = userService.getByUsername(username);
@@ -56,15 +53,15 @@ public class AuthController {
             String token = jwtTokenProvider.createToken(username, user
                     .orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found")).getRoles());
             AuthResponse response = new AuthResponse(user.get().getId(), username, user.get().getRoles(), token);
-            return new BaseResponse<AuthResponse>(200, "sign in success", response);
+            return ResponseEntity.ok().body(new BaseResponse<AuthResponse>(200, "sign in success", response));
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
     }
 
     @GetMapping("/check")
-    public BaseResponse<String> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return new BaseResponse<String>(200, "token is valid", userDetails.getUsername());
+    public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok().body(new BaseResponse<String>(200, "token is valid", userDetails.getUsername()));
     }
 
     @PostMapping("/validate-admin")
