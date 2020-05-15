@@ -1,0 +1,29 @@
+.account-card-carousel {
+  transition: 0.3s ease-in-out;
+  min-height: 108px;
+}
+
+.account-card-carousel-hover {
+  transition: 0.3s ease-in-out;
+  min-height: 108px;
+  border-left: .25rem solid transparent !important;
+}
+
+.account-card-icon {
+  transition: 0.2s ease-in-out;
+  font-size: 30px;
+  background-color: white;
+  color: #acb0b9;
+  padding: 25px;
+  border-radius: 50%;
+}
+
+.account-card-icon:hover {
+  cursor: pointer;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.account-card-icon:active {
+  background-color: rgb(238, 238, 238);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
