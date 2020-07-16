@@ -24,7 +24,9 @@ frontend/yarn-error.log*
 
 ### Backend ###
 HELP.md
-target/
+!target/
+target/*
+!target/*.jar
 
 ### STS ###
 .apt_generated

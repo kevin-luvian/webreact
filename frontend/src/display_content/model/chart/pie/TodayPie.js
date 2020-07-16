@@ -1,15 +1,21 @@
 import React, { Component } from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import Chart from "chart.js";
 
 class TodayPie extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { pieChart: {} };
   }
 
   componentDidMount() {
-    this.loadChart();
+    this.loadChartNew();
   }
+
+  reload = () => {
+    this.state.pieChart.destroy();
+    this.loadChartNew();
+  };
 
   parseData = () => {
     let data = this.props.data;
@@ -22,14 +28,14 @@ class TodayPie extends Component {
       } else {
         res[data[i].categoryModel.name] = {
           total: value_clone,
-          color: data[i].categoryModel.color
+          color: data[i].categoryModel.color,
         };
       }
     }
     return res;
   };
 
-  getTotalExpense = data => {
+  getTotalExpense = (data) => {
     let total = 0;
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
@@ -40,7 +46,7 @@ class TodayPie extends Component {
     return total;
   };
 
-  parseDetailData = data => {
+  parseDetailData = (data) => {
     let percentageData = [];
     let colors = [];
     let total = this.getTotalExpense(data);
@@ -52,12 +58,26 @@ class TodayPie extends Component {
             colors.push(data[key].color);
             percentageData.push({
               name: key,
-              y: value / total
+              y: value / total,
             });
           }
       }
     }
     return { colors: colors, percentageData: percentageData };
+  };
+
+  loadChartNew = () => {
+    let parsedData = this.parseData();
+    let details = this.parseDetailData(parsedData);
+    var myDoughnutChart = new Chart(ctx, {
+      type: "doughnut",
+      data: parsedData,
+      options: {},
+    });
+
+    this.setState({
+      pieChart: myDoughnutChart,
+    });
   };
 
   loadChart = () => {
@@ -72,13 +92,13 @@ class TodayPie extends Component {
         plotBorderWidth: null,
         plotShadow: false,
         type: "pie",
-        height: "400px"
+        height: "400px",
       },
       title: {
-        text: ""
+        text: "",
       },
       tooltip: {
-        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
       },
       plotOptions: {
         pie: {
@@ -91,7 +111,7 @@ class TodayPie extends Component {
               color: "contrast",
               fontSize: "11px",
               fontWeight: "bold",
-              textOutline: ""
+              textOutline: "",
             },
             enabled: true,
             format: "<b>{point.name}</b><br>{point.percentage:.1f} %",
@@ -99,18 +119,18 @@ class TodayPie extends Component {
             filter: {
               property: "percentage",
               operator: ">",
-              value: 4
-            }
-          }
-        }
+              value: 4,
+            },
+          },
+        },
       },
       series: [
         {
           animation: false,
           name: "Share",
-          data: details.percentageData
-        }
-      ]
+          data: details.percentageData,
+        },
+      ],
     });
   };
 
