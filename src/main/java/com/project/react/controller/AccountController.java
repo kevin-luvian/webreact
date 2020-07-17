@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://mywallet.atkev.site")
 @RequestMapping("/api/account")
 public class AccountController {
 
@@ -62,7 +59,7 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody AccountRequest request) {
+                                       @Valid @RequestBody AccountRequest request) {
         try {
             if (request.getName().get().trim().isEmpty() || request.getColor().get().trim().isEmpty())
                 throw new NullPointerException();
@@ -83,7 +80,7 @@ public class AccountController {
 
     @PutMapping
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody AccountRequest request) {
+                               @Valid @RequestBody AccountRequest request) {
         try {
             if (request.getId().get().trim().isEmpty() || request.getName().get().trim().isEmpty()
                     || request.getColor().get().trim().isEmpty()) {
@@ -107,7 +104,7 @@ public class AccountController {
 
     @GetMapping
     private ResponseEntity<?> getModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                       @Valid @RequestBody String id) {
         try {
             AccountModel account = accountService.getById(id).get();
             if (account.getUserModel().equals(userService.getByUsername(userDetails.getUsername()).get())) {
@@ -121,7 +118,7 @@ public class AccountController {
 
     @PostMapping(value = "/transactions")
     private ResponseEntity<?> getAccountTransactions(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                                     @Valid @RequestBody String id) {
         try {
             id = id.replace("=", "");
             AccountModel account = accountService.getById(id).get();
@@ -138,7 +135,7 @@ public class AccountController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                         @Valid @RequestBody String id) {
         try {
             AccountModel account = accountService.getById(id).get();
             if (account.getUserModel().equals(userService.getByUsername(userDetails.getUsername()).get())) {

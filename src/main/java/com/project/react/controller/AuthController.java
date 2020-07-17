@@ -9,7 +9,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,8 +28,6 @@ import com.project.react.security.jwtAuth.JwtTokenProvider;
 import com.project.react.service.interfaces.UserService;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://mywallet.atkev.site")
 @RequestMapping("/auth")
 public class AuthController {
     @Autowired
