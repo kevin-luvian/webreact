@@ -281,17 +281,17 @@ class DataTable extends Component {
         <ModalAccount
           ref="modalAdd"
           modalTitle="Create Account"
-          handleSubmit={this.handleAdd}
+          onSubmit={this.handleAdd}
         />
         <ModalAccount
           ref="modalEdit"
           modalTitle="Edit Account"
-          handleSubmit={this.handleEdit}
+          onSubmit={this.handleEdit}
         />
         <ModalDelete
           ref="modalDelete"
           modalTitle="Delete Account"
-          handleSubmit={this.handleDelete}
+          onSubmit={this.handleDelete}
         />
         {this.state.isLoading ? (
           <div className="card shadow" style={{ minHeight: "238px" }}>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import Chart from "chart.js";
+import Color from "color";
 
 class TodayPie extends Component {
   constructor(props) {
@@ -35,102 +36,50 @@ class TodayPie extends Component {
     return res;
   };
 
-  getTotalExpense = (data) => {
-    let total = 0;
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        let value = data[key].total;
-        if (value > 0) total += value;
-      }
+  parseDataToArray = (dataset) => {
+    const res = { labels: [], colors: [], colorsDarken: [], totals: [] };
+    for (const key in dataset) {
+      res.labels.push(key);
+      res.colors.push(dataset[key].color);
+      res.colorsDarken.push(Color(dataset[key].color).darken(0.2).hex());
+      res.totals.push(dataset[key].total);
     }
-    return total;
-  };
-
-  parseDetailData = (data) => {
-    let percentageData = [];
-    let colors = [];
-    let total = this.getTotalExpense(data);
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        let value = data[key].total;
-        if (data[key].total > 0)
-          if (value > 0) {
-            colors.push(data[key].color);
-            percentageData.push({
-              name: key,
-              y: value / total,
-            });
-          }
-      }
-    }
-    return { colors: colors, percentageData: percentageData };
+    return res;
   };
 
   loadChartNew = () => {
     let parsedData = this.parseData();
-    let details = this.parseDetailData(parsedData);
-    var myDoughnutChart = new Chart(ctx, {
+    let dataArr = this.parseDataToArray(parsedData);
+    var data = {
+      labels: dataArr.labels,
+      datasets: [
+        {
+          fill: true,
+          backgroundColor: dataArr.colors,
+          hoverBackgroundColor: dataArr.colorsDarken,
+          data: dataArr.totals,
+          borderColor: Array(dataArr.colors.length).fill("white"),
+          borderWidth: [2, 2],
+        },
+      ],
+    };
+    var options = {
+      title: {
+        display: true,
+        position: "top",
+      },
+      rotation: -0.7 * Math.PI,
+      animation: { animateScale: true },
+      // rotation: 0,
+    };
+    var myDoughnutChart = new Chart("piechart", {
       type: "doughnut",
-      data: parsedData,
-      options: {},
+      data: data,
+      options: options,
     });
 
     this.setState({
       pieChart: myDoughnutChart,
-    });
-  };
-
-  loadChart = () => {
-    let parsedData = this.parseData();
-    let details = this.parseDetailData(parsedData);
-
-    var Highcharts = require("highcharts");
-
-    Highcharts.chart("highpiechart", {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: "pie",
-        height: "400px",
-      },
-      title: {
-        text: "",
-      },
-      tooltip: {
-        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          size: "100%",
-          cursor: "pointer",
-          colors: details.colors,
-          dataLabels: {
-            style: {
-              color: "contrast",
-              fontSize: "11px",
-              fontWeight: "bold",
-              textOutline: "",
-            },
-            enabled: true,
-            format: "<b>{point.name}</b><br>{point.percentage:.1f} %",
-            distance: -50,
-            filter: {
-              property: "percentage",
-              operator: ">",
-              value: 4,
-            },
-          },
-        },
-      },
-      series: [
-        {
-          animation: false,
-          name: "Share",
-          data: details.percentageData,
-        },
-      ],
     });
   };
 
@@ -148,7 +97,11 @@ class TodayPie extends Component {
           <div className="card shadow">
             <div className="card-body">
               <h4 className="header-title">Today Expenses</h4>
-              <div id="highpiechart" />
+              <div style={{overflowX:"auto"}}>
+              <canvas
+                id="piechart"
+                style={{ minWidth: "300px", minHeight: "170px" }}
+              /></div>
             </div>
           </div>
         )}

@@ -520,19 +520,19 @@ class DataTable extends Component {
           modalTitle="Create Transaction"
           accounts={this.props.accounts}
           categories={this.props.categories}
-          handleSubmit={this.handleAdd}
+          onSubmit={this.handleAdd}
         />
         <ModalTransaction
           ref="modalEdit"
           modalTitle="Edit Transaction"
           accounts={this.props.accounts}
           categories={this.props.categories}
-          handleSubmit={this.handleEdit}
+          onSubmit={this.handleEdit}
         />
         <ModalDelete
           ref="modalDelete"
           modalTitle="Delete Transaction"
-          handleSubmit={this.handleDelete}
+          onSubmit={this.handleDelete}
         />
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "238px" }}>
