@@ -2,9 +2,9 @@ import axios from "axios";
 import { store } from "../redux/Store";
 
 const instance = axios.create({
-//    baseURL: "http://localhost:8080",
-    baseURL: "http://mywallet.atkev.site",
-//  baseURL: "https://finreact.herokuapp.com"
+  // baseURL: "http://localhost:8080",
+  baseURL: "http://mywallet.atkev.site",
+  //  baseURL: "https://finreact.herokuapp.com"
 });
 
 instance.interceptors.request.use(

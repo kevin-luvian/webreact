@@ -32,7 +32,7 @@ class DetailArea extends Component {
           transaction_clone.value;
       }
     } catch (err) {
-      console.log(err.message);
+      console.log("error", err.message);
     }
 
     this.setState({

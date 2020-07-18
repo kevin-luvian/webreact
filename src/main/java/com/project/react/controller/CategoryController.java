@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-//@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080", "http://localhost:3000"})
-@CrossOrigin(origins = {"http://mywallet.atkev.site"})
+@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080", "http://localhost:3000"})
+// @CrossOrigin(origins = {"http://mywallet.atkev.site"})
 @RequestMapping("/api/category")
 public class CategoryController {
     @Autowired

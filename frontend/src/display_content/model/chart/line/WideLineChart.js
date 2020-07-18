@@ -31,6 +31,7 @@ class WideLineChart extends Component {
       incomeChecked: true,
       expenseChecked: true,
       data: [],
+      dataPos: [],
       chart: {},
     };
   }
@@ -61,15 +62,17 @@ class WideLineChart extends Component {
   };
 
   reload = () => {
-    let chart = this.state.chart;
-    chart.data = this.processData();
-    this.setState({ chart: chart });
-    //this.state.chart.data = this.processData();
+    // const chart = this.state.chart;
+    // chart.data = this.processData();
+    // this.setState({ chart: chart });
+    this.state.chart.dispose();
+    this.loadChart();
   };
 
   loadAndSort = () => {
     let data = this.props.data;
-    let res = [];
+    const dataGenerated = [];
+    const dataPos = [];
     try {
       data.sort(dateSort());
     } catch {
@@ -77,60 +80,81 @@ class WideLineChart extends Component {
     }
     for (let i = 0; i < data.length - 1; i++) {
       //res.push({ date: data[i].date, value: data[i].value });
-      res.push(data[i]);
+      dataGenerated.push(data[i]);
+      dataPos.push(convertToDate(data[i].date).getTime());
       try {
         let currentDate = convertToDate(data[i].date);
         let nextdate = convertToDate(data[i + 1].date);
         nextdate.setDate(nextdate.getDate() - 1);
         while (currentDate.getTime() < nextdate.getTime()) {
           currentDate.setDate(currentDate.getDate() + 1);
-          res.push({ date: parseDate(currentDate), value: 0 });
+          dataGenerated.push({ date: parseDate(currentDate), value: 0 });
         }
       } catch {
-        console.log("error at " + data[i].date);
+        console.log("error at ", data[i].date);
       }
     }
-    res.push(data[data.length - 1]);
+    dataGenerated.push(data[data.length - 1]);
+    dataPos.push(convertToDate(data[data.length - 1].date).getTime());
 
-    this.setState({ data: res }, () => {
+    this.setState({ data: dataGenerated, dataPos: dataPos }, () => {
       this.loadChart();
     });
   };
 
   loadChart = async () => {
+    const dataPos = this.state.dataPos;
+
     // Create chart instance
-    let chart = am4core.create("chartdiv", am4charts.XYChart);
+    const chart = am4core.create("chartdiv", am4charts.XYChart);
 
     // Add data
     chart.data = this.processData();
 
     // Create axes
-    let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
 
-    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = "Transactions";
 
     // Create series
-    let series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = "value";
-    series.dataFields.dateX = "date";
+    const series = chart.series.push(new am4charts.LineSeries());
     series.strokeWidth = 3;
     series.minBulletDistance = 10;
+    series.dataFields.valueY = "value";
+    series.dataFields.dateX = "date";
     series.tooltipText = "{valueY}";
     series.tooltip.pointerOrientation = "vertical";
     series.tooltip.background.cornerRadius = 20;
     series.tooltip.background.fillOpacity = 0.5;
-    //series.tooltip.label.padding(12, 12, 12, 12);
+    series.tooltip.label.padding(12, 12, 12, 12);
 
     // Add scrollbar
     chart.scrollbarX = new am4charts.XYChartScrollbar();
     chart.scrollbarX.series.push(series);
+    chart.scrollbarX.strokeDasharray = "2,2";
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
     chart.cursor.snapToSeries = series;
+
+    // Make bullets grow on hover
+    const bullet = series.bullets.push(new am4charts.CircleBullet());
+    bullet.circle.strokeWidth = 2;
+    bullet.circle.radius = 4;
+    bullet.circle.fill = am4core.color("#fff");
+
+    const bullethover = bullet.states.create("hover");
+    bullethover.properties.scale = 1.3;
+
+    // Hide bullet at 0 value
+    bullet.adapter.add("disabled", (disabled, target) => {
+      if (!target.dataItem) return disabled;
+      let values = target.dataItem.values;
+      return !dataPos.includes(values.dateX.value);
+    });
 
     this.setState({ chart: chart });
   };
