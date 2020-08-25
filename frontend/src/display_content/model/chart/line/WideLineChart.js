@@ -94,9 +94,11 @@ class WideLineChart extends Component {
         console.log("error at ", data[i].date);
       }
     }
-    dataGenerated.push(data[data.length - 1]);
-    dataPos.push(convertToDate(data[data.length - 1].date).getTime());
-
+    if (data.length > 0) {
+      dataGenerated.push(data[data.length - 1]);
+      dataPos.push(convertToDate(data[data.length - 1].date).getTime());
+    }
+    
     this.setState({ data: dataGenerated, dataPos: dataPos }, () => {
       this.loadChart();
     });
@@ -139,22 +141,6 @@ class WideLineChart extends Component {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
     chart.cursor.snapToSeries = series;
-
-    // Make bullets grow on hover
-    const bullet = series.bullets.push(new am4charts.CircleBullet());
-    bullet.circle.strokeWidth = 2;
-    bullet.circle.radius = 4;
-    bullet.circle.fill = am4core.color("#fff");
-
-    const bullethover = bullet.states.create("hover");
-    bullethover.properties.scale = 1.3;
-
-    // Hide bullet at 0 value
-    bullet.adapter.add("disabled", (disabled, target) => {
-      if (!target.dataItem) return disabled;
-      let values = target.dataItem.values;
-      return !dataPos.includes(values.dateX.value);
-    });
 
     this.setState({ chart: chart });
   };

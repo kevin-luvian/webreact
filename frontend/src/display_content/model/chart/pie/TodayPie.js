@@ -6,7 +6,7 @@ import Color from "color";
 class TodayPie extends Component {
   constructor(props) {
     super(props);
-    this.state = { pieChart: {} };
+    this.state = { pieChart: {}, showCanvas: true };
   }
 
   componentDidMount() {
@@ -16,6 +16,13 @@ class TodayPie extends Component {
   reload = () => {
     this.state.pieChart.destroy();
     this.loadChartNew();
+  };
+
+  isEmpty = (obj) => {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) return false;
+    }
+    return true;
   };
 
   parseData = () => {
@@ -49,38 +56,42 @@ class TodayPie extends Component {
 
   loadChartNew = () => {
     let parsedData = this.parseData();
-    let dataArr = this.parseDataToArray(parsedData);
-    var data = {
-      labels: dataArr.labels,
-      datasets: [
-        {
-          fill: true,
-          backgroundColor: dataArr.colors,
-          hoverBackgroundColor: dataArr.colorsDarken,
-          data: dataArr.totals,
-          borderColor: Array(dataArr.colors.length).fill("white"),
-          borderWidth: [2, 2],
+    if (this.isEmpty(parsedData)) {
+      this.setState({ showCanvas: false });
+    } else {
+      let dataArr = this.parseDataToArray(parsedData);
+      var data = {
+        labels: dataArr.labels,
+        datasets: [
+          {
+            fill: true,
+            backgroundColor: dataArr.colors,
+            hoverBackgroundColor: dataArr.colorsDarken,
+            data: dataArr.totals,
+            borderColor: Array(dataArr.colors.length).fill("white"),
+            borderWidth: [2, 2],
+          },
+        ],
+      };
+      var options = {
+        title: {
+          display: true,
+          position: "top",
         },
-      ],
-    };
-    var options = {
-      title: {
-        display: true,
-        position: "top",
-      },
-      rotation: -0.7 * Math.PI,
-      animation: { animateScale: true },
-      // rotation: 0,
-    };
-    var myDoughnutChart = new Chart("piechart", {
-      type: "doughnut",
-      data: data,
-      options: options,
-    });
+        rotation: -0.7 * Math.PI,
+        animation: { animateScale: true },
+        // rotation: 0,
+      };
+      var myDoughnutChart = new Chart("piechart", {
+        type: "doughnut",
+        data: data,
+        options: options,
+      });
 
-    this.setState({
-      pieChart: myDoughnutChart,
-    });
+      this.setState({
+        pieChart: myDoughnutChart,
+      });
+    }
   };
 
   render() {
@@ -97,11 +108,29 @@ class TodayPie extends Component {
           <div className="card shadow">
             <div className="card-body">
               <h4 className="header-title">Today Expenses</h4>
-              <div style={{overflowX:"auto"}}>
-              <canvas
-                id="piechart"
-                style={{ minWidth: "300px", minHeight: "170px" }}
-              /></div>
+              <div style={{ overflowX: "auto" }}>
+                {this.state.showCanvas ? (
+                  <canvas
+                    id="piechart"
+                    style={{
+                      minWidth: "300px",
+                      minHeight: "170px",
+                      marginBottom: "30px",
+                    }}
+                  />
+                ) : (
+                  <p
+                    style={{
+                      marginTop: "30px",
+                      marginBottom: "30px",
+                      textAlign: "center",
+                      color: "gray",
+                    }}
+                  >
+                    you have not created any transactions for today
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         )}

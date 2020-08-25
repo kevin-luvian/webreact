@@ -1,8 +1,14 @@
 version: '3'
+
+volumes:
+  mysql:
+
 services:
   db:
     container_name: spring_react_mysql
     restart: unless-stopped
+    volumes:
+      - mysql:/var/lib/mysql
     build: ./
     ports:
-      - '3310:3306'
+      - '9001:3306'
