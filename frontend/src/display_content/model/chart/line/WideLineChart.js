@@ -31,7 +31,6 @@ class WideLineChart extends Component {
       incomeChecked: true,
       expenseChecked: true,
       data: [],
-      dataPos: [],
       chart: {},
     };
   }
@@ -72,7 +71,6 @@ class WideLineChart extends Component {
   loadAndSort = () => {
     let data = this.props.data;
     const dataGenerated = [];
-    const dataPos = [];
     try {
       data.sort(dateSort());
     } catch {
@@ -81,7 +79,6 @@ class WideLineChart extends Component {
     for (let i = 0; i < data.length - 1; i++) {
       //res.push({ date: data[i].date, value: data[i].value });
       dataGenerated.push(data[i]);
-      dataPos.push(convertToDate(data[i].date).getTime());
       try {
         let currentDate = convertToDate(data[i].date);
         let nextdate = convertToDate(data[i + 1].date);
@@ -96,17 +93,14 @@ class WideLineChart extends Component {
     }
     if (data.length > 0) {
       dataGenerated.push(data[data.length - 1]);
-      dataPos.push(convertToDate(data[data.length - 1].date).getTime());
     }
     
-    this.setState({ data: dataGenerated, dataPos: dataPos }, () => {
+    this.setState({ data: dataGenerated }, () => {
       this.loadChart();
     });
   };
 
   loadChart = async () => {
-    const dataPos = this.state.dataPos;
-
     // Create chart instance
     const chart = am4core.create("chartdiv", am4charts.XYChart);
 

@@ -228,11 +228,7 @@ class ThisWeekDashboardPage extends Component {
             isLoading={this.state.isLoading}
             accounts={this.state.accounts}
             categories={this.state.categories}
-            currentDate={
-              this.state.currentDate === "all"
-                ? this.state.startDate
-                : this.state.currentDate
-            }
+            currentDate={new Date()}
             reload={this.reload}
           />
         </div>

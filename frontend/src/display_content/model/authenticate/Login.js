@@ -11,6 +11,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+    error: false,
       username: "",
       password: "",
     };
@@ -32,19 +33,20 @@ class Login extends Component {
       },
       (error) => {
         console.log(error);
+        this.setState({error:true})
       }
     );
   };
 
   handleChangeUsername = (username_param) => {
     this.setState({
-      username: username_param,
+      username: username_param,error:false
     });
   };
 
   handleChangePassword = (password_param) => {
     this.setState({
-      password: password_param,
+      password: password_param,error:false
     });
   };
 
@@ -92,6 +94,11 @@ class Login extends Component {
                   <p>Hello there, Sign in and start managing your Finances</p>
                 </div>
                 <div className="login-form-body shadow">
+                {this.state.error &&
+                    <div className="error-container">
+                    <p style={{margin:"0"}}>invalid username or password</p>
+                    </div>
+                    }
                   {this.createInput()}
                   <div className="submit-btn-area">
                     <button id="form_submit" type="submit">

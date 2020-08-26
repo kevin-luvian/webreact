@@ -30,7 +30,8 @@ class TodayPie extends Component {
     var res = {};
     for (let i = 0; i < data.length; i++) {
       let value_clone = data[i].value;
-      if (!data[i].type) value_clone *= -1;
+//      if (!data[i].type) value_clone *= -1;
+      if (!data[i].type) continue;
       if (data[i].categoryModel.name in res) {
         res[data[i].categoryModel.name].total += value_clone;
       } else {

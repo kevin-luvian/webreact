@@ -36,6 +36,7 @@
 .main-content {
     width: 100%;
     background: #F3F8FB;
+    min-height: 100vh;
 }
 
 .main-content-inner {
@@ -2345,7 +2346,7 @@ table.dataTable thead td {
 .submit-btn-area button {
     width: 100%;
     height: 50px;
-    border: none;
+    border: 2px solid #2c71da;
     background: #fff;
     color: #585b5f;
     border-radius: 40px;
