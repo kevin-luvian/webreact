@@ -49,7 +49,7 @@ public class UserController {
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().trim().isEmpty() || request.getPassword().get().trim().isEmpty()) {
+            if (request.getUsername().get().trim().isEmpty() || request.getAdminPassword().get().trim().isEmpty()) {
                 throw new NullPointerException();
             }
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
@@ -68,7 +68,7 @@ public class UserController {
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().trim().isEmpty() || request.getNewPassword().get().trim().isEmpty()
+            if (request.getUsername().get().trim().isEmpty() || request.getAdminPassword().get().trim().isEmpty()
                     || request.getPassword().get().trim().isEmpty())
                 throw new NullPointerException();
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();

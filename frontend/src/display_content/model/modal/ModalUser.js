@@ -15,14 +15,11 @@ class ModalUser extends Component {
     super(props);
     this.state = {
       open: false,
-      passwordError: false,
-      nameError: false,
-      newPasswordError: false,
       id: "",
       filledName: "",
       filledPassword: "",
-      filledNewPassword: "",
-      selectedRole: [],
+      filledAdminPassword: "",
+      selectedRole: null,
     };
     this.baseState = this.state;
   }
@@ -32,6 +29,7 @@ class ModalUser extends Component {
   }
 
   handleShow = (id, name, password, role) => {
+  console.log("INITIAL ROLE >>",role)
     this.handleOpen();
     this.setState({
       id: id,
@@ -59,17 +57,16 @@ class ModalUser extends Component {
   };
 
   handleNameChange = (e) => {
-    this.setState({ filledName: e.target.value, nameError: false });
+    this.setState({ filledName: e.target.value });
   };
 
   handlePasswordChange = (e) => {
-    this.setState({ filledPassword: e.target.value, passwordError: false });
+    this.setState({ filledPassword: e.target.value });
   };
 
-  handleNewPasswordChange = (e) => {
+  handleAdminPasswordChange = (e) => {
     this.setState({
-      filledNewPassword: e.target.value,
-      newPasswordError: false,
+      filledAdminPassword: e.target.value
     });
   };
 
@@ -78,40 +75,17 @@ class ModalUser extends Component {
   };
 
   handleSubmit = () => {
-    if (!this.checkInputError()) {
       this.props.onSubmit({
         id: this.state.id,
         name: this.state.filledName,
         password: this.state.filledPassword,
-        newPassword: this.state.filledNewPassword,
+        adminPassword: this.state.filledAdminPassword,
         role: this.state.selectedRole,
       });
-    }
-  };
-
-  checkInputError = () => {
-    let nameError = false;
-    let newPasswordError = false;
-    let passwordError = false;
-    if (this.state.filledName === "") {
-      nameError = true;
-    }
-    if (this.state.filledPassword === "") {
-      passwordError = true;
-    }
-    if (this.state.filledNewPassword === "" && this.props.isEdit) {
-      newPasswordError = true;
-    }
-    this.setState({
-      nameError: nameError,
-      passwordError: passwordError,
-      newPasswordError: newPasswordError,
-    });
-    return nameError || passwordError || newPasswordError;
   };
 
   render() {
-    const roles = ["User", "Admin"];
+    const roles = [{display:"User",value:"ROLE_USER"}, {display:"Admin",value:"ROLE_ADMIN"}];
     return (
       <React.Fragment>
         <Modal
@@ -142,29 +116,24 @@ class ModalUser extends Component {
                 noValidate
                 autoComplete="off"
               >
+                  <TextField
+                    className="w-100 mt-4"
+                    label="Admin Password"
+                    value={this.state.filledAdminPassword}
+                    onChange={this.handleAdminPasswordChange}
+                  />
                 <TextField
                   className="w-100 mt-4"
                   label="Name"
-                  error={this.state.nameError}
                   value={this.state.filledName}
                   onChange={this.handleNameChange}
                 />
                 <TextField
                   className="w-100 mt-4"
-                  error={this.state.passwordError}
                   label="Password"
                   value={this.state.filledPassword}
                   onChange={this.handlePasswordChange}
                 />
-                {this.props.isEdit && (
-                  <TextField
-                    className="w-100 mt-4"
-                    error={this.state.newPasswordError}
-                    label="New Password"
-                    value={this.state.filledNewPassword}
-                    onChange={this.handleNewPasswordChange}
-                  />
-                )}
                 <FormControl className="w-100 mt-4">
                   <InputLabel>Roles</InputLabel>
                   <Select
@@ -173,8 +142,8 @@ class ModalUser extends Component {
                   >
                     {roles.map((role, index) => {
                       return (
-                        <MenuItem key={index} value={role}>
-                          {role}
+                        <MenuItem key={index} value={role.value}>
+                          {role.display}
                         </MenuItem>
                       );
                     })}
