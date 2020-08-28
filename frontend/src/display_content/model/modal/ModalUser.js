@@ -5,21 +5,28 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
+  FormHelperText,
   Select,
   Fade,
   TextField,
 } from "@material-ui/core";
+import $ from "jquery";
 
 class ModalUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
+      errorMessage: "",
       id: "",
       filledName: "",
       filledPassword: "",
       filledAdminPassword: "",
-      selectedRole: null,
+      selectedRole: "",
+      filledNameError: { state: false, message: "" },
+      filledPasswordError: { state: false, message: "" },
+      filledAdminPasswordError: { state: false, message: "" },
+      selectedRoleError: { state: false, message: "" },
     };
     this.baseState = this.state;
   }
@@ -28,8 +35,47 @@ class ModalUser extends Component {
     this.setState(this.baseState);
   }
 
+  toggleError = (message, state) => {
+    this.setState({ errorMessage: message });
+    if (state) {
+      $("#errorContainer").slideDown("fast");
+    } else {
+      $("#errorContainer").slideUp("fast");
+    }
+  };
+
+  checkInputError = () => {
+    let isError = false;
+    const emptyError = { state: true, message: "this field cannot be empty" };
+    if (this.state.filledAdminPassword === "") {
+      this.setState({ filledAdminPasswordError: emptyError });
+      isError = true;
+    }
+    if (this.state.filledName === "") {
+      this.setState({ filledNameError: emptyError });
+      isError = true;
+    }
+    if (this.state.filledPassword === "") {
+      this.setState({ filledPasswordError: emptyError });
+      isError = true;
+    }
+    if (this.state.selectedRole === "") {
+      this.setState({ selectedRoleError: emptyError });
+      isError = true;
+    }
+    return isError;
+  };
+
+  resetError = () => {
+    const noError = { state: false, message: "" };
+    this.setState({ filledAdminPasswordError: noError });
+    this.setState({ filledNameError: noError });
+    this.setState({ filledPasswordError: noError });
+    this.setState({ selectedRoleError: noError });
+    this.toggleError("", false);
+  };
+
   handleShow = (id, name, password, role) => {
-  console.log("INITIAL ROLE >>",role)
     this.handleOpen();
     this.setState({
       id: id,
@@ -52,10 +98,6 @@ class ModalUser extends Component {
     });
   };
 
-  handleError = () => {
-    this.setState({ passwordError: true });
-  };
-
   handleNameChange = (e) => {
     this.setState({ filledName: e.target.value });
   };
@@ -66,7 +108,7 @@ class ModalUser extends Component {
 
   handleAdminPasswordChange = (e) => {
     this.setState({
-      filledAdminPassword: e.target.value
+      filledAdminPassword: e.target.value,
     });
   };
 
@@ -75,6 +117,8 @@ class ModalUser extends Component {
   };
 
   handleSubmit = () => {
+    this.resetError();
+    if (!this.checkInputError()) {
       this.props.onSubmit({
         id: this.state.id,
         name: this.state.filledName,
@@ -82,10 +126,14 @@ class ModalUser extends Component {
         adminPassword: this.state.filledAdminPassword,
         role: this.state.selectedRole,
       });
+    }
   };
 
   render() {
-    const roles = [{display:"User",value:"ROLE_USER"}, {display:"Admin",value:"ROLE_ADMIN"}];
+    const roles = [
+      { display: "User", value: "ROLE_USER" },
+      { display: "Admin", value: "ROLE_ADMIN" },
+    ];
     return (
       <React.Fragment>
         <Modal
@@ -111,30 +159,50 @@ class ModalUser extends Component {
                   onClick={this.handleClose}
                 />
               </div>
+              <div
+                id="errorContainer"
+                className="error-container"
+                style={{
+                  display: "none",
+                  marginBottom: "0",
+                  marginTop: "25px",
+                }}
+              >
+                <p style={{ margin: "0" }}>{this.state.errorMessage}</p>
+              </div>
               <form
                 className="col-10 mx-auto mt-2 mb-4"
                 noValidate
                 autoComplete="off"
               >
-                  <TextField
-                    className="w-100 mt-4"
-                    label="Admin Password"
-                    value={this.state.filledAdminPassword}
-                    onChange={this.handleAdminPasswordChange}
-                  />
+                <TextField
+                  className="w-100 mt-4"
+                  label="Admin Password"
+                  value={this.state.filledAdminPassword}
+                  error={this.state.filledAdminPasswordError.state}
+                  helperText={this.state.filledAdminPasswordError.message}
+                  onChange={this.handleAdminPasswordChange}
+                />
                 <TextField
                   className="w-100 mt-4"
                   label="Name"
                   value={this.state.filledName}
+                  error={this.state.filledNameError.state}
+                  helperText={this.state.filledNameError.message}
                   onChange={this.handleNameChange}
                 />
                 <TextField
                   className="w-100 mt-4"
                   label="Password"
                   value={this.state.filledPassword}
+                  error={this.state.filledPasswordError.state}
+                  helperText={this.state.filledPasswordError.message}
                   onChange={this.handlePasswordChange}
                 />
-                <FormControl className="w-100 mt-4">
+                <FormControl
+                  className="w-100 mt-4"
+                  error={this.state.selectedRoleError.state}
+                >
                   <InputLabel>Roles</InputLabel>
                   <Select
                     value={this.state.selectedRole}
@@ -148,6 +216,9 @@ class ModalUser extends Component {
                       );
                     })}
                   </Select>
+                  <FormHelperText>
+                    {this.state.selectedRoleError.message}
+                  </FormHelperText>
                 </FormControl>
               </form>
               <button

@@ -39,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionModel create(TransactionRequest request, AccountModel account, CategoryModel category,
-            UserModel user) {
+                                   UserModel user) {
         if (!account.getUserModel().equals(user) || !category.getUserModel().equals(user))
             throw new AccessDeniedException("unauthorized");
         TransactionModel transaction = new TransactionModel();
@@ -55,7 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionModel update(TransactionRequest request, AccountModel account, CategoryModel category,
-            UserModel user) {
+                                   UserModel user) {
         TransactionModel transaction = getById(request.getId().get()).get();
         if (!account.getUserModel().equals(user) || !category.getUserModel().equals(user)
                 || !transaction.getUserModel().equals(user))

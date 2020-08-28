@@ -25,14 +25,14 @@ class UserTable extends Component {
     await axios
       .get("/api/user/all")
       .then((response) => {
-        console.log("API USER ALL",response.data.payload);
+        console.log("API USER ALL", response.data.payload);
         this.setState({
           data: response.data.payload,
           isLoading: false,
         });
       })
       .catch((error) => {
-        console.log("ERROR >>",error);
+        console.log("ERROR >>", error);
         this.setState({
           isLoading: false,
         });
@@ -40,7 +40,7 @@ class UserTable extends Component {
   };
 
   handleToolbarClick = () => {
-    this.refs.modalAdd.handleShow("", "", "", "User");
+    this.refs.modalAdd.handleShow("", "", "", "ROLE_USER");
   };
 
   handleEditClick = (rowData) => {
@@ -59,7 +59,10 @@ class UserTable extends Component {
         this.fetchUsers();
       })
       .catch((error) => {
-        console.log(error.response);
+        if ("response" in error) {
+          console.log("Error message", error.response.data.message);
+          this.refs.modalAdd.toggleError(error.response.data.message, true);
+        }
       });
   };
 
@@ -71,8 +74,10 @@ class UserTable extends Component {
         this.fetchUsers();
       })
       .catch((error) => {
-        console.log("Error message", error.response.data.message);
-        this.refs.modalEdit.handleError();
+        if ("response" in error) {
+          console.log("Error message", error.response.data.message);
+          this.refs.modalEdit.toggleError(error.response.data.message, true);
+        }
       });
   };
 
@@ -83,7 +88,10 @@ class UserTable extends Component {
         this.fetchUsers();
       })
       .catch((error) => {
-        console.log(error);
+        if ("response" in error) {
+          console.log("Error message", error.response.data.message);
+          this.refs.modalEdit.toggleError(error.response.data.message, true);
+        }
       });
   };
 
@@ -149,7 +157,11 @@ class UserTable extends Component {
             return (
               <div className="text-center">
                 {value.map((role, index) => {
-                  return <p style={{margin:"0"}} key={index}>{role}</p>;
+                  return (
+                    <p style={{ margin: "0" }} key={index}>
+                      {role}
+                    </p>
+                  );
                 })}
               </div>
             );

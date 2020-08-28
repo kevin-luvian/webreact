@@ -66,7 +66,7 @@ public class TransactionController {
 
     @PostMapping(value = "/betweendate")
     private ResponseEntity<?> retrieveByDate(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransactionListRequest request) {
+                                             @Valid @RequestBody TransactionListRequest request) {
         UserModel user = userService.getByUsername(userDetails.getUsername()).get();
         List<TransactionModel> transactions = transactionService.getBetween(user, request.getStartDate().get(),
                 request.getEndDate().get());
@@ -76,7 +76,7 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransactionRequest request) {
+                                       @Valid @RequestBody TransactionRequest request) {
         try {
             if (request.getName().get().trim().isEmpty() || request.getAccountId().get().trim().isEmpty()
                     || request.getCategoryId().get().trim().isEmpty())
@@ -101,7 +101,7 @@ public class TransactionController {
 
     @PutMapping
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransactionRequest request) {
+                               @Valid @RequestBody TransactionRequest request) {
         try {
             if (request.getId().get().trim().isEmpty() || request.getName().get().trim().isEmpty()
                     || request.getAccountId().get().trim().isEmpty()
@@ -128,7 +128,7 @@ public class TransactionController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                         @Valid @RequestBody String id) {
         try {
             TransactionModel transaction = transactionService.delete(id,
                     userService.getByUsername(userDetails.getUsername()).get());

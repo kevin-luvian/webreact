@@ -77,9 +77,12 @@ class AccountPage extends Component {
         this.incrementKeyFetch();
       })
       .catch((error) => {
-        console.log(error);
+        if ("response" in error) {
+          console.log("Error message :", error.response.data.message);
+        }
         this.setState({
           isError: true,
+          isLoading: false,
         });
       });
   };
@@ -88,7 +91,10 @@ class AccountPage extends Component {
     await axios
       .get("/api/account/all")
       .then((response) => {
-        let firstAccountId = response.data.payload[0].id;
+        let firstAccountId = "";
+        if (response.data.payload.length > 0) {
+          firstAccountId = response.data.payload[0].id;
+        }
         this.setState({
           currentId: firstAccountId,
           accounts: response.data.payload,

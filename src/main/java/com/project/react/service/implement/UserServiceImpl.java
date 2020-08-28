@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel create(UserModel currentUser, UserRequest request) {
-        if (!currentUser.getRoles().contains("ROLE_ADMIN") || !checkPassword(currentUser,request.getAdminPassword().get()))
+        if (!currentUser.getRoles().contains("ROLE_ADMIN") || !checkPassword(currentUser, request.getAdminPassword().get()))
             throw new AccessDeniedException("unauthorized");
         UserModel user = new UserModel();
         user.setUsername(request.getUsername().get());
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel update(UserModel currentUser, UserRequest request) {
-        if (!currentUser.getRoles().contains("ROLE_ADMIN") || !checkPassword(currentUser,request.getAdminPassword().get()))
+        if (!currentUser.getRoles().contains("ROLE_ADMIN") || !checkPassword(currentUser, request.getAdminPassword().get()))
             throw new AccessDeniedException("unauthorized");
         UserModel user = getById(request.getId().get()).get();
         user.setUsername(request.getUsername().get());

@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -31,20 +31,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //@formatter:off
         http
-            .cors().and()
-            .httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .cors().and()
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/api/user/**").hasRole("ADMIN")
                 .antMatchers("/api/**").authenticated()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
-            .and()
-            .apply(new JwtConfigurer(jwtTokenProvider));
-        //@formatter:on
+                .and()
+                .apply(new JwtConfigurer(jwtTokenProvider));
     }
 }

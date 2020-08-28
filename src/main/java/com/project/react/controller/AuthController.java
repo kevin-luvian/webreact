@@ -58,13 +58,13 @@ public class AuthController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> currentUser(@AuthenticationPrincipal UserDetails userDetails) throws NullPointerException {
         return ResponseEntity.ok().body(new BaseResponse<String>(200, "token is valid", userDetails.getUsername()));
     }
 
     @PostMapping("/validate-admin")
     public ResponseEntity<?> validateAdmin(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody Map<String, String> request) {
+                                           @Valid @RequestBody Map<String, String> request) {
         try {
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
             if (userService.checkPassword(currentUser, request.get("password")))

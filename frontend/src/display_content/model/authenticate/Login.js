@@ -6,16 +6,28 @@ import SetTokenAction from "../../../backend/redux/actions/SetTokenAction";
 import SetUsernameAction from "../../../backend/redux/actions/SetUsernameAction";
 import SetRolesAction from "../../../backend/redux/actions/SetRolesAction";
 import ClearTokenAction from "../../../backend/redux/actions/ClearTokenAction";
+import $ from "jquery";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    error: false,
       username: "",
       password: "",
     };
   }
+
+  useGuestAccount = () => {
+    this.setState({ username: "guest", password: "guestpass" });
+  };
+
+  toggleError = (state) => {
+    if (state) {
+      $("#errorContainer").slideDown();
+    } else {
+      $("#errorContainer").slideUp();
+    }
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,21 +45,23 @@ class Login extends Component {
       },
       (error) => {
         console.log(error);
-        this.setState({error:true})
+        this.toggleError(true);
       }
     );
   };
 
   handleChangeUsername = (username_param) => {
     this.setState({
-      username: username_param,error:false
+      username: username_param,
     });
+    this.toggleError(false);
   };
 
   handleChangePassword = (password_param) => {
     this.setState({
-      password: password_param,error:false
+      password: password_param,
     });
+    this.toggleError(false);
   };
 
   createInput = () => {
@@ -90,15 +104,27 @@ class Login extends Component {
                 }}
               >
                 <div className="login-form-head">
-                  <h4>Sign In</h4>
-                  <p>Hello there, Sign in and start managing your Finances</p>
+                  <h4 style={{ margin: "10px" }}>Sign In</h4>
+                  <p style={{ margin: "0" }}>
+                    Hello there, Sign in and start managing your Finances
+                  </p>
+                  <p style={{ margin: "5px 0" }}>or</p>
+                  <p
+                    className="text-link"
+                    style={{ margin: "0", width: "fit-content" }}
+                    onClick={this.useGuestAccount}
+                  >
+                    use guest account
+                  </p>
                 </div>
                 <div className="login-form-body shadow">
-                {this.state.error &&
-                    <div className="error-container">
-                    <p style={{margin:"0"}}>invalid username or password</p>
-                    </div>
-                    }
+                  <div
+                    id="errorContainer"
+                    className="error-container"
+                    style={{ display: "none" }}
+                  >
+                    <p style={{ margin: "0" }}>invalid username or password</p>
+                  </div>
                   {this.createInput()}
                   <div className="submit-btn-area">
                     <button id="form_submit" type="submit">

@@ -52,7 +52,7 @@ public class CategoryController {
 
     @GetMapping
     private ResponseEntity<?> getModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                       @Valid @RequestBody String id) {
         try {
             CategoryModel category = categoryService.getById(id).get();
             if (category.getUserModel().equals(userService.getByUsername(userDetails.getUsername()).get())) {
@@ -67,7 +67,7 @@ public class CategoryController {
 
     @PutMapping
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CategoryRequest request) {
+                               @Valid @RequestBody CategoryRequest request) {
         try {
             if (request.getId().get().trim().isEmpty() || request.getName().get().trim().isEmpty()
                     || request.getColor().get().trim().isEmpty()) {
@@ -87,7 +87,7 @@ public class CategoryController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                         @Valid @RequestBody String id) {
         try {
 
             CategoryModel category = categoryService.delete(id,
@@ -103,7 +103,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CategoryRequest request) {
+                                       @Valid @RequestBody CategoryRequest request) {
         try {
             if (request.getName().get().trim().isEmpty() || request.getColor().get().trim().isEmpty()) {
                 throw new NullPointerException();

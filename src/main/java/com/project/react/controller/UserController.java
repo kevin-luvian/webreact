@@ -47,7 +47,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UserRequest request) {
+                                       @Valid @RequestBody UserRequest request) {
         try {
             if (request.getUsername().get().trim().isEmpty() || request.getAdminPassword().get().trim().isEmpty()) {
                 throw new NullPointerException();
@@ -66,7 +66,7 @@ public class UserController {
 
     @PutMapping
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UserRequest request) {
+                               @Valid @RequestBody UserRequest request) {
         try {
             if (request.getUsername().get().trim().isEmpty() || request.getAdminPassword().get().trim().isEmpty()
                     || request.getPassword().get().trim().isEmpty())
@@ -85,7 +85,7 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                         @Valid @RequestBody String id) {
         try {
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
             UserModel user = userService.delete(currentUser, id);

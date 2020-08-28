@@ -17,7 +17,7 @@ public class TransactionRequest {
     }
 
     public TransactionRequest(String id, String name, Boolean type, Long value, String date, String categoryId,
-            String accountId) {
+                              String accountId) {
         this.id = Optional.of(id);
         this.name = Optional.of(name);
         this.type = Optional.of(type);

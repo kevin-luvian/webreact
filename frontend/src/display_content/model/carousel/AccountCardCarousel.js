@@ -44,6 +44,7 @@ class AccountCardCarousel extends Component {
         ) : (
           <Carousel
             className="col-12 col-md-9 col-lg-7 col-xl-6 mx-auto"
+            style={{ minHeight: "108px" }}
             indicators={false}
             interval={null}
             prevIcon={<i className="fa fa-chevron-left" style={iconStyle} />}
