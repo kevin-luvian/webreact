@@ -38,7 +38,7 @@ class FavIconPage extends Component {
   handleSearch = (e) => {
     this.setState(
       {
-        searchParam: (e.target.value).toLowerCase(),
+        searchParam: e.target.value.toLowerCase(),
       },
       this.renderSearch
     );
@@ -48,7 +48,7 @@ class FavIconPage extends Component {
     var res = [];
     let searchParam = this.state.searchParam;
     let counter = 0;
-    if (searchParam !== "" && searchParam.length > 1) {
+    if (searchParam.trim().length > 0) {
       for (let i = 1; i < favicondata.length; i++) {
         for (let j = 0; j < favicondata[i].icons.length; j++) {
           if (favicondata[i].icons[j].text.includes(searchParam))
@@ -101,7 +101,7 @@ class FavIconPage extends Component {
                 <TextField
                   className="w-100"
                   error={false}
-                  helperText="search more than 1 char"
+                  helperText="browse icon from fontawesome"
                   label="Search Icon"
                   value={this.state.searchParam}
                   onChange={this.handleSearch}
@@ -122,7 +122,7 @@ class FavIconPage extends Component {
           </div>
           {this.state.allData}
         </div>
-        </AuthNavbarWrapper>
+      </AuthNavbarWrapper>
     );
   }
 }

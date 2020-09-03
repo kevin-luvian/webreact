@@ -2346,7 +2346,7 @@ table.dataTable thead td {
 .submit-btn-area button {
     width: 100%;
     height: 50px;
-    border: 2px solid #2c71da;
+    border: 2px solid #8655FC;
     background: #fff;
     color: #585b5f;
     border-radius: 40px;
@@ -2360,7 +2360,7 @@ table.dataTable thead td {
 }
 
 .submit-btn-area button:hover {
-    background: #2c71da;
+    background: #8655FC;
     color: #ffffff;
 }
 

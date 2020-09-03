@@ -141,7 +141,9 @@ class DetailArea extends Component {
             <div className="col-12 collapse" id="target-detail-body">
               <div className="row mt-4">
                 {this.iterateOver(this.state.categories, (key, value) => {
-                  return <DetailElement key={key} {...value} />;
+                  if (value.count > 0) {
+                    return <DetailElement key={key} {...value} />;
+                  }
                 })}
               </div>
             </div>

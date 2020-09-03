@@ -8,11 +8,11 @@ import {
   InputAdornment,
   Select,
   Fade,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
+  KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
@@ -27,11 +27,11 @@ class ModalBox extends Component {
       selectedCategory: this.props.category,
       selectedAccount: this.props.account,
       filledName: this.props.name,
-      filledValue: this.props.value
+      filledValue: this.props.value,
     };
     this.baseState = this.state;
   }
-
+  
   resetState() {
     this.setState(this.baseState);
   }
@@ -45,62 +45,62 @@ class ModalBox extends Component {
       selectedAccount: account,
       filledName: name,
       filledValue: value,
-      open: true
+      open: true,
     });
   };
 
   handleOpen = () => {
     this.resetState();
     this.setState({
-      open: true
+      open: true,
     });
   };
 
   handleClose = () => {
     this.setState({
-      open: false
+      open: false,
     });
   };
 
-  handleAccountChange = e => {
+  handleAccountChange = (e) => {
     this.setState({
-      selectedAccount: e.target.value
+      selectedAccount: e.target.value,
     });
   };
 
-  handleDateChange = e => {
+  handleDateChange = (e) => {
     this.setState({
-      selectedDate: e
+      selectedDate: e,
     });
   };
 
-  handleNameChange = e => {
+  handleNameChange = (e) => {
     this.setState({
-      filledName: e.target.value
+      filledName: e.target.value,
     });
   };
 
-  handleCategoryChange = e => {
+  handleCategoryChange = (e) => {
     this.setState({
-      selectedCategory: e.target.value
+      selectedCategory: e.target.value,
     });
   };
 
-  handleValueChange = e => {
+  handleValueChange = (e) => {
     this.setState({
-      filledValue: e.target.value
+      filledValue: e.target.value,
     });
   };
 
   handleExpenseClick = () => {
     this.setState({
-      selectedType: true
+      selectedType: true,
     });
   };
 
   handleIncomeClick = () => {
     this.setState({
-      selectedType: false
+      selectedType: false,
     });
   };
 
@@ -112,15 +112,15 @@ class ModalBox extends Component {
       value: this.state.filledValue,
       date: this.parseDate(this.state.selectedDate),
       categoryId: this.state.selectedCategory,
-      accountId: this.state.selectedAccount
+      accountId: this.state.selectedAccount,
     });
   };
 
-  parseDate = date => {
+  parseDate = (date) => {
     return [
       date.getFullYear(),
       ("0" + (date.getMonth() + 1)).slice(-2),
-      ("0" + date.getDate()).slice(-2)
+      ("0" + date.getDate()).slice(-2),
     ].join("-");
   };
 
@@ -133,12 +133,12 @@ class ModalBox extends Component {
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
-            timeout: 500
+            timeout: 500,
           }}
           style={{
             overflowY: "scroll",
             height: "100%",
-            display: "block"
+            display: "block",
           }}
         >
           <Fade in={this.state.open}>
@@ -225,7 +225,7 @@ class ModalBox extends Component {
                     value={this.state.selectedDate}
                     onChange={this.handleDateChange}
                     KeyboardButtonProps={{
-                      "aria-label": "change date"
+                      "aria-label": "change date",
                     }}
                   />
                 </MuiPickersUtilsProvider>
@@ -245,7 +245,7 @@ class ModalBox extends Component {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">Rp</InputAdornment>
-                    )
+                    ),
                   }}
                   onChange={this.handleValueChange}
                 />

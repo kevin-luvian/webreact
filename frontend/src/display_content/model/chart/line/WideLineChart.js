@@ -18,16 +18,15 @@ import {
   convertToDate,
 } from "../../../../backend/function/Function";
 
-const modes = ["normal", "cumulative"];
-
 am4core.useTheme(am4themes_animated);
 
 class WideLineChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: "normal",
-      incomeAsPositiveChecked: false,
+      modes: ["cumulative", "independent"],
+      mode: "cumulative",
+      incomeAsPositiveChecked: true,
       incomeChecked: true,
       expenseChecked: true,
       data: [],
@@ -94,7 +93,7 @@ class WideLineChart extends Component {
     if (data.length > 0) {
       dataGenerated.push(data[data.length - 1]);
     }
-    
+
     this.setState({ data: dataGenerated }, () => {
       this.loadChart();
     });
@@ -193,7 +192,7 @@ class WideLineChart extends Component {
                       onChange={this.handleModeChange}
                       label="mode"
                     >
-                      {modes.map((value, index) => {
+                      {this.state.modes.map((value, index) => {
                         return (
                           <MenuItem key={index} value={value}>
                             {value}

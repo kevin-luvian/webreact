@@ -9,7 +9,11 @@ import {
   Select,
   Fade,
   TextField,
+  Input,
+  IconButton,
+  InputAdornment,
 } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import $ from "jquery";
 
 class ModalUser extends Component {
@@ -19,6 +23,8 @@ class ModalUser extends Component {
       open: false,
       errorMessage: "",
       id: "",
+      showAdminPassword: false,
+      showPassword: false,
       filledName: "",
       filledPassword: "",
       filledAdminPassword: "",
@@ -175,14 +181,33 @@ class ModalUser extends Component {
                 noValidate
                 autoComplete="off"
               >
-                <TextField
-                  className="w-100 mt-4"
-                  label="Admin Password"
-                  value={this.state.filledAdminPassword}
-                  error={this.state.filledAdminPasswordError.state}
-                  helperText={this.state.filledAdminPasswordError.message}
-                  onChange={this.handleAdminPasswordChange}
-                />
+                <FormControl className="w-100 mt-4">
+                  <InputLabel>Admin Password</InputLabel>
+                  <Input
+                    type={this.state.showAdminPassword ? "" : "password"}
+                    value={this.state.filledAdminPassword}
+                    error={this.state.filledAdminPasswordError.state}
+                    helperText={this.state.filledAdminPasswordError.message}
+                    onChange={this.handleAdminPasswordChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            this.setState({
+                              showAdminPassword: !this.state.showAdminPassword,
+                            });
+                          }}
+                        >
+                          {this.state.showAdminPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
                 <TextField
                   className="w-100 mt-4"
                   label="Name"
@@ -191,14 +216,33 @@ class ModalUser extends Component {
                   helperText={this.state.filledNameError.message}
                   onChange={this.handleNameChange}
                 />
-                <TextField
-                  className="w-100 mt-4"
-                  label="Password"
-                  value={this.state.filledPassword}
-                  error={this.state.filledPasswordError.state}
-                  helperText={this.state.filledPasswordError.message}
-                  onChange={this.handlePasswordChange}
-                />
+                <FormControl className="w-100 mt-4">
+                  <InputLabel>Password</InputLabel>
+                  <Input
+                    type={this.state.showPassword ? "text" : "password"}
+                    value={this.state.filledPassword}
+                    error={this.state.filledPasswordError.state}
+                    helperText={this.state.filledPasswordError.message}
+                    onChange={this.handlePasswordChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            this.setState({
+                              showPassword: !this.state.showPassword,
+                            });
+                          }}
+                        >
+                          {this.state.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
                 <FormControl
                   className="w-100 mt-4"
                   error={this.state.selectedRoleError.state}

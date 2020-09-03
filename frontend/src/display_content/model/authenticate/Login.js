@@ -1,7 +1,15 @@
 import React, { Component } from "react";
-import axios from "../../../backend/axios/Axios";
-import Input from "./Input";
 import { connect } from "react-redux";
+import axios from "../../../backend/axios/Axios";
+import {
+  InputLabel,
+  FormControl,
+  TextField,
+  Input,
+  IconButton,
+  InputAdornment,
+} from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import SetTokenAction from "../../../backend/redux/actions/SetTokenAction";
 import SetUsernameAction from "../../../backend/redux/actions/SetUsernameAction";
 import SetRolesAction from "../../../backend/redux/actions/SetRolesAction";
@@ -14,6 +22,7 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      showPassword: false,
     };
   }
 
@@ -50,45 +59,18 @@ class Login extends Component {
     );
   };
 
-  handleChangeUsername = (username_param) => {
+  handleChangeUsername = (e) => {
     this.setState({
-      username: username_param,
+      username: e.target.value,
     });
     this.toggleError(false);
   };
 
-  handleChangePassword = (password_param) => {
+  handleChangePassword = (e) => {
     this.setState({
-      password: password_param,
+      password: e.target.value,
     });
     this.toggleError(false);
-  };
-
-  createInput = () => {
-    const inputs = [
-      {
-        id: "input-1",
-        ico: "ti-user",
-        name: "username",
-        label: "Username",
-        type: "text",
-        value: this.state.username,
-        handleInputChange: this.handleChangeUsername,
-      },
-      {
-        id: "input-2",
-        ico: "ti-lock",
-        name: "password",
-        label: "Password",
-        type: "password",
-        value: this.state.password,
-        handleInputChange: this.handleChangePassword,
-      },
-    ];
-
-    let result = [];
-    inputs.map((props, index) => result.push(<Input key={index} {...props} />));
-    return result;
   };
 
   render() {
@@ -125,7 +107,43 @@ class Login extends Component {
                   >
                     <p style={{ margin: "0" }}>invalid username or password</p>
                   </div>
-                  {this.createInput()}
+                  <form
+                    className="col-10 mx-auto mt-2 mb-4"
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <TextField
+                      className="w-100"
+                      label="Username"
+                      value={this.state.username}
+                      onChange={this.handleChangeUsername}
+                    />
+                    <FormControl className="w-100 mt-4">
+                      <InputLabel>Password</InputLabel>
+                      <Input
+                        type={this.state.showPassword ? "" : "password"}
+                        value={this.state.password}
+                        onChange={this.handleChangePassword}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => {
+                                this.setState({
+                                  showPassword: !this.state.showPassword,
+                                });
+                              }}
+                            >
+                              {this.state.showPassword ? (
+                                <Visibility />
+                              ) : (
+                                <VisibilityOff />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </form>
                   <div className="submit-btn-area">
                     <button id="form_submit" type="submit">
                       Submit <i className="ti-arrow-right"></i>
