@@ -18,6 +18,7 @@ import SettingsPage from "../../display_content/page/SettingsPage";
 import FavIconPage from "../../display_content/page/FavIconPage";
 import Error404Page from "../../display_content/page/error/Error404Page";
 import UserManagementPage from "../../display_content/page/UserManagementPage";
+import TargetPage from "../../display_content/page/TargetPage";
 import axios from "../axios/Axios";
 
 class MenuRouter extends Component {
@@ -68,13 +69,14 @@ class MenuRouter extends Component {
             path="/week-dashboard"
             component={ThisWeekDashboardPage}
           />
-          <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
-          <ProtectedRoute path="/account" component={AccountPage} />
-          <ProtectedRoute path="/settings" component={SettingsPage} />
           <ProtectedRoute
             path="/user-management"
             component={UserManagementPage}
           />
+          <ProtectedRoute path="/summary-dashboard" component={SummaryPage} />
+          <ProtectedRoute path="/account" component={AccountPage} />
+          <ProtectedRoute path="/settings" component={SettingsPage} />
+          <ProtectedRoute path="/target" component={TargetPage} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
           <Route path="/favicon" component={FavIconPage} />

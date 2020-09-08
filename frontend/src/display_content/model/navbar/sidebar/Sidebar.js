@@ -21,6 +21,11 @@ class Sidebar extends Component {
         ],
       },
       {
+        title: "Target",
+        href: "/target",
+        icon: "fa fa-tags",
+      },
+      {
         title: "Account",
         href: "/account",
         icon: "fa fa-money",

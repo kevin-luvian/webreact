@@ -16,7 +16,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-class ModalBox extends Component {
+class ModalTransaction extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -264,4 +264,4 @@ class ModalBox extends Component {
   }
 }
 
-export default ModalBox;
+export default ModalTransaction;

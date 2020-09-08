@@ -251,7 +251,7 @@ class SummaryPage extends Component {
         )}
         <div className="row mt-4">
           <DetailArea
-            key={this.state.keyFetch}
+            key={this.state.key}
             data={this.state.display_transactions}
             isLoading={this.state.isLoading}
             categories={this.state.categories}

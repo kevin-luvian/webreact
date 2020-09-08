@@ -14,13 +14,13 @@ const navigation = {
   history: [
     {
       title: "Home",
-      href: "/"
+      href: "/",
     },
     {
       title: "Weekly",
-      href: ""
-    }
-  ]
+      href: "",
+    },
+  ],
 };
 
 class ThisWeekDashboardPage extends Component {
@@ -37,7 +37,7 @@ class ThisWeekDashboardPage extends Component {
       transactions: [],
       display_transactions: [],
       accounts: [],
-      categories: []
+      categories: [],
     };
   }
 
@@ -70,22 +70,23 @@ class ThisWeekDashboardPage extends Component {
         "/api/transaction/betweendate",
         this.getStartDateAndEndDate(this.state.startDate)
       )
-      .then(response => {
+      .then((response) => {
         this.setState({
           isLoading: false,
           transactions: response.data.payload,
           display_transactions: this.getDisplayTransactions(
             response.data.payload,
             this.state.currentDate
-          )
+          ),
         });
+        console.log("Transactions", response.data.payload);
         this.incrementKey();
         this.incrementKeyFetch();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -93,16 +94,16 @@ class ThisWeekDashboardPage extends Component {
   fetchAccounts = async () => {
     await axios
       .get("/api/account/all")
-      .then(response => {
+      .then((response) => {
         this.setState({
-          accounts: response.data.payload
+          accounts: response.data.payload,
         });
         this.incrementKey();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -110,28 +111,28 @@ class ThisWeekDashboardPage extends Component {
   fetchCategories = async () => {
     await axios
       .get("/api/category/all")
-      .then(response => {
+      .then((response) => {
         this.setState({
-          categories: response.data.payload
+          categories: response.data.payload,
         });
         this.incrementKey();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
 
-  getStartDateAndEndDate = date_param => {
+  getStartDateAndEndDate = (date_param) => {
     let startDate = new Date(date_param);
     startDate.setDate(startDate.getDate() - startDate.getDay() + 1);
     let endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + 7);
     return {
       startDate: parseDate(startDate),
-      endDate: parseDate(endDate)
+      endDate: parseDate(endDate),
     };
   };
 
@@ -147,11 +148,11 @@ class ThisWeekDashboardPage extends Component {
     return newTransactions;
   };
 
-  handleScrollMenuChange = dateStr_param => {
+  handleScrollMenuChange = (dateStr_param) => {
     if (dateStr_param === "all") {
       this.setState({
         display_transactions: this.state.transactions,
-        currentDate: "all"
+        currentDate: "all",
       });
     } else {
       this.setState({
@@ -159,24 +160,17 @@ class ThisWeekDashboardPage extends Component {
           this.state.transactions,
           new Date(dateStr_param)
         ),
-        currentDate: new Date(dateStr_param)
+        currentDate: new Date(dateStr_param),
       });
     }
     this.incrementKey();
   };
 
-  handleScrollMenuChange2 = menu_param => {
-    console.log(menu_param);
-  };
-
-  handleDateChange = dateStr_param => {
-    console.log("Change Date >> " + parseDate(dateStr_param));
-    let datek = this.getStartDateAndEndDate(dateStr_param).startDate;
-    console.log("DATEE >> " + datek);
+  handleDateChange = (dateStr_param) => {
     this.setState(
       {
         startDate: this.getStartDateAndEndDate(dateStr_param).startDate,
-        currentDate: "all"
+        currentDate: "all",
       },
       () => {
         this.fetchTransactions();
