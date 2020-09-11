@@ -31,7 +31,10 @@ class DataTable extends Component {
         this.props.reload();
       })
       .catch((error) => {
-        console.log(error.response);
+        if ("response" in error) {
+          console.log("Error :", error.response.data.message);
+          this.refs.modalAdd.handleError(error.response.data.message);
+        }
       });
   };
 
@@ -43,7 +46,10 @@ class DataTable extends Component {
         this.props.reload();
       })
       .catch((error) => {
-        console.log(error.response);
+        if ("response" in error) {
+          console.log("Error :", error.response.data.message);
+          this.refs.modalEdit.handleError(error.response.data.message);
+        }
       });
   };
 
@@ -537,7 +543,7 @@ class DataTable extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "238px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={70} width={5} margin={5} />
             </div>
           </div>
         ) : (

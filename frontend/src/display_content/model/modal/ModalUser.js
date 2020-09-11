@@ -157,120 +157,129 @@ class ModalUser extends Component {
           }}
         >
           <Fade in={this.state.open}>
-            <div className="col-11 col-sm-8 col-md-6 col-xl-5 card mx-auto p-4 my-4">
-              <div className="row mx-3">
-                <h5 className="col-8 m-0">{this.props.modalTitle}</h5>
-                <i
-                  className="col-4 fa fa-close text-right my-auto i-modal-close"
-                  onClick={this.handleClose}
-                />
-              </div>
-              <div
-                id="errorContainer"
-                className="error-container"
-                style={{
-                  display: "none",
-                  marginBottom: "0",
-                  marginTop: "25px",
-                }}
-              >
-                <p style={{ margin: "0" }}>{this.state.errorMessage}</p>
-              </div>
-              <form
-                className="col-10 mx-auto mt-2 mb-4"
-                noValidate
-                autoComplete="off"
-              >
-                <FormControl className="w-100 mt-4">
-                  <InputLabel>Admin Password</InputLabel>
-                  <Input
-                    type={this.state.showAdminPassword ? "" : "password"}
-                    value={this.state.filledAdminPassword}
-                    error={this.state.filledAdminPasswordError.state}
-                    helperText={this.state.filledAdminPasswordError.message}
-                    onChange={this.handleAdminPasswordChange}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => {
-                            this.setState({
-                              showAdminPassword: !this.state.showAdminPassword,
-                            });
-                          }}
-                        >
-                          {this.state.showAdminPassword ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
+            <div
+              style={{
+                height: "100vh",
+                display: "block",
+                overflowY: "scroll",
+              }}
+            >
+              <div className="col-11 col-sm-8 col-md-6 col-xl-5 card mx-auto p-4 my-4">
+                <div className="row mx-3">
+                  <h5 className="col-8 m-0">{this.props.modalTitle}</h5>
+                  <i
+                    className="col-4 fa fa-close text-right my-auto i-modal-close"
+                    onClick={this.handleClose}
                   />
-                </FormControl>
-                <TextField
-                  className="w-100 mt-4"
-                  label="Name"
-                  value={this.state.filledName}
-                  error={this.state.filledNameError.state}
-                  helperText={this.state.filledNameError.message}
-                  onChange={this.handleNameChange}
-                />
-                <FormControl className="w-100 mt-4">
-                  <InputLabel>Password</InputLabel>
-                  <Input
-                    type={this.state.showPassword ? "text" : "password"}
-                    value={this.state.filledPassword}
-                    error={this.state.filledPasswordError.state}
-                    helperText={this.state.filledPasswordError.message}
-                    onChange={this.handlePasswordChange}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => {
-                            this.setState({
-                              showPassword: !this.state.showPassword,
-                            });
-                          }}
-                        >
-                          {this.state.showPassword ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <FormControl
-                  className="w-100 mt-4"
-                  error={this.state.selectedRoleError.state}
+                </div>
+                <div
+                  id="errorContainer"
+                  className="error-container"
+                  style={{
+                    display: "none",
+                    marginBottom: "0",
+                    marginTop: "25px",
+                  }}
                 >
-                  <InputLabel>Roles</InputLabel>
-                  <Select
-                    value={this.state.selectedRole}
-                    onChange={this.handleRoleChange}
+                  <p style={{ margin: "0" }}>{this.state.errorMessage}</p>
+                </div>
+                <form
+                  className="col-10 mx-auto mt-2 mb-4"
+                  noValidate
+                  autoComplete="off"
+                >
+                  <FormControl className="w-100 mt-4">
+                    <InputLabel>Admin Password</InputLabel>
+                    <Input
+                      type={this.state.showAdminPassword ? "" : "password"}
+                      value={this.state.filledAdminPassword}
+                      error={this.state.filledAdminPasswordError.state}
+                      helperText={this.state.filledAdminPasswordError.message}
+                      onChange={this.handleAdminPasswordChange}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              this.setState({
+                                showAdminPassword: !this.state
+                                  .showAdminPassword,
+                              });
+                            }}
+                          >
+                            {this.state.showAdminPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                  <TextField
+                    className="w-100 mt-4"
+                    label="Name"
+                    value={this.state.filledName}
+                    error={this.state.filledNameError.state}
+                    helperText={this.state.filledNameError.message}
+                    onChange={this.handleNameChange}
+                  />
+                  <FormControl className="w-100 mt-4">
+                    <InputLabel>Password</InputLabel>
+                    <Input
+                      type={this.state.showPassword ? "text" : "password"}
+                      value={this.state.filledPassword}
+                      error={this.state.filledPasswordError.state}
+                      helperText={this.state.filledPasswordError.message}
+                      onChange={this.handlePasswordChange}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              this.setState({
+                                showPassword: !this.state.showPassword,
+                              });
+                            }}
+                          >
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                  <FormControl
+                    className="w-100 mt-4"
+                    error={this.state.selectedRoleError.state}
                   >
-                    {roles.map((role, index) => {
-                      return (
-                        <MenuItem key={index} value={role.value}>
-                          {role.display}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  <FormHelperText>
-                    {this.state.selectedRoleError.message}
-                  </FormHelperText>
-                </FormControl>
-              </form>
-              <button
-                className="btn-modal-submit float-right mt-4"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </button>
+                    <InputLabel>Roles</InputLabel>
+                    <Select
+                      value={this.state.selectedRole}
+                      onChange={this.handleRoleChange}
+                    >
+                      {roles.map((role, index) => {
+                        return (
+                          <MenuItem key={index} value={role.value}>
+                            {role.display}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <FormHelperText>
+                      {this.state.selectedRoleError.message}
+                    </FormHelperText>
+                  </FormControl>
+                </form>
+                <button
+                  className="btn-modal btn-modal-submit float-right mt-4"
+                  onClick={this.handleSubmit}
+                >
+                  Submit
+                </button>
+              </div>
             </div>
           </Fade>
         </Modal>

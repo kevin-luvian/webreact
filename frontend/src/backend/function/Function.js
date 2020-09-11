@@ -1,4 +1,4 @@
-export const parseDayFromDate = date => {
+export const parseDayFromDate = (date) => {
   let dayNames = [
     "Sunday",
     "Monday",
@@ -6,12 +6,12 @@ export const parseDayFromDate = date => {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday"
+    "Saturday",
   ];
   return dayNames[date.getDay()];
 };
 
-export const parseMonthFromDate = date => {
+export const parseMonthFromDate = (date) => {
   let monthNames = [
     "January",
     "February",
@@ -24,12 +24,12 @@ export const parseMonthFromDate = date => {
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ];
   return monthNames[date.getMonth()];
 };
 
-export const parseMonthToInt = month_str => {
+export const parseMonthToInt = (month_str) => {
   let monthNames = [
     "January",
     "February",
@@ -42,7 +42,7 @@ export const parseMonthToInt = month_str => {
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ];
   for (let i = 0; i < monthNames.length; i++) {
     if (monthNames[i] === month_str) return i;
@@ -50,15 +50,15 @@ export const parseMonthToInt = month_str => {
   return -1;
 };
 
-export const parseDate = date_param => {
+export const parseDate = (date_param) => {
   return [
     date_param.getFullYear(),
     ("0" + (date_param.getMonth() + 1)).slice(-2),
-    ("0" + date_param.getDate()).slice(-2)
+    ("0" + date_param.getDate()).slice(-2),
   ].join("-");
 };
 
-export const convertToDate = dateStr_param => {
+export const convertToDate = (dateStr_param) => {
   let date = dateStr_param.split("-");
   return new Date(date[0], parseInt(date[1]) - 1, date[2]);
 };
@@ -87,4 +87,8 @@ export const dateSort = () => {
     }
     return res;
   };
+};
+
+export const rand6Char = () => {
+  return Math.random().toString(36).substring(7);
 };

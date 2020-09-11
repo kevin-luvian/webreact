@@ -25,7 +25,7 @@ class DisplayApp extends Component {
                 className="mx-auto"
                 style={{ transform: "translateY(42vh)" }}
               >
-                <Loader color={"#8914fe"} size={100} />
+                <Loader color={"#007bff"} size={100} />
               </div>
             </div>
           </div>

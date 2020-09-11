@@ -117,7 +117,7 @@ class ModalAccount extends Component {
               </form>
 
               <button
-                className="btn-modal-submit float-right mt-4"
+                className="btn-modal btn-modal-submit float-right mt-4"
                 onClick={this.handleSubmit}
               >
                 Submit

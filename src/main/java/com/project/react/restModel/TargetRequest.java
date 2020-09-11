@@ -1,34 +1,18 @@
 package com.project.react.restModel;
 
-import com.project.react.model.TransactionModel;
-
-import java.time.LocalDate;
 import java.util.Optional;
 
-public class TransactionRequest {
+public class TargetRequest {
     private Optional<String> id;
     private Optional<String> name;
-    private Optional<Boolean> type;
     private Optional<Long> value;
-    private Optional<LocalDate> date; // yyyy-mm-dd
     private Optional<String> categoryId;
     private Optional<String> accountId;
 
-    public TransactionRequest() {
-        this("", "", true, 10L, "2020-02-20", "", "");
-    }
-
-    public TransactionRequest(TransactionModel transactionModel) {
-        this(transactionModel.getId(), transactionModel.getName(), transactionModel.getType(), transactionModel.getValue(), transactionModel.getDate().toString(), transactionModel.getCategoryModel().getId(), transactionModel.getAccountModel().getId());
-    }
-
-    public TransactionRequest(String id, String name, Boolean type, Long value, String date, String categoryId,
-                              String accountId) {
+    public TargetRequest(String id, String name, Long value, String categoryId, String accountId) {
         this.id = Optional.of(id);
         this.name = Optional.of(name);
-        this.type = Optional.of(type);
         this.value = Optional.of(value);
-        this.date = Optional.of(LocalDate.parse(date));
         this.categoryId = Optional.of(categoryId);
         this.accountId = Optional.of(accountId);
     }
@@ -57,14 +41,6 @@ public class TransactionRequest {
         this.value = value;
     }
 
-    public Optional<LocalDate> getDate() {
-        return date;
-    }
-
-    public void setDate(Optional<LocalDate> date) {
-        this.date = date;
-    }
-
     public Optional<String> getCategoryId() {
         return categoryId;
     }
@@ -79,13 +55,5 @@ public class TransactionRequest {
 
     public void setAccountId(Optional<String> accountId) {
         this.accountId = accountId;
-    }
-
-    public Optional<Boolean> getType() {
-        return type;
-    }
-
-    public void setType(Optional<Boolean> type) {
-        this.type = type;
     }
 }

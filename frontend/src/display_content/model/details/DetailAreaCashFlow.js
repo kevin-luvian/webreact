@@ -107,7 +107,7 @@ class DetailAreaCashFlow extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "108px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={50} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={50} width={5} margin={5} />
             </div>
           </div>
         ) : (

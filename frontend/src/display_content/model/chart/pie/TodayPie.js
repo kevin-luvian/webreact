@@ -101,7 +101,7 @@ class TodayPie extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "478px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={70} width={5} margin={5} />
               <div className="d-none" id="highpiechart" />
             </div>
           </div>

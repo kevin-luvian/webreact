@@ -1,20 +1,21 @@
 import React, { Component } from "react";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class TargetCard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: "Drone Mk.II",
-      amount: { current: 500000, target: 5000000 },
-      account: { name: "card", color: "orange", icon: "fa fa-plus" },
-      category: { name: "food", color: "crimson" },
-    };
-  }
+  isTargetReached = () => {
+    return this.props.value - this.props.currentAmount <= 0;
+  };
 
   getCurrentPercentage = () => {
     const currentPercentage =
-      (this.state.amount.current / this.state.amount.target) * 100;
+      (this.props.value <= 0) | this.isTargetReached()
+        ? 100
+        : (this.props.currentAmount / this.props.value) * 100;
     return currentPercentage + "%";
+  };
+
+  getRaisedAmount = () => {
+    return this.props.currentAmount;
   };
 
   render() {
@@ -30,7 +31,7 @@ class TargetCard extends Component {
       >
         <div className="container">
           <div className="row">
-            <div className="col-9 pl-2">
+            <div className="col-12 col-md-8 pl-2">
               <div className="row m-0">
                 <p
                   className="hover-shadow"
@@ -41,10 +42,10 @@ class TargetCard extends Component {
                     margin: "0",
                     padding: "5px 15px",
                     color: "white",
-                    backgroundColor: this.state.category.color,
+                    backgroundColor: this.props.categoryModel.color,
                   }}
                 >
-                  {this.state.title}
+                  {this.props.name}
                 </p>
                 <div
                   className="hover-shadow"
@@ -54,11 +55,11 @@ class TargetCard extends Component {
                     padding: "0 0.5rem",
                     marginLeft: "0.5rem",
                     borderRadius: "1rem",
-                    backgroundColor: this.state.account.color,
+                    backgroundColor: this.props.accountModel.color,
                   }}
                 >
                   <i
-                    className={this.state.account.icon}
+                    className={"fa fa-" + this.props.accountModel.favIcon}
                     style={{
                       fontSize: "0.9rem",
                       margin: "0px 5px",
@@ -77,40 +78,64 @@ class TargetCard extends Component {
                       color: "white",
                     }}
                   >
-                    {this.state.account.name}
+                    {this.props.accountModel.name}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="col-3 text-right pr-2">
+            <div className="col-12 col-md-4 text-right pr-2">
               <div
                 className="btn-target px-3"
-                style={{ backgroundColor: this.state.category.color }}
+                style={{ backgroundColor: this.props.categoryModel.color }}
               >
-                <i
-                  className="fa fa-plus"
-                  style={{
-                    color: "white",
-                    transform: "translateY(20%)",
-                  }}
-                  onClick={this.props.onAdd}
-                />
-                <i
-                  className="fa fa-edit mx-3"
-                  style={{
-                    color: "white",
-                    transform: "translateY(20%)",
-                  }}
-                  onClick={this.props.onEdit}
-                />
-                <i
-                  className="fa fa-trash"
-                  style={{
-                    color: "white",
-                    transform: "translateY(15%)",
-                  }}
-                />
+                <Tooltip title="add transaction" arrow>
+                  <i
+                    className="fa fa-plus"
+                    style={{
+                      color: "white",
+                      transform: "translateY(20%)",
+                    }}
+                    onClick={this.props.onAdd}
+                  />
+                </Tooltip>
+                <Tooltip title="edit" arrow>
+                  <i
+                    className="fa fa-edit mx-3"
+                    style={{
+                      color: "white",
+                      transform: "translateY(20%)",
+                    }}
+                    onClick={this.props.onEdit}
+                  />
+                </Tooltip>
+                <Tooltip title="delete" arrow>
+                  <i
+                    className="fa fa-trash"
+                    style={{
+                      color: "white",
+                      transform: "translateY(15%)",
+                    }}
+                    onClick={this.props.onDelete}
+                  />
+                </Tooltip>
               </div>
+              {this.isTargetReached() && (
+                <div
+                  className="btn-target px-1 ml-1"
+                  style={{ backgroundColor: "#4caf50" }}
+                >
+                  <Tooltip title="end target" arrow>
+                    <i
+                      className="fa fa-check"
+                      style={{
+                        color: "white",
+                        transform: "translateY(20%)",
+                      }}
+                      onClick={this.props.onEnd}
+                    />
+                  </Tooltip>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -125,7 +150,7 @@ class TargetCard extends Component {
             <div
               style={{
                 borderRadius: "1rem",
-                backgroundColor: this.state.category.color,
+                backgroundColor: this.props.categoryModel.color,
                 width: this.getCurrentPercentage(),
                 height: "100%",
               }}
@@ -134,12 +159,12 @@ class TargetCard extends Component {
         </div>
         <div className="container mt-2">
           <p className="m-0">
-            <b style={{ color: this.state.category.color }}>
-              Rp {this.state.amount.target - this.state.amount.current} remained
+            <b style={{ color: this.props.categoryModel.color }}>
+              Rp {this.getRaisedAmount()} raised
             </b>
             <span style={{ color: "#7a7a7a", fontSize: "0.9rem" }}>
               {" "}
-              of Rp {this.state.amount.target}
+              of Rp {this.props.value}
             </span>
           </p>
         </div>

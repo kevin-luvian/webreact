@@ -5,10 +5,10 @@ volumes:
 
 services:
   db:
-    container_name: spring_react_mysql
+    container_name: mysql
     restart: unless-stopped
     volumes:
       - mysql:/var/lib/mysql
     build: ./
     ports:
-      - '9001:3306'
+      - '3306:3306'

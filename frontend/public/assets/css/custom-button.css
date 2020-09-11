@@ -85,11 +85,10 @@
   color: white;
 }
 
-.btn-modal-submit {
+.btn-modal {
+  cursor: pointer;
   font-weight: bold;
   text-align: center;
-  background-color: #007bff;
-  color: white;
   border: 3px solid transparent;
   min-height: 40px;
   min-width: 120px;
@@ -97,8 +96,12 @@
   transition: 0.3s ease-in-out;
 }
 
+.btn-modal-submit {
+  background-color: #007bff;
+  color: white;
+}
+
 .btn-modal-submit:hover {
-  cursor: pointer;
   background-color: #006cdf;
 }
 
@@ -107,24 +110,29 @@
 }
 
 .btn-modal-crimson {
-  font-weight: bold;
-  text-align: center;
   background-color: crimson;
   color: white;
-  border: 3px solid transparent;
-  min-height: 40px;
-  min-width: 120px;
-  border-radius: 6px;
-  transition: 0.3s ease-in-out;
 }
 
 .btn-modal-crimson:hover {
-  cursor: pointer;
   background-color: rgb(204, 19, 56);
 }
 
 .btn-modal-crimson:active {
   background-color: rgb(163, 15, 45);
+}
+
+.btn-modal-theme {
+  background-color: #4336fb;
+  color: white;
+}
+
+.btn-modal-theme:hover {
+  background-color: #342ab8;
+}
+
+.btn-modal-theme:active {
+  background-color: #342ab8;
 }
 
 .btn-mywhite {
@@ -204,7 +212,7 @@
 }
 
 .btn-target-add {
-  background-color: #4336FB;
+  background-color: #4336fb;
   text-align: center;
   border-radius: 0.3rem;
   transition: 0.3s ease-in-out;

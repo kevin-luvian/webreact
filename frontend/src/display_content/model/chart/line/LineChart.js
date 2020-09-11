@@ -234,7 +234,7 @@ class LineChart extends Component {
             <div className="card shadow" style={{ minHeight: "453px" }}>
               <div className="center mx-auto">
                 <ScaleLoader
-                  color={"#8914fe"}
+                  color={"#007bff"}
                   height={70}
                   width={5}
                   margin={5}

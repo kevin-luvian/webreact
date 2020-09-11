@@ -1,5 +1,6 @@
 package com.project.react.controller;
 
+import com.project.react.Exception.NonPositiveValueException;
 import com.project.react.service.interfaces.AccountService;
 import com.project.react.service.interfaces.CategoryService;
 import com.project.react.service.interfaces.TransactionService;
@@ -78,9 +79,12 @@ public class TransactionController {
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
                                        @Valid @RequestBody TransactionRequest request) {
         try {
-            if (request.getName().get().trim().isEmpty() || request.getAccountId().get().trim().isEmpty()
+            if (request.getName().get().trim().isEmpty()
+                    || request.getAccountId().get().trim().isEmpty()
                     || request.getCategoryId().get().trim().isEmpty())
                 throw new NullPointerException();
+            else if (request.getValue().get() < 0L)
+                throw new NonPositiveValueException();
             UserModel user = userService.getByUsername(userDetails.getUsername()).get();
             AccountModel account = accountService.getById(request.getAccountId().get()).get();
             CategoryModel category = categoryService.getById(request.getCategoryId().get()).get();
@@ -96,6 +100,9 @@ public class TransactionController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest()
                     .body(new BaseResponse<String>(400, "no such element exception", e.getMessage()));
+        } catch (NonPositiveValueException e) {
+            return ResponseEntity.badRequest()
+                    .body(new BaseResponse<Object>(400, "non positive value entered", e.getMessage()));
         }
     }
 
@@ -105,9 +112,10 @@ public class TransactionController {
         try {
             if (request.getId().get().trim().isEmpty() || request.getName().get().trim().isEmpty()
                     || request.getAccountId().get().trim().isEmpty()
-                    || request.getCategoryId().get().trim().isEmpty()) {
+                    || request.getCategoryId().get().trim().isEmpty())
                 throw new NullPointerException(" id or name or account or category is null ");
-            }
+            else if (request.getValue().get() < 0L)
+                throw new NonPositiveValueException();
             UserModel user = userService.getByUsername(userDetails.getUsername()).get();
             AccountModel account = accountService.getById(request.getAccountId().get()).get();
             CategoryModel category = categoryService.getById(request.getCategoryId().get()).get();
@@ -123,6 +131,9 @@ public class TransactionController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest()
                     .body(new BaseResponse<Object>(400, "no such element exception", e.getMessage()));
+        } catch (NonPositiveValueException e) {
+            return ResponseEntity.badRequest()
+                    .body(new BaseResponse<Object>(400, "non positive value entered", e.getMessage()));
         }
     }
 

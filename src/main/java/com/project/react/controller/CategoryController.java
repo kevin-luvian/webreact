@@ -51,8 +51,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    private ResponseEntity<?> getModel(@AuthenticationPrincipal UserDetails userDetails,
-                                       @Valid @RequestBody String id) {
+    private ResponseEntity<?> getModel(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody String id) {
         try {
             CategoryModel category = categoryService.getById(id).get();
             if (category.getUserModel().equals(userService.getByUsername(userDetails.getUsername()).get())) {
@@ -89,7 +88,6 @@ public class CategoryController {
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
                                          @Valid @RequestBody String id) {
         try {
-
             CategoryModel category = categoryService.delete(id,
                     userService.getByUsername(userDetails.getUsername()).get());
             return ResponseEntity.ok()

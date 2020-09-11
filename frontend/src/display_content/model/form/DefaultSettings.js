@@ -94,7 +94,7 @@ class DefaultSettings extends Component {
             </div>
             <div className="col-12 mt-5">
               <button
-                className="btn-modal-submit w-100"
+                className="btn-modal btn-modal-submit w-100"
                 onClick={this.handleSubmit}
               >
                 Submit

@@ -114,7 +114,7 @@
 }
 
 .metismenu li a i {
-    color: #6a56a5;
+    color: rgba(0, 157, 255, 0.7);
     -webkit-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
 }
@@ -609,7 +609,7 @@
     top: 50%;
     width: 4px;
     height: 36px;
-    background: var(--primary-color);
+    background: #4336FB;
     -webkit-transform: translateY(-50%);
             transform: translateY(-50%);
 }

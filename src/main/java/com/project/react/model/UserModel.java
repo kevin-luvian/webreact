@@ -52,11 +52,15 @@ public class UserModel implements UserDetails {
 
     @OneToMany(mappedBy = "userModel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
+    private List<AccountModel> accountList;
+
+    @OneToMany(mappedBy = "userModel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CategoryModel> categoryList;
 
     @OneToMany(mappedBy = "userModel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<AccountModel> accountList;
+    private List<TargetModel> targetList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -123,6 +127,14 @@ public class UserModel implements UserDetails {
         this.transactionList = transactionList;
     }
 
+    public List<AccountModel> getAccountList() {
+        return accountList;
+    }
+
+    public void setAccountList(List<AccountModel> accountList) {
+        this.accountList = accountList;
+    }
+
     public List<CategoryModel> getCategoryList() {
         return categoryList;
     }
@@ -131,11 +143,11 @@ public class UserModel implements UserDetails {
         this.categoryList = categoryList;
     }
 
-    public List<AccountModel> getAccountList() {
-        return accountList;
+    public List<TargetModel> getTargetList() {
+        return targetList;
     }
 
-    public void setAccountList(List<AccountModel> accountList) {
-        this.accountList = accountList;
+    public void setTargetList(List<TargetModel> targetList) {
+        this.targetList = targetList;
     }
 }

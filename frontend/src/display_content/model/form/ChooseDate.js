@@ -28,7 +28,7 @@ class ChooseDate extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "88px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={40} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={40} width={5} margin={5} />
             </div>
           </div>
         ) : (
