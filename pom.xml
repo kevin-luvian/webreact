@@ -140,12 +140,12 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>npm run build</id>
+						<id>npm build</id>
 						<goals>
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>run build</arguments>
+							<arguments>build</arguments>
 						</configuration>
 					</execution>
 				</executions>
