@@ -92,8 +92,7 @@ class Login extends Component {
                   </p>
                   <p style={{ margin: "5px 0" }}>or</p>
                   <p
-                    className="text-link"
-                    style={{ margin: "0", width: "fit-content" }}
+                    className="text-link m-0"
                     onClick={this.useGuestAccount}
                   >
                     use guest account
@@ -136,8 +135,8 @@ class Login extends Component {
                               {this.state.showPassword ? (
                                 <Visibility />
                               ) : (
-                                <VisibilityOff />
-                              )}
+                                  <VisibilityOff />
+                                )}
                             </IconButton>
                           </InputAdornment>
                         }
