@@ -1,0 +1,12 @@
+version: '3'
+services:
+  frontend:
+    restart: on-failure
+    container_name: webreact_frontend
+    build: ./
+    ports:
+      - '3000:80'
+    networks:
+      - frontend
+networks:
+  frontend:

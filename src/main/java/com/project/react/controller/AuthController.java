@@ -29,7 +29,7 @@ import com.project.react.security.jwtAuth.JwtTokenProvider;
 import com.project.react.service.interfaces.UserService;
 
 @RestController
-@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080"})
 // @CrossOrigin(origins = {"http://mywallet.atkev.site"})
 @RequestMapping("/auth")
 public class AuthController {

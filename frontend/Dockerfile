@@ -1,13 +1,15 @@
 FROM node:12 as build
-WORKDIR /frontendApp
+WORKDIR /app
 ENV PATH ./node_modules/.bin:$PATH
-COPY package*.json ./
+COPY package.json package-lock.json ./
 RUN npm install --silent
 COPY . ./
 RUN npm run build
 
-FROM nginx:1.19.1
-COPY --from=build /frontendApp/build /var/www/html
-COPY ./nginx/default.conf /etc/nginx/conf.d
+# production environment
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+# new
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD ["nginx","-g","daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]

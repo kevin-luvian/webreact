@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080"})
 @RequestMapping("/api/target")
 public class TargetController {
     @Autowired

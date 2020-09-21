@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080"})
 // @CrossOrigin(origins = {"http://mywallet.atkev.site"})
 @RequestMapping("/api/user")
 public class UserController {

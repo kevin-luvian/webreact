@@ -1,8 +1,37 @@
-version: '3'
+version: '3.5'
 services:
-    app:
-        container_name: spring_react_app
-        restart: unless-stopped
-        build: ./
-        ports:
-            - '9000:8080'
+  nginx:
+    container_name: webreact_nginx
+    restart: on-failure
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+      - frontend 
+    networks:
+      - webreact
+  frontend:
+    restart: on-failure
+    build: ./frontend
+    ports:
+      - '8081:80'
+    depends_on:
+      - app
+    networks:
+      - webreact
+  app:
+    restart: on-failure
+    build: ./
+    ports:
+      - '8082:8080'
+    networks:
+      - webreact
+      - db
+networks:
+  webreact:
+  db:
+    external:
+      name: mysql_default

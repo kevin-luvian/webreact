@@ -1,4 +1,3 @@
 FROM openjdk:11
-VOLUME /tmp
-COPY target/app-boot.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY ./target /
+ENTRYPOINT ["java","-jar","/app-boot.jar"]
