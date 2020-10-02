@@ -1,117 +1,98 @@
 import React, { Component } from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import Chart from "chart.js";
+import Color from "color";
 
 class TodayPie extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { pieChart: {}, showCanvas: true };
   }
 
   componentDidMount() {
-    this.loadChart();
+    this.loadChartNew();
   }
+
+  reload = () => {
+    this.state.pieChart.destroy();
+    this.loadChartNew();
+  };
+
+  isEmpty = (obj) => {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) return false;
+    }
+    return true;
+  };
 
   parseData = () => {
     let data = this.props.data;
     var res = {};
     for (let i = 0; i < data.length; i++) {
       let value_clone = data[i].value;
-      if (!data[i].type) value_clone *= -1;
+//      if (!data[i].type) value_clone *= -1;
+      if (!data[i].type) continue;
       if (data[i].categoryModel.name in res) {
         res[data[i].categoryModel.name].total += value_clone;
       } else {
         res[data[i].categoryModel.name] = {
           total: value_clone,
-          color: data[i].categoryModel.color
+          color: data[i].categoryModel.color,
         };
       }
     }
     return res;
   };
 
-  getTotalExpense = data => {
-    let total = 0;
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        let value = data[key].total;
-        if (value > 0) total += value;
-      }
+  parseDataToArray = (dataset) => {
+    const res = { labels: [], colors: [], colorsDarken: [], totals: [] };
+    for (const key in dataset) {
+      res.labels.push(key);
+      res.colors.push(dataset[key].color);
+      res.colorsDarken.push(Color(dataset[key].color).darken(0.2).hex());
+      res.totals.push(dataset[key].total);
     }
-    return total;
+    return res;
   };
 
-  parseDetailData = data => {
-    let percentageData = [];
-    let colors = [];
-    let total = this.getTotalExpense(data);
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        let value = data[key].total;
-        if (data[key].total > 0)
-          if (value > 0) {
-            colors.push(data[key].color);
-            percentageData.push({
-              name: key,
-              y: value / total
-            });
-          }
-      }
-    }
-    return { colors: colors, percentageData: percentageData };
-  };
-
-  loadChart = () => {
+  loadChartNew = () => {
     let parsedData = this.parseData();
-    let details = this.parseDetailData(parsedData);
+    if (this.isEmpty(parsedData)) {
+      this.setState({ showCanvas: false });
+    } else {
+      let dataArr = this.parseDataToArray(parsedData);
+      var data = {
+        labels: dataArr.labels,
+        datasets: [
+          {
+            fill: true,
+            backgroundColor: dataArr.colors,
+            hoverBackgroundColor: dataArr.colorsDarken,
+            data: dataArr.totals,
+            borderColor: Array(dataArr.colors.length).fill("white"),
+            borderWidth: [2, 2],
+          },
+        ],
+      };
+      var options = {
+        title: {
+          display: true,
+          position: "top",
+        },
+        rotation: -0.7 * Math.PI,
+        animation: { animateScale: true },
+        // rotation: 0,
+      };
+      var myDoughnutChart = new Chart("piechart", {
+        type: "doughnut",
+        data: data,
+        options: options,
+      });
 
-    var Highcharts = require("highcharts");
-
-    Highcharts.chart("highpiechart", {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: "pie",
-        height: "400px"
-      },
-      title: {
-        text: ""
-      },
-      tooltip: {
-        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          size: "100%",
-          cursor: "pointer",
-          colors: details.colors,
-          dataLabels: {
-            style: {
-              color: "contrast",
-              fontSize: "11px",
-              fontWeight: "bold",
-              textOutline: ""
-            },
-            enabled: true,
-            format: "<b>{point.name}</b><br>{point.percentage:.1f} %",
-            distance: -50,
-            filter: {
-              property: "percentage",
-              operator: ">",
-              value: 4
-            }
-          }
-        }
-      },
-      series: [
-        {
-          animation: false,
-          name: "Share",
-          data: details.percentageData
-        }
-      ]
-    });
+      this.setState({
+        pieChart: myDoughnutChart,
+      });
+    }
   };
 
   render() {
@@ -120,7 +101,7 @@ class TodayPie extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "478px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={70} width={5} margin={5} />
               <div className="d-none" id="highpiechart" />
             </div>
           </div>
@@ -128,7 +109,29 @@ class TodayPie extends Component {
           <div className="card shadow">
             <div className="card-body">
               <h4 className="header-title">Today Expenses</h4>
-              <div id="highpiechart" />
+              <div style={{ overflowX: "auto" }}>
+                {this.state.showCanvas ? (
+                  <canvas
+                    id="piechart"
+                    style={{
+                      minWidth: "300px",
+                      minHeight: "170px",
+                      marginBottom: "30px",
+                    }}
+                  />
+                ) : (
+                  <p
+                    style={{
+                      marginTop: "30px",
+                      marginBottom: "30px",
+                      textAlign: "center",
+                      color: "gray",
+                    }}
+                  >
+                    you have not created any transactions for today
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         )}

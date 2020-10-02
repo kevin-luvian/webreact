@@ -92,7 +92,7 @@ class ModalBox extends Component {
                         this.state.isError ? "color-crimson" : "text-muted"
                       }
                     >
-                      enter "{this.state.name}" to continue
+                      enter <b>"{this.state.name}"</b> to delete
                     </small>
                   </p>
                   <TextField
@@ -105,7 +105,7 @@ class ModalBox extends Component {
                 </div>
               </div>
               <button
-                className="btn-modal-crimson float-right mt-4"
+                className="btn-modal btn-modal-crimson float-right mt-4"
                 onClick={this.handleSubmit}
               >
                 Submit

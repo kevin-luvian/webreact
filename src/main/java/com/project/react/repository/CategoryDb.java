@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.project.react.model.CategoryModel;
 
 @Repository
-public interface CategoryDb extends JpaRepository<CategoryModel, String>{
+public interface CategoryDb extends JpaRepository<CategoryModel, String> {
 }

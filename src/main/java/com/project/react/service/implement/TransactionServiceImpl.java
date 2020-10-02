@@ -28,6 +28,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public List<TransactionModel> getUserTransactions(UserModel user) {
+        return transactionDb.findAllByUserModel(user);
+    }
+
+    @Override
     public Optional<TransactionModel> getById(String id) {
         return transactionDb.findById(id);
     }
@@ -39,7 +44,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionModel create(TransactionRequest request, AccountModel account, CategoryModel category,
-            UserModel user) {
+                                   UserModel user) {
         if (!account.getUserModel().equals(user) || !category.getUserModel().equals(user))
             throw new AccessDeniedException("unauthorized");
         TransactionModel transaction = new TransactionModel();
@@ -55,17 +60,25 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionModel update(TransactionRequest request, AccountModel account, CategoryModel category,
-            UserModel user) {
+                                   UserModel user) {
         TransactionModel transaction = getById(request.getId().get()).get();
-        if (!account.getUserModel().equals(user) || !category.getUserModel().equals(user)
-                || !transaction.getUserModel().equals(user))
-            throw new AccessDeniedException("unauthorized");
         transaction.setName(request.getName().get());
         transaction.setType(request.getType().get());
-        transaction.setValue(Math.abs(request.getValue().get()));
         transaction.setDate(request.getDate().get());
+        transaction.setValue(request.getValue().get());
         transaction.setAccountModel(account);
         transaction.setCategoryModel(category);
+        return update(transaction, user);
+    }
+
+    @Override
+    public TransactionModel update(TransactionModel transaction, UserModel user) {
+        AccountModel account = transaction.getAccountModel();
+        CategoryModel category = transaction.getCategoryModel();
+        if (!account.getUserModel().equals(user)
+                || !category.getUserModel().equals(user)
+                || !transaction.getUserModel().equals(user))
+            throw new AccessDeniedException("unauthorized");
         return transactionDb.save(transaction);
     }
 
@@ -75,11 +88,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public TransactionModel delete(TransactionModel transaction, UserModel user) {
+        if (!transaction.getUserModel().equals(user))
+            throw new AccessDeniedException("unauthorized");
+        return delete(transaction.getId(), user);
+    }
+
+    @Override
     public TransactionModel delete(String id, UserModel user) {
         TransactionModel transaction = getById(id).get();
-        if (!transaction.getUserModel().equals(user)) {
+        if (!transaction.getUserModel().equals(user))
             throw new AccessDeniedException("unauthorized");
-        }
         transactionDb.delete(transaction);
         return transaction;
     }

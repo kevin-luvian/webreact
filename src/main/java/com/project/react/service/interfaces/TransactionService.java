@@ -4,14 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.project.react.model.AccountModel;
-import com.project.react.model.CategoryModel;
-import com.project.react.model.TransactionModel;
-import com.project.react.model.UserModel;
+import com.project.react.model.*;
 import com.project.react.restModel.TransactionRequest;
 
 public interface TransactionService {
     List<TransactionModel> getAll();
+
+    List<TransactionModel> getUserTransactions(UserModel user);
 
     Optional<TransactionModel> getById(String id);
 
@@ -21,7 +20,11 @@ public interface TransactionService {
 
     TransactionModel create(TransactionRequest request, AccountModel account, CategoryModel category, UserModel user);
 
+    TransactionModel update(TransactionModel transaction, UserModel user);
+
     TransactionModel update(TransactionRequest request, AccountModel account, CategoryModel category, UserModel user);
+
+    TransactionModel delete(TransactionModel transaction, UserModel user);
 
     TransactionModel delete(String id, UserModel user);
 }

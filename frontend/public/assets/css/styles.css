@@ -36,6 +36,7 @@
 .main-content {
     width: 100%;
     background: #F3F8FB;
+    min-height: 100vh;
 }
 
 .main-content-inner {
@@ -113,7 +114,7 @@
 }
 
 .metismenu li a i {
-    color: #6a56a5;
+    color: rgba(0, 157, 255, 0.7);
     -webkit-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
 }
@@ -608,7 +609,7 @@
     top: 50%;
     width: 4px;
     height: 36px;
-    background: var(--primary-color);
+    background: #4336FB;
     -webkit-transform: translateY(-50%);
             transform: translateY(-50%);
 }
@@ -634,7 +635,7 @@ ul.breadcrumbs {
     display: block;
     font-size: 14px;
     font-weight: 400;
-    color: #7801ff;
+    color: #4336FB;
     letter-spacing: 0;
     margin-right: 16px;
     position: relative;
@@ -664,8 +665,7 @@ ul.breadcrumbs {
             align-items: center;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    background: -webkit-linear-gradient(left, #8914fe 0%, #8063f5 100%);
-    background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
+    background-color: #4336FB;
     padding: 17px 38px;
     position: relative;
 }
@@ -2345,7 +2345,7 @@ table.dataTable thead td {
 .submit-btn-area button {
     width: 100%;
     height: 50px;
-    border: none;
+    border: 2px solid #8655FC;
     background: #fff;
     color: #585b5f;
     border-radius: 40px;
@@ -2359,7 +2359,7 @@ table.dataTable thead td {
 }
 
 .submit-btn-area button:hover {
-    background: #2c71da;
+    background: #8655FC;
     color: #ffffff;
 }
 

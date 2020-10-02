@@ -8,6 +8,6 @@ import java.util.Optional;
 import com.project.react.model.UserModel;
 
 @Repository
-public interface UserDb extends JpaRepository<UserModel, String>{
+public interface UserDb extends JpaRepository<UserModel, String> {
     Optional<UserModel> findByUsername(String username);
 }

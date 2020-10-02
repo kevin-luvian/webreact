@@ -11,6 +11,8 @@ import com.project.react.model.UserModel;
 
 @Repository
 public interface TransactionDb extends JpaRepository<TransactionModel, String> {
-    List<TransactionModel> findAllByUserModelAndDateLessThanAndDateGreaterThanEqualOrderByDateAsc(UserModel user,
-            LocalDate startDate, LocalDate endDate);
+    List<TransactionModel> findAllByUserModelAndDateLessThanAndDateGreaterThanEqualOrderByDateAsc(
+            UserModel user, LocalDate startDate, LocalDate endDate);
+
+    List<TransactionModel> findAllByUserModel(UserModel user);
 }

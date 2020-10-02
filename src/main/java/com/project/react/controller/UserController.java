@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080"})
+// @CrossOrigin(origins = {"http://mywallet.atkev.site"})
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -46,9 +47,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UserRequest request) {
+                                       @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().trim().isEmpty() || request.getPassword().get().trim().isEmpty()) {
+            if (request.getUsername().get().trim().isEmpty() || request.getAdminPassword().get().trim().isEmpty()) {
                 throw new NullPointerException();
             }
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
@@ -65,9 +66,9 @@ public class UserController {
 
     @PutMapping
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UserRequest request) {
+                               @Valid @RequestBody UserRequest request) {
         try {
-            if (request.getUsername().get().trim().isEmpty() || request.getNewPassword().get().trim().isEmpty()
+            if (request.getUsername().get().trim().isEmpty() || request.getAdminPassword().get().trim().isEmpty()
                     || request.getPassword().get().trim().isEmpty())
                 throw new NullPointerException();
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
@@ -84,7 +85,7 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                         @Valid @RequestBody String id) {
         try {
             UserModel currentUser = userService.getByUsername(userDetails.getUsername()).get();
             UserModel user = userService.delete(currentUser, id);

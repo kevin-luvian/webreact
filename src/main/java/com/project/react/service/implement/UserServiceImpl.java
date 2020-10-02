@@ -1,5 +1,6 @@
 package com.project.react.service.implement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -39,25 +40,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel create(UserModel currentUser, UserRequest request) {
-        System.out.println(currentUser.getRoles());
-        if (!currentUser.getRoles().contains("ROLE_ADMIN"))
+        if (!currentUser.getRoles().contains("ROLE_ADMIN") || !checkPassword(currentUser, request.getAdminPassword().get()))
             throw new AccessDeniedException("unauthorized");
         UserModel user = new UserModel();
         user.setUsername(request.getUsername().get());
         user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
-        user.setRoles(Arrays.asList("ROLE_USER"));
+        user.setRoles(new ArrayList<>(Arrays.asList(request.getRole().get())));
         return userDb.save(user);
     }
 
     @Override
     public UserModel update(UserModel currentUser, UserRequest request) {
-        if (!currentUser.getRoles().contains("ROLE_ADMIN"))
+        if (!currentUser.getRoles().contains("ROLE_ADMIN") || !checkPassword(currentUser, request.getAdminPassword().get()))
             throw new AccessDeniedException("unauthorized");
         UserModel user = getById(request.getId().get()).get();
-        if (!passwordEncoder.matches(request.getPassword().get(), user.getPassword()))
-            throw new AccessDeniedException("unauthorized");
         user.setUsername(request.getUsername().get());
-        user.setPassword(this.passwordEncoder.encode(request.getNewPassword().get()));
+        user.setPassword(this.passwordEncoder.encode(request.getPassword().get()));
+        user.setRoles(new ArrayList<>(Arrays.asList(request.getRole().get())));
         return userDb.save(user);
     }
 

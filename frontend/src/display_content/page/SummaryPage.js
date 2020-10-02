@@ -9,7 +9,8 @@ import HorizontalScrollMenu from "../model/form/HorizontalScrollMenu";
 import {
   convertToDate,
   parseDate,
-  parseMonthToInt
+  parseMonthToInt,
+  parseMonthFromDate,
 } from "../../backend/function/Function";
 
 const navigation = {
@@ -17,13 +18,13 @@ const navigation = {
   history: [
     {
       title: "Home",
-      href: "/"
+      href: "/",
     },
     {
       title: "Summary",
-      href: ""
-    }
-  ]
+      href: "",
+    },
+  ],
 };
 
 class SummaryPage extends Component {
@@ -40,11 +41,12 @@ class SummaryPage extends Component {
       transactions: [],
       display_transactions: [],
       accounts: [],
-      categories: []
+      categories: [],
     };
   }
 
   componentDidMount() {
+    this.setTodayYearAndMonth();
     this.fetchAccounts();
     this.fetchCategories();
     this.fetchTransactions();
@@ -70,25 +72,25 @@ class SummaryPage extends Component {
   fetchTransactions = async () => {
     await axios
       .get("/api/transaction/all")
-      .then(response => {
+      .then((response) => {
         this.setState(
           {
             isLoading: false,
-            transactions: response.data.payload
+            transactions: response.data.payload,
           },
           () => {
             this.setState({
-              display_transactions: this.createDisplayTransactions()
+              display_transactions: this.createDisplayTransactions(),
             });
           }
         );
         this.incrementKey();
         this.incrementKeyFetch();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -96,16 +98,16 @@ class SummaryPage extends Component {
   fetchAccounts = async () => {
     await axios
       .get("/api/account/all")
-      .then(response => {
+      .then((response) => {
         this.setState({
-          accounts: response.data.payload
+          accounts: response.data.payload,
         });
         this.incrementKey();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -113,16 +115,16 @@ class SummaryPage extends Component {
   fetchCategories = async () => {
     await axios
       .get("/api/category/all")
-      .then(response => {
+      .then((response) => {
         this.setState({
-          categories: response.data.payload
+          categories: response.data.payload,
         });
         this.incrementKey();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
-          isError: true
+          isError: true,
         });
       });
   };
@@ -159,33 +161,33 @@ class SummaryPage extends Component {
     return res;
   };
 
-  handleYearChange = payload => {
+  handleYearChange = (payload) => {
     if (this.state.currentYear !== payload) {
       this.setState({ currentYear: payload, currentMonth: "all" }, () => {
         this.setState({
-          display_transactions: this.createDisplayTransactions()
+          display_transactions: this.createDisplayTransactions(),
         });
         this.incrementKey();
       });
     }
   };
 
-  handleMonthChange = payload => {
+  handleMonthChange = (payload) => {
     if (this.state.currentMonth !== payload) {
       this.setState({ currentMonth: payload }, () => {
         this.setState({
-          display_transactions: this.createDisplayTransactions()
+          display_transactions: this.createDisplayTransactions(),
         });
         this.incrementKey();
       });
     }
   };
 
-  getStartDateAndEndDate = mode => {
+  getStartDateAndEndDate = (mode) => {
     if (mode === "year") {
       return {
         startDate: parseDate(new Date(parseInt(this.state.currentYear), 0)),
-        endDate: parseDate(new Date(parseInt(this.state.currentYear), 12, 0))
+        endDate: parseDate(new Date(parseInt(this.state.currentYear), 12, 0)),
       };
     } else if (mode === "month") {
       return {
@@ -202,16 +204,17 @@ class SummaryPage extends Component {
             parseMonthToInt(this.state.currentMonth) + 1,
             0
           )
-        )
+        ),
       };
     }
   };
 
-  getCurrentDate = () => {
-    if (this.state.currentYear === "all") return new Date();
-    else if (this.state.currentMonth === "all")
-      return this.getStartDateAndEndDate("year").startDate;
-    else return this.getStartDateAndEndDate("month").startDate;
+  setTodayYearAndMonth = () => {
+    const todayDate = new Date();
+    this.setState({
+      currentYear: todayDate.getFullYear().toString(),
+      currentMonth: parseMonthFromDate(todayDate),
+    });
   };
 
   render() {
@@ -261,7 +264,7 @@ class SummaryPage extends Component {
             isLoading={this.state.isLoading}
             accounts={this.state.accounts}
             categories={this.state.categories}
-            currentDate={this.getCurrentDate()}
+            currentDate={new Date()}
             reload={this.reload}
           />
         </div>

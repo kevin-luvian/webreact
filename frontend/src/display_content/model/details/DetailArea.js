@@ -32,7 +32,7 @@ class DetailArea extends Component {
           transaction_clone.value;
       }
     } catch (err) {
-      console.log(err.message);
+      console.log("error", err.message);
     }
 
     this.setState({
@@ -100,7 +100,7 @@ class DetailArea extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "108px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={50} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={50} width={5} margin={5} />
             </div>
           </div>
         ) : (
@@ -141,7 +141,9 @@ class DetailArea extends Component {
             <div className="col-12 collapse" id="target-detail-body">
               <div className="row mt-4">
                 {this.iterateOver(this.state.categories, (key, value) => {
-                  return <DetailElement key={key} {...value} />;
+                  if (value.count > 0) {
+                    return <DetailElement key={key} {...value} />;
+                  }
                 })}
               </div>
             </div>

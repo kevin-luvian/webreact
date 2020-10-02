@@ -18,16 +18,15 @@ import {
   convertToDate,
 } from "../../../../backend/function/Function";
 
-const modes = ["normal", "cumulative"];
-
 am4core.useTheme(am4themes_animated);
 
 class WideLineChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: "normal",
-      incomeAsPositiveChecked: false,
+      modes: ["cumulative", "independent"],
+      mode: "cumulative",
+      incomeAsPositiveChecked: true,
       incomeChecked: true,
       expenseChecked: true,
       data: [],
@@ -61,15 +60,16 @@ class WideLineChart extends Component {
   };
 
   reload = () => {
-    let chart = this.state.chart;
-    chart.data = this.processData();
-    this.setState({ chart: chart });
-    //this.state.chart.data = this.processData();
+    // const chart = this.state.chart;
+    // chart.data = this.processData();
+    // this.setState({ chart: chart });
+    this.state.chart.dispose();
+    this.loadChart();
   };
 
   loadAndSort = () => {
     let data = this.props.data;
-    let res = [];
+    const dataGenerated = [];
     try {
       data.sort(dateSort());
     } catch {
@@ -77,55 +77,58 @@ class WideLineChart extends Component {
     }
     for (let i = 0; i < data.length - 1; i++) {
       //res.push({ date: data[i].date, value: data[i].value });
-      res.push(data[i]);
+      dataGenerated.push(data[i]);
       try {
         let currentDate = convertToDate(data[i].date);
         let nextdate = convertToDate(data[i + 1].date);
         nextdate.setDate(nextdate.getDate() - 1);
         while (currentDate.getTime() < nextdate.getTime()) {
           currentDate.setDate(currentDate.getDate() + 1);
-          res.push({ date: parseDate(currentDate), value: 0 });
+          dataGenerated.push({ date: parseDate(currentDate), value: 0 });
         }
       } catch {
-        console.log("error at " + data[i].date);
+        console.log("error at ", data[i].date);
       }
     }
-    res.push(data[data.length - 1]);
+    if (data.length > 0) {
+      dataGenerated.push(data[data.length - 1]);
+    }
 
-    this.setState({ data: res }, () => {
+    this.setState({ data: dataGenerated }, () => {
       this.loadChart();
     });
   };
 
   loadChart = async () => {
     // Create chart instance
-    let chart = am4core.create("chartdiv", am4charts.XYChart);
+    const chart = am4core.create("chartdiv", am4charts.XYChart);
 
     // Add data
     chart.data = this.processData();
 
     // Create axes
-    let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
 
-    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.title.text = "Transactions";
 
     // Create series
-    let series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = "value";
-    series.dataFields.dateX = "date";
+    const series = chart.series.push(new am4charts.LineSeries());
     series.strokeWidth = 3;
     series.minBulletDistance = 10;
+    series.dataFields.valueY = "value";
+    series.dataFields.dateX = "date";
     series.tooltipText = "{valueY}";
     series.tooltip.pointerOrientation = "vertical";
     series.tooltip.background.cornerRadius = 20;
     series.tooltip.background.fillOpacity = 0.5;
-    //series.tooltip.label.padding(12, 12, 12, 12);
+    series.tooltip.label.padding(12, 12, 12, 12);
 
     // Add scrollbar
     chart.scrollbarX = new am4charts.XYChartScrollbar();
     chart.scrollbarX.series.push(series);
+    chart.scrollbarX.strokeDasharray = "2,2";
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -174,7 +177,7 @@ class WideLineChart extends Component {
         {this.props.isLoading ? (
           <div className="card shadow" style={{ minHeight: "500px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={70} width={5} margin={5} />
             </div>
           </div>
         ) : (
@@ -189,7 +192,7 @@ class WideLineChart extends Component {
                       onChange={this.handleModeChange}
                       label="mode"
                     >
-                      {modes.map((value, index) => {
+                      {this.state.modes.map((value, index) => {
                         return (
                           <MenuItem key={index} value={value}>
                             {value}

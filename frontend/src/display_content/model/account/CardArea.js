@@ -42,7 +42,7 @@ class CardArea extends Component {
         {this.state.isLoading ? (
           <div className="card shadow mt-4" style={{ minHeight: "108px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={40} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={40} width={5} margin={5} />
             </div>
           </div>
         ) : (

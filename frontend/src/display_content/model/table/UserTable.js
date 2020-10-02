@@ -25,14 +25,14 @@ class UserTable extends Component {
     await axios
       .get("/api/user/all")
       .then((response) => {
-        console.log(response.data.payload);
+        console.log("API USER ALL", response.data.payload);
         this.setState({
           data: response.data.payload,
           isLoading: false,
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.log("ERROR >>", error);
         this.setState({
           isLoading: false,
         });
@@ -40,12 +40,11 @@ class UserTable extends Component {
   };
 
   handleToolbarClick = () => {
-    this.refs.modalAdd.handleShow("", "", "", "User");
+    this.refs.modalAdd.handleShow("", "", "", "ROLE_USER");
   };
 
   handleEditClick = (rowData) => {
-    let role = rowData[2].includes("ROLE_ADMIN") ? "Admin" : "User";
-    this.refs.modalEdit.handleShow(rowData[0], rowData[1], "", role);
+    this.refs.modalEdit.handleShow(rowData[0], rowData[1], "", rowData[2][0]);
   };
 
   handleDeleteClick = (rowData) => {
@@ -60,7 +59,10 @@ class UserTable extends Component {
         this.fetchUsers();
       })
       .catch((error) => {
-        console.log(error.response);
+        if ("response" in error) {
+          console.log("Error message", error.response.data.message);
+          this.refs.modalAdd.toggleError(error.response.data.message, true);
+        }
       });
   };
 
@@ -72,9 +74,10 @@ class UserTable extends Component {
         this.fetchUsers();
       })
       .catch((error) => {
-        console.log(error);
-        console.log("Error");
-        this.refs.modalEdit.handleError();
+        if ("response" in error) {
+          console.log("Error message", error.response.data.message);
+          this.refs.modalEdit.toggleError(error.response.data.message, true);
+        }
       });
   };
 
@@ -85,16 +88,19 @@ class UserTable extends Component {
         this.fetchUsers();
       })
       .catch((error) => {
-        console.log(error);
+        if ("response" in error) {
+          console.log("Error message", error.response.data.message);
+          this.refs.modalEdit.toggleError(error.response.data.message, true);
+        }
       });
   };
 
   parseData = (data) => {
     return {
+      adminPassword: data.adminPassword,
       id: data.id,
       username: data.name,
       password: data.password,
-      newPassword: data.newPassword,
       role: data.role,
     };
   };
@@ -151,7 +157,11 @@ class UserTable extends Component {
             return (
               <div className="text-center">
                 {value.map((role, index) => {
-                  return <p key={index}>{role}</p>;
+                  return (
+                    <p style={{ margin: "0" }} key={index}>
+                      {role}
+                    </p>
+                  );
                 })}
               </div>
             );
@@ -275,7 +285,7 @@ class UserTable extends Component {
         {this.state.isLoading ? (
           <div className="card shadow" style={{ minHeight: "238px" }}>
             <div className="center mx-auto">
-              <ScaleLoader color={"#8914fe"} height={70} width={5} margin={5} />
+              <ScaleLoader color={"#007bff"} height={70} width={5} margin={5} />
             </div>
           </div>
         ) : (

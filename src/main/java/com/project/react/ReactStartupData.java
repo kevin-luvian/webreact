@@ -19,22 +19,22 @@ public class ReactStartupData implements ApplicationRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Override
-    public void run(ApplicationArguments args) throws Exception {        
-        if(!userService.getByUsername("admin").isPresent()){
+    public void run(ApplicationArguments args) throws Exception {
+        if (!userService.getByUsername("admin").isPresent()) {
             UserModel user = new UserModel();
             user.setUsername("admin");
             user.setPassword(this.passwordEncoder.encode("password"));
-            user.setRoles(Arrays.asList( "ROLE_ADMIN"));
+            user.setRoles(Arrays.asList("ROLE_ADMIN"));
             userService.save(user);
         }
 
-        if(!userService.getByUsername("user").isPresent()){
+        if (!userService.getByUsername("guest").isPresent()) {
             UserModel user = new UserModel();
-            user.setUsername("user");
-            user.setPassword(this.passwordEncoder.encode("password"));
-            user.setRoles(Arrays.asList( "ROLE_USER"));
+            user.setUsername("guest");
+            user.setPassword(this.passwordEncoder.encode("guestpass"));
+            user.setRoles(Arrays.asList("ROLE_USER"));
             userService.save(user);
         }
     }

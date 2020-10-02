@@ -10,7 +10,10 @@ class Navigation extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="page-title-area">
+        <div
+          className="page-title-area"
+          style={{ boxShadow: "rgba(0, 0, 0, 0.1) 0px 0.15rem .7rem" }}
+        >
           <div className="row align-items-center py-3">
             <div className="col-sm-6">
               <div className="breadcrumbs-area clearfix">

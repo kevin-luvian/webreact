@@ -98,7 +98,7 @@ class ModalSecureDelete extends Component {
                         this.state.isError ? "color-crimson" : "text-muted"
                       }
                     >
-                      enter password to delete "{this.state.name}"
+                      enter password to delete <b>{this.state.name}</b>
                     </small>
                   </p>
                   <TextField
@@ -113,7 +113,7 @@ class ModalSecureDelete extends Component {
                 </div>
               </div>
               <button
-                className="btn-modal-crimson float-right mt-4"
+                className="btn-modal btn-modal-crimson float-right mt-4"
                 onClick={this.handleSubmit}
               >
                 Submit

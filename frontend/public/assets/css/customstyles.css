@@ -3,7 +3,7 @@
 }
 
 .shadow-tight {
-  box-shadow: 0 .2rem .5rem rgba(0,0,0,.2)!important
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.2) !important;
 }
 
 .card-border-ry-none {
@@ -14,8 +14,31 @@
   border-radius: 0.25rem;
 }
 
+.text-link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.error-container {
+  background-color: crimson;
+  padding: 6px 0px;
+  margin-bottom: 30px;
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+}
+
 div.inline {
   float: left;
+}
+
+.hover-shadow {
+  transition: 0.3s ease-in-out;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
 .icon-arrow-up {

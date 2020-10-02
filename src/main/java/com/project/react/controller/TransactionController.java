@@ -1,5 +1,6 @@
 package com.project.react.controller;
 
+import com.project.react.Exception.NonPositiveValueException;
 import com.project.react.service.interfaces.AccountService;
 import com.project.react.service.interfaces.CategoryService;
 import com.project.react.service.interfaces.TransactionService;
@@ -33,7 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://mywallet.atkev.site", "http://localhost:8080"})
+// @CrossOrigin(origins = {"http://mywallet.atkev.site"})
 @RequestMapping("/api/transaction")
 public class TransactionController {
 
@@ -65,7 +67,7 @@ public class TransactionController {
 
     @PostMapping(value = "/betweendate")
     private ResponseEntity<?> retrieveByDate(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransactionListRequest request) {
+                                             @Valid @RequestBody TransactionListRequest request) {
         UserModel user = userService.getByUsername(userDetails.getUsername()).get();
         List<TransactionModel> transactions = transactionService.getBetween(user, request.getStartDate().get(),
                 request.getEndDate().get());
@@ -75,11 +77,14 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<?> postModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransactionRequest request) {
+                                       @Valid @RequestBody TransactionRequest request) {
         try {
-            if (request.getName().get().trim().isEmpty() || request.getAccountId().get().trim().isEmpty()
+            if (request.getName().get().trim().isEmpty()
+                    || request.getAccountId().get().trim().isEmpty()
                     || request.getCategoryId().get().trim().isEmpty())
                 throw new NullPointerException();
+            else if (request.getValue().get() < 0L)
+                throw new NonPositiveValueException();
             UserModel user = userService.getByUsername(userDetails.getUsername()).get();
             AccountModel account = accountService.getById(request.getAccountId().get()).get();
             CategoryModel category = categoryService.getById(request.getCategoryId().get()).get();
@@ -95,18 +100,22 @@ public class TransactionController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest()
                     .body(new BaseResponse<String>(400, "no such element exception", e.getMessage()));
+        } catch (NonPositiveValueException e) {
+            return ResponseEntity.badRequest()
+                    .body(new BaseResponse<Object>(400, "non positive value entered", e.getMessage()));
         }
     }
 
     @PutMapping
     ResponseEntity<?> putModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransactionRequest request) {
+                               @Valid @RequestBody TransactionRequest request) {
         try {
             if (request.getId().get().trim().isEmpty() || request.getName().get().trim().isEmpty()
                     || request.getAccountId().get().trim().isEmpty()
-                    || request.getCategoryId().get().trim().isEmpty()) {
+                    || request.getCategoryId().get().trim().isEmpty())
                 throw new NullPointerException(" id or name or account or category is null ");
-            }
+            else if (request.getValue().get() < 0L)
+                throw new NonPositiveValueException();
             UserModel user = userService.getByUsername(userDetails.getUsername()).get();
             AccountModel account = accountService.getById(request.getAccountId().get()).get();
             CategoryModel category = categoryService.getById(request.getCategoryId().get()).get();
@@ -122,12 +131,15 @@ public class TransactionController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest()
                     .body(new BaseResponse<Object>(400, "no such element exception", e.getMessage()));
+        } catch (NonPositiveValueException e) {
+            return ResponseEntity.badRequest()
+                    .body(new BaseResponse<Object>(400, "non positive value entered", e.getMessage()));
         }
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteModel(@AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody String id) {
+                                         @Valid @RequestBody String id) {
         try {
             TransactionModel transaction = transactionService.delete(id,
                     userService.getByUsername(userDetails.getUsername()).get());

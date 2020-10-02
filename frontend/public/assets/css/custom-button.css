@@ -85,11 +85,10 @@
   color: white;
 }
 
-.btn-modal-submit {
+.btn-modal {
+  cursor: pointer;
   font-weight: bold;
   text-align: center;
-  background-color: #007bff;
-  color: white;
   border: 3px solid transparent;
   min-height: 40px;
   min-width: 120px;
@@ -97,8 +96,12 @@
   transition: 0.3s ease-in-out;
 }
 
+.btn-modal-submit {
+  background-color: #007bff;
+  color: white;
+}
+
 .btn-modal-submit:hover {
-  cursor: pointer;
   background-color: #006cdf;
 }
 
@@ -107,24 +110,29 @@
 }
 
 .btn-modal-crimson {
-  font-weight: bold;
-  text-align: center;
   background-color: crimson;
   color: white;
-  border: 3px solid transparent;
-  min-height: 40px;
-  min-width: 120px;
-  border-radius: 6px;
-  transition: 0.3s ease-in-out;
 }
 
 .btn-modal-crimson:hover {
-  cursor: pointer;
   background-color: rgb(204, 19, 56);
 }
 
 .btn-modal-crimson:active {
   background-color: rgb(163, 15, 45);
+}
+
+.btn-modal-theme {
+  background-color: #4336fb;
+  color: white;
+}
+
+.btn-modal-theme:hover {
+  background-color: #342ab8;
+}
+
+.btn-modal-theme:active {
+  background-color: #342ab8;
 }
 
 .btn-mywhite {
@@ -159,7 +167,7 @@
 
 .btn-date-sm-submit {
   min-width: 100%;
-  margin: .25rem 0;
+  margin: 0.25rem 0;
 }
 
 @media (max-width: 578px) {
@@ -176,4 +184,41 @@
   .btn-modal-type-disabled {
     min-width: 90px;
   }
+}
+
+.btn-target {
+  display: inline-block;
+  font-size: 0.9rem;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  min-height: 30px;
+  min-width: 30px;
+  border-radius: 1rem;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-target:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.btn-target i {
+  transition: 0.3s ease-in-out;
+}
+
+.btn-target i:hover {
+  cursor: pointer;
+  color: #e3e3e3 !important;
+}
+
+.btn-target-add {
+  background-color: #4336fb;
+  text-align: center;
+  border-radius: 0.3rem;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-target-add:hover {
+  cursor: pointer;
+  background: #342ab8;
 }

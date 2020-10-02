@@ -1,5 +1,7 @@
 package com.project.react.restModel;
 
+import com.project.react.model.TransactionModel;
+
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -13,11 +15,15 @@ public class TransactionRequest {
     private Optional<String> accountId;
 
     public TransactionRequest() {
-        this("", "", true, Long.valueOf(10), "2020-02-20", "", "");
+        this("", "", true, 10L, "2020-02-20", "", "");
+    }
+
+    public TransactionRequest(TransactionModel transactionModel) {
+        this(transactionModel.getId(), transactionModel.getName(), transactionModel.getType(), transactionModel.getValue(), transactionModel.getDate().toString(), transactionModel.getCategoryModel().getId(), transactionModel.getAccountModel().getId());
     }
 
     public TransactionRequest(String id, String name, Boolean type, Long value, String date, String categoryId,
-            String accountId) {
+                              String accountId) {
         this.id = Optional.of(id);
         this.name = Optional.of(name);
         this.type = Optional.of(type);
