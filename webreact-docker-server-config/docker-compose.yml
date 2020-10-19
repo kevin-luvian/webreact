@@ -15,15 +15,15 @@ services:
       - "3306"
   frontend:
     restart: unless-stopped
-    build: ./frontend
+    image: wkeplon/webreact_frontend:prod
     container_name: webreact_frontend
     environment:
-      - WEBREACT_API_URL=http://localhost:8002
+      - WEBREACT_API_URL=https://mywallet.atkev.site
     ports:
       - '8001:80'
   app:
     restart: unless-stopped
-    build: ./
+    image: wkeplon/webreact_app:prod
     container_name: webreact_app
     environment:
       - WEBREACT_MYSQL_DATABASE=jdbc:mysql://mysqldb:3306/mydb?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC

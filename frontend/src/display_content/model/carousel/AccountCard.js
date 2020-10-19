@@ -88,7 +88,7 @@ class AccountCard extends Component {
                     className={
                       "fa fa-2x text-gray-300 fa-" + this.props.favIcon
                     }
-                  ></i>
+                  />
                 </div>
               </div>
             </div>
